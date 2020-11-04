@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="8.0.6" transformSequenceNumber="8">
+<install4j version="8.0.8" transformSequenceNumber="8">
   <directoryPresets config="./OPENPNP_2_0.md" />
-  <application name="OpenPnP" applicationId="9204-4030-0867-1434" mediaDir="./installers" mediaFilePattern="${compiler:sys.fullName}-${compiler:sys.platform}-${compiler:mediaFileVersion}" shortName="openpnp" publisher="OpenPnP" publisherWeb="http://openpnp.org" version="develop" allPathsRelative="true" macVolumeId="2f75d25b539292d5" javaMinVersion="1.7">
+  <application name="OpenPnP" applicationId="9204-4030-0867-1434" mediaDir="./installers" mediaFilePattern="${compiler:sys.fullName}-${compiler:sys.platform}-${compiler:mediaFileVersion}" shortName="openpnp" publisher="OpenPnP" publisherWeb="http://openpnp.org" version="develop" allPathsRelative="true" macVolumeId="2f75d25b539292d5" javaMinVersion="1.8">
     <variables>
       <variable name="native_path" />
       <variable name="mediaFileVersion" value="${compiler:sys.version}" />
@@ -18,18 +18,18 @@
     <entries>
       <dirEntry mountPoint="22" file="target" subDirectory="target">
         <exclude>
-          <entry location="test-classes" />
-          <entry location="generated-sources" />
-          <entry location="classes" />
-          <entry location="checkstyle-cachefile" />
           <entry location="checkstyle-result.xml" />
-          <entry location="checkstyle-rules.xml" />
-          <entry location="maven-status" />
-          <entry location="maven-archiver" />
-          <entry location="generated-test-sources" />
-          <entry location="surefire-reports" />
           <entry location="checkstyle-header.txt" />
+          <entry location="test-classes" />
+          <entry location="maven-archiver" />
+          <entry location="checkstyle-rules.xml" />
+          <entry location="generated-test-sources" />
+          <entry location="checkstyle-cachefile" />
+          <entry location="classes" />
+          <entry location="maven-status" />
           <entry location="checkstyle-checker.xml" />
+          <entry location="dependency-maven-plugin-markers" />
+          <entry location="generated-sources" />
         </exclude>
       </dirEntry>
       <fileEntry mountPoint="22" file="CHANGES.md" />
@@ -940,26 +940,32 @@ if (context.isUnattended()) {
   <mediaSets>
     <windows name="Windows_32" id="24" installDir="openpnp" jreBitType="32">
       <variables>
-        <variable name="native_path" value="windows/x86" />
+        <variable name="native_path" value="windows/x86_32" />
       </variables>
       <jreBundle jreBundleSource="preCreated" includedJre="windows-x86-1.8.0_131" />
     </windows>
     <windows name="Windows_64" id="28" installDir="openpnp">
       <variables>
-        <variable name="native_path" value="windows/x64" />
+        <variable name="native_path" value="windows/x86_64" />
       </variables>
       <jreBundle jreBundleSource="preCreated" includedJre="windows-amd64-1.8.0_131" />
     </windows>
     <macosFolder name="Mac OS X Folder" id="119" installDir="OpenPnP">
       <variables>
-        <variable name="native_path" value="mac/universal" />
+        <variable name="native_path" value="osx/x86_64" />
       </variables>
       <jreBundle jreBundleSource="preCreated" includedJre="macosx-amd64-1.8.0_131" bundleUrl="http://openpnp.org" />
     </macosFolder>
-    <unixInstaller name="Unix Installer" id="121" installDir="openpnp" />
-    <unixArchive name="Unix Archive" id="122" installDir="openpnp" />
-    <linuxRPM name="Linux RPM" id="123" installDir="/opt/openpnp" />
-    <linuxDeb name="Linux Deb Archive" id="124" installDir="/opt/openpnp" bzip="true" description="Open Source SMT Pick and Place Software" maintainerEmail="jason@vonnieda.org" />
+    <linuxRPM name="Linux RPM" id="123" installDir="/opt/openpnp">
+      <variables>
+        <variable name="native_path" value="linux/x86_64" />
+      </variables>
+    </linuxRPM>
+    <linuxDeb name="Linux Deb Archive" id="124" installDir="/opt/openpnp" bzip="true" description="Open Source SMT Pick and Place Software" maintainerEmail="jason@vonnieda.org">
+      <variables>
+        <variable name="native_path" value="linux/x86_64" />
+      </variables>
+    </linuxDeb>
   </mediaSets>
   <buildIds>
     <mediaSet refId="119" />

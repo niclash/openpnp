@@ -146,14 +146,9 @@
 			<version>1.4.9</version>
 		</dependency>
 		<dependency>
-			<groupId>org.javassist</groupId>
-			<artifactId>javassist</artifactId>
-			<version>3.27.0-GA</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jdesktop</groupId>
-			<artifactId>beansbinding</artifactId>
-			<version>1.2.1</version>
+			<groupId> it.tidalwave.betterbeansbinding</groupId>
+			<artifactId>betterbeansbinding-core</artifactId>
+			<version>1.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -276,7 +271,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.8</version>
+				<version>3.1.2</version>
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
@@ -289,6 +284,29 @@
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+					</execution>
+					<execution>
+						<id>unpack</id>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.openpnp</groupId>
+									<artifactId>opencv</artifactId>
+									<outputDirectory>${project.build.directory}/native</outputDirectory>
+									<includes>nu/pattern/opencv/</includes>
+									<excludes>**/*.class,**/README.md,**/cmake.log</excludes>
+									<fileMappers>
+										<org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
+											<pattern>nu/pattern/opencv/</pattern>
+											<replacement>./</replacement>
+										</org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
+									</fileMappers>
+								</artifactItem>
+							</artifactItems>
 						</configuration>
 					</execution>
 				</executions>
