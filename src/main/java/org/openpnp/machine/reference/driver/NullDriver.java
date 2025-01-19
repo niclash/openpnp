@@ -47,7 +47,7 @@ import org.openpnp.spi.MotionPlanner.CompletionType;
 import org.openpnp.spi.base.AbstractDriver;
 import org.openpnp.util.NanosecondTime;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * An example of the simplest possible driver. This driver maintains a set of coordinates for each Axis
@@ -56,7 +56,7 @@ import org.simpleframework.xml.Attribute;
 public class NullDriver extends AbstractDriver {
 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double feedRateMmPerMinute = 5000;
 
     private boolean enabled;

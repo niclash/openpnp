@@ -30,6 +30,7 @@ import org.openpnp.model.Configuration;
 import org.openpnp.model.Length;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.Head;
 import org.openpnp.spi.Nozzle;
@@ -44,45 +45,43 @@ import org.openpnp.util.SimpleGraph;
 import org.openpnp.util.UiUtils;
 import org.openpnp.vision.TemplateImage;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferenceNozzleTip extends AbstractNozzleTip {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int pickDwellMilliseconds;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int placeDwellMilliseconds;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double placeBlowOffLevel;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location changerStartLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double changerStartToMidSpeed = 1D;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location changerMidLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double changerMidToMid2Speed = 1D;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location changerMidLocation2 = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double changerMid2ToEndSpeed = 1D;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location changerEndLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location touchLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length visionCalibrationZAdjust = new Length(0, LengthUnit.Millimeters);
 
     public enum VisionCalibration {
@@ -107,43 +106,43 @@ public class ReferenceNozzleTip extends AbstractNozzleTip {
         }
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private VisionCalibration visionCalibration = VisionCalibration.None;
     
     public enum VisionCalibrationTrigger {
         Manual, MachineHome, NozzleTipChange
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     VisionCalibrationTrigger visionCalibrationTrigger = VisionCalibrationTrigger.Manual;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length visionTemplateDimensionX = new Length(10, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length visionTemplateDimensionY = new Length(10, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double visionMatchMinimumScore = 0.2;
 
     private Double visionMatchLastScore = null;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length visionTemplateTolerance = new Length(4, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int visionCalibrationMaxPasses = 3; 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length visionCalibrationTolerance = new Length(0.7, LengthUnit.Millimeters); 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private TemplateImage visionTemplateImageEmpty = null;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private TemplateImage visionTemplateImageOccupied = null;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location visionCalibrationOffset;
 
     public enum ZCalibrationTrigger {
@@ -153,31 +152,31 @@ public class ReferenceNozzleTip extends AbstractNozzleTip {
         }
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private ZCalibrationTrigger zCalibrationTrigger = ZCalibrationTrigger.Manual;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean zCalibrationFailHoming = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean templateNozzleTip = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean templateLocked = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length minPartDiameter = new Length(0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length maxPartDiameter = new Length(20, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length maxPartHeight = new Length(5, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length maxPickTolerance = new Length(1, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private ReferenceNozzleTipCalibration calibration = new ReferenceNozzleTipCalibration();
 
     public enum VacuumMeasurementMethod {
@@ -191,82 +190,82 @@ public class ReferenceNozzleTip extends AbstractNozzleTip {
         }
     }
 
-    @Element(required = false)
+    @JacksonXmlProperty
     VacuumMeasurementMethod methodPartOn = null;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     boolean partOnCheckAfterPick = true; 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     boolean partOnCheckAlign = true; 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     boolean partOnCheckBeforePlace = true; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean establishPartOnLevel;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double vacuumLevelPartOnLow;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double vacuumLevelPartOnHigh;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double vacuumDifferencePartOnLow;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double vacuumDifferencePartOnHigh;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     VacuumMeasurementMethod methodPartOff = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean establishPartOffLevel;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     boolean partOffCheckAfterPlace = true; 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     boolean partOffCheckBeforePick = true; 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double vacuumLevelPartOffLow;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     private double vacuumLevelPartOffHigh;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int partOffProbingMilliseconds;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int partOffDwellMilliseconds;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double vacuumDifferencePartOffLow;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double vacuumDifferencePartOffHigh;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length diameterLow = new Length(0, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean isPushAndDragAllowed = false;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     protected String changerActuatorPostStepOne;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected String changerActuatorPostStepTwo;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     protected String changerActuatorPostStepThree;
 
     public ReferenceNozzleTip() {
     }
 
-    @Commit
+    @PostDeserialize
     public void commit() {
         Configuration.get().addListener(new ConfigurationListener.Adapter() {
             @Override

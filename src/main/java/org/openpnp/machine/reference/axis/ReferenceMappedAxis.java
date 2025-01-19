@@ -21,6 +21,7 @@
 
 package org.openpnp.machine.reference.axis;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.axis.wizards.ReferenceMappedAxisConfigurationWizard;
 import org.openpnp.model.AxesLocation;
@@ -31,7 +32,6 @@ import org.openpnp.spi.Locatable.LocationOption;
 import org.openpnp.spi.base.AbstractMachine;
 import org.openpnp.spi.base.AbstractSingleTransformedAxis;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Element;
 
 /**
  * The ReferenceMappedAxis can map from an input Axis using two coordinate points mapped to each other.
@@ -40,16 +40,16 @@ import org.simpleframework.xml.Element;
  * linear math knowledge. 
  */
 public class ReferenceMappedAxis extends AbstractSingleTransformedAxis {
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length mapInput0 = new Length(0.0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length mapOutput0 = new Length(0.0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length mapInput1 = new Length(1.0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length mapOutput1 = new Length(1.0, LengthUnit.Millimeters);
 
     @Override

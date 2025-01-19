@@ -21,6 +21,7 @@
 
 package org.openpnp.spi.base;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.openpnp.model.AxesLocation;
 import org.openpnp.model.Configuration;
 import org.openpnp.model.Length;
@@ -33,14 +34,13 @@ import org.openpnp.spi.HeadMountable;
 import org.openpnp.spi.Locatable.LocationOption;
 import org.openpnp.spi.Machine;
 import org.openpnp.util.MovableUtils;
-import org.simpleframework.xml.Element;
 
 /**
  * An AbstractCoordinateAxis is an axis which can store a coordinate either physically or virtually. 
  *
  */
 public abstract class AbstractCoordinateAxis extends AbstractAxis implements CoordinateAxis {
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length homeCoordinate = new Length(0.0, LengthUnit.Millimeters);
 
     /**

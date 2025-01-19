@@ -33,30 +33,30 @@ import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.spi.base.AbstractActuator;
 import org.openpnp.util.MovableUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferenceAutoFeeder extends ReferenceFeeder {
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String actuatorName;
     
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Actuator.ActuatorValueType actuatorType = null;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double actuatorValue;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String postPickActuatorName;
     
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Actuator.ActuatorValueType postPickActuatorType = null;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double postPickActuatorValue;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean moveBeforeFeed;
 
     @Override

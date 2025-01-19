@@ -35,22 +35,22 @@ import org.openpnp.spi.Machine;
 import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.spi.base.AbstractActuator;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class SwitcherCamera extends ReferenceCamera {
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private int switcher = 0;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private String cameraId;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private String actuatorId;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double actuatorDoubleValue;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private long actuatorDelayMillis = 500;
 
     private static ReentrantLock switchingLock = new ReentrantLock();

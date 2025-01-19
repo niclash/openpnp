@@ -13,24 +13,24 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(
   category   ="Image Processing", 
   description="Replace the working image with the image loaded from a given path.")
   
 public class ImageRead extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Absolute path of the image file to read.")
     private File file = new File("");
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="The color space of the image.  Use to select the color space that the original image had when it was written. "
             + "Note that this does not change any of the numerical values that represent the image but rather their interpretation when the "
             + "image is displayed in the pipeline editor.")
     private ColorSpace colorSpace = ColorSpace.Bgr;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Handle the loaded image as if captured by the camera. The image resolution and aspect ratio will be adapted, and "
             + "if information is present (upp.txt), the image is scaled to camera Units per Pixel.<br/>"
             + "Any pixel coordinates obtained from the image are therefore correctly interpreted, as they would from a "

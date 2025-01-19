@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.apache.commons.io.IOUtils;
 import org.opencv.core.Point;
 import org.opencv.core.RotatedRect;
@@ -47,41 +48,38 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvPipeline.PipelineShot;
 import org.openpnp.vision.pipeline.CvStage.Result;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferenceBottomVision extends AbstractPartAlignment {
 
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     protected CvPipeline pipeline;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean enabled = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean preRotate = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int maxVisionPasses = 3;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length maxLinearOffset = new Length(1, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double maxAngularOffset = 10;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double testAlignmentAngle = 0.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Deprecated
     private Integer edgeDetectionPixels = null;
 
     @Deprecated
-    @ElementMap(required = false)
+    @JacksonXmlProperty
     protected Map<String, PartSettings> partSettingsByPartId = null;
 
     public ReferenceBottomVision() {
@@ -740,34 +738,34 @@ public class ReferenceBottomVision extends AbstractPartAlignment {
     }
 
     @Deprecated
-    @Root
+    @JacksonXmlRootElement
     public static class PartSettings extends AbstractModelObject {
 
         @Deprecated
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         protected boolean enabled = true;
         @Deprecated
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected PreRotateUsage preRotateUsage = PreRotateUsage.Default;
 
         @Deprecated
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected PartSizeCheckMethod checkPartSizeMethod = PartSizeCheckMethod.Disabled;
 
         @Deprecated
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected int checkSizeTolerancePercent = 20;
 
         @Deprecated
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected MaxRotation maxRotation = MaxRotation.Adjust;
 
         @Deprecated
-        @Element(required = false)
+        @JacksonXmlProperty
         protected Location visionOffset = new Location(LengthUnit.Millimeters);
 
         @Deprecated
-        @Element
+        @JacksonXmlProperty
         protected CvPipeline pipeline;
 
         @Deprecated

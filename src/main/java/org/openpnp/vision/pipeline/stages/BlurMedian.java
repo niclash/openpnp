@@ -6,12 +6,12 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Image Processing",
         description = "Performs median blurring on the working image.")
 public class BlurMedian extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Width and height of the blurring kernel. Should be and odd number greater than or equal to 3")
     private int kernelSize = 3;
 

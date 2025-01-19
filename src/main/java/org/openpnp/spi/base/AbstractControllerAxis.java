@@ -28,16 +28,16 @@ import org.openpnp.model.LengthUnit;
 import org.openpnp.spi.Axis;
 import org.openpnp.spi.ControllerAxis;
 import org.openpnp.spi.Driver;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractControllerAxis extends AbstractCoordinateAxis implements ControllerAxis {
 
     private Driver driver;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String driverId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String letter;
 
     /**

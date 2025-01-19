@@ -18,10 +18,10 @@ import org.openpnp.spi.Machine;
 import org.openpnp.spi.MotionPlanner.CompletionType;
 import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.spi.base.AbstractDriver;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class TestDriver extends AbstractDriver implements Driver {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String dummy;
 
     private Driver delegate = new TestDriverDelegate();

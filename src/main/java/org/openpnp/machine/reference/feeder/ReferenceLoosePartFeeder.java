@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.swing.Action;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.apache.commons.io.IOUtils;
 import org.opencv.core.RotatedRect;
 import org.openpnp.gui.MainFrame;
@@ -38,10 +39,9 @@ import org.openpnp.util.MovableUtils;
 import org.openpnp.util.OpenCvUtils;
 import org.openpnp.util.VisionUtils;
 import org.openpnp.vision.pipeline.CvPipeline;
-import org.simpleframework.xml.Element;
 
 public class ReferenceLoosePartFeeder extends ReferenceFeeder {
-    @Element(required = false)
+    @JacksonXmlProperty
     private CvPipeline pipeline = createDefaultPipeline();
 
     private Location pickLocation;

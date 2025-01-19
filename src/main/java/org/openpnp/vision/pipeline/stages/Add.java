@@ -6,23 +6,21 @@ import org.opencv.core.Scalar;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Adds two images together, scale either, or subtract second.")
 public class Add extends CvStage {
-    @Element(required = false)
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String firstStageName = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String secondStageName = null;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double firstScalar = 1.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double secondScalar = 1.0;
 
     public String getFirstStageName() {

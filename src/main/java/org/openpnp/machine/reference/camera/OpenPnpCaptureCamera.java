@@ -32,12 +32,12 @@ import org.openpnp.capture.PropertyLimits;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.camera.wizards.OpenPnpCaptureCameraConfigurationWizard;
 import org.openpnp.model.AbstractModelObject;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.PropertySheetHolder;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+@SuppressWarnings("FieldMayBeFinal")
 public class OpenPnpCaptureCamera extends ReferenceCamera implements Runnable {
     private OpenPnpCapture capture = new OpenPnpCapture();
 
@@ -45,52 +45,52 @@ public class OpenPnpCaptureCamera extends ReferenceCamera implements Runnable {
     private CaptureFormat format;
     private CaptureStream stream;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String uniqueId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Integer formatId;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder backLightCompensation = new CapturePropertyHolder(CaptureProperty.BackLightCompensation);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder brightness = new CapturePropertyHolder(CaptureProperty.Brightness);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder contrast = new CapturePropertyHolder(CaptureProperty.Contrast);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder exposure = new CapturePropertyHolder(CaptureProperty.Exposure);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder focus = new CapturePropertyHolder(CaptureProperty.Focus);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder gain = new CapturePropertyHolder(CaptureProperty.Gain);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder gamma = new CapturePropertyHolder(CaptureProperty.Gamma);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder hue = new CapturePropertyHolder(CaptureProperty.Hue);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder powerLineFrequency = new CapturePropertyHolder(CaptureProperty.PowerLineFrequency);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder saturation = new CapturePropertyHolder(CaptureProperty.Saturation);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder sharpness = new CapturePropertyHolder(CaptureProperty.Sharpness);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder whiteBalance = new CapturePropertyHolder(CaptureProperty.WhiteBalance);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CapturePropertyHolder zoom = new CapturePropertyHolder(CaptureProperty.Zoom);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean freezeProperties = false;
 
     public List<CaptureDevice> getCaptureDevices() {
@@ -103,7 +103,7 @@ public class OpenPnpCaptureCamera extends ReferenceCamera implements Runnable {
             return null;
         }
         try {
-            /**
+            /*
              * The timeout is only needed if the stream is somehow in error and not producing frames (anymore) 
              * which can happen, if you disconnect the USB port and then try to capture from a pipeline.  
              */
@@ -256,7 +256,7 @@ public class OpenPnpCaptureCamera extends ReferenceCamera implements Runnable {
         return capturedFrames*1000./(t1-t0);
     }
 
-    @Commit
+    @PostDeserialize
     protected void commit() throws Exception {
         super.commit();
         backLightCompensation.setCamera(this);
@@ -427,13 +427,13 @@ public class OpenPnpCaptureCamera extends ReferenceCamera implements Runnable {
     }
 
     public static class CapturePropertyHolder extends AbstractModelObject {
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private CaptureProperty property;
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private Integer value;
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private Boolean auto;
 
         private OpenPnpCaptureCamera camera;

@@ -5,13 +5,13 @@ import javax.swing.Icon;
 import org.openpnp.model.AbstractModelObject;
 import org.openpnp.model.Configuration;
 import org.openpnp.spi.NozzleTip;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractNozzleTip extends AbstractModelObject implements NozzleTip {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected String id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name;
 
     public AbstractNozzleTip() {

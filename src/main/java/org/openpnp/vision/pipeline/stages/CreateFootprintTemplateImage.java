@@ -12,10 +12,7 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.openpnp.vision.pipeline.stages.convert.ColorConverter;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.convert.Convert;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Creates a template from the specified footprint and camera properties. The template is scaled to the camera's units.")
 public class CreateFootprintTemplateImage extends CvStage {
@@ -25,51 +22,48 @@ public class CreateFootprintTemplateImage extends CvStage {
         TopView,
         BottomView
     }
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Determines, how the footprint is drawn. Fiducial: only draws the pads, TopView: draws body over pads, "
             + "BottomView: draws pads over body.")
     private FootprintView footprintView = FootprintView.Fiducial;
 
-    @Element(required=false)
-    @Convert(ColorConverter.class)
+    @JacksonXmlProperty
     @Property(description = "Color of the pads.")
-    private Color padsColor = Color.white; 
+    private Color padsColor = Color.white;
 
-    @Element(required=false)
-    @Convert(ColorConverter.class)
+    @JacksonXmlProperty
     @Property(description = "Color of the body.")
-    private Color bodyColor = Color.black; 
+    private Color bodyColor = Color.black;
 
-    @Element(required=false)
-    @Convert(ColorConverter.class)
+    @JacksonXmlProperty
     @Property(description = "Color of the background.")
     private Color backgroundColor = Color.black; 
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "If enabled dimensions are only controled by the part size.")
     private boolean minimalImageSize = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Vision offset in X in pixels. The footprint is visually asymmetric, and its detection center offset to the right (+) or left (-).")
     private double xOffset = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Vision offset in Y in pixels. The footprint is visually asymmetric, and its detection center offset to the top (+) or bottom (-).")
     private double yOffset = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Rotation")
     private double rotation = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Max width of the template. Set 0 to get the full width.")
     private double maxWidth = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Max height of the template. Set 0 to get the full height.")
     private double maxHeight = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of the property through which OpenPnP controls this stage. Use \"footprint\" for standard control.")
     private String propertyName = "footprint";
 

@@ -4,21 +4,21 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.opencv.core.RotatedRect;
 
 
 @Stage(description="It uses pixel sizes. Check part's pixel sizes on detected RotatedRect (i.e. MinAreaRect) and put the same values into this stage. Place this stage after the Pipeline that returns RotatedRect (i.e. MinAreaRect...) and use it as 'results' stage. Rename MinAreaRect into 'result'.")
 public class SizeCheck extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="This value is inaccuracy tolerance +/- pixel size that is considered to be valid.")
     private int tolerance = 5;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="1st component's size (pixels).")
     private int sizeW = 7;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="2nd component's size (pixels).")
     private int sizeH = 28;
 

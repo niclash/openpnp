@@ -28,6 +28,7 @@ import org.openpnp.ConfigurationListener;
 import org.openpnp.gui.support.PropertySheetWizardAdapter;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.model.Configuration;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Head;
 import org.openpnp.spi.Machine;
@@ -36,26 +37,25 @@ import org.openpnp.spi.Nozzle;
 import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.util.MovableUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class BambooFeederAutoVision extends AbstractPandaplacerVisionFeeder {
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private String feedActuatorName;
     protected Actuator feedActuator;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double feedActuatorValue;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private String postPickActuatorName;
     protected Actuator postPickActuator;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double postPickActuatorValue;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean moveBeforeFeed = false;
 
     public String getFeedActuatorName() {
@@ -156,7 +156,7 @@ public class BambooFeederAutoVision extends AbstractPandaplacerVisionFeeder {
 
   }
 
-  @Persist
+  @PreSerialize
   private void persist() {
     // Make sure the newest names are persisted (legacy way).
     feedActuatorName = (feedActuator == null ? null : feedActuator.getName());

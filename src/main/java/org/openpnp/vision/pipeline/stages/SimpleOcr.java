@@ -56,7 +56,7 @@ import org.openpnp.vision.pipeline.CvStage.Result.TemplateMatch;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
@@ -70,28 +70,28 @@ import com.google.zxing.common.HybridBinarizer;
         + "Use an AffineWarp stage to extract the region of interest first (for cropping, rotation and acceptable speed).<br/>"
         + "It is also recommended to convert the image to grayscale first. Do not apply a threshold stage.")
 public class SimpleOcr extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Alphabet of all the characters that can be recognized. The smaller the alphabet, the faster and the "
             + "more reliable the OCR works. The alphabet can be overriden with the \"alphabet\" property.")
     private String alphabet = "0123456789.-+_RCLDQYXJIVAFH%GMKkmuµnp";
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of the font to be recognized or "+OcrUtils.BARCODE_PSEUDO_FONT+".<br/>"
             + "Monospace fonts work much better and allow lower resolution. "
             + "Use a font where all the used characters are easily distinguishable. Fonts with clear separation between characters "
             + "are preferred.")
     private String fontName = "Liberation Mono";
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Size of the font in typographic points (1 pt = 1/72 in).")
     private double fontSizePt = 7.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "If the font size is larger in pixels than this value, the OCR stage will resizes the image to a smaller resolution first "
             + "(to achieve acceptable OCR speed). Alternatively, you can use an AffineWarp stage with scale < 1.0, but then you need to scale your pointSize too.")
     private int fontMaxPixelSize = 20;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "<strong style=\"color:red;\">CAUTION, Quick&Dirty Hack:</strong> This will "
             + "auto-detect the font size upwards and downwards of your currently set pointSize. "
             + "This is a one-shot option, used while editing the pipeline. Once the detection is done, the switch "
@@ -99,7 +99,7 @@ public class SimpleOcr extends CvStage {
             + "The process may take a while and appear to hang, be patient. Afterwards you need to switch stages to refresh the GUI.")
     private boolean autoDetectSize = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Template matching minimum match threshold (CCOEFF_NORMED method). Default is 0.75.")
     private double threshold = 0.75;
 
@@ -109,15 +109,15 @@ public class SimpleOcr extends CvStage {
         OverOriginalImage
     };
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Draw the OCR match onto the image. ")
     private DrawStyle drawStyle = DrawStyle.OverOriginalImage;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Write debug images and messages. Will slow down operation.")
     private boolean debug;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Property name as controlled by the vision operation using this pipeline.<br/>"
             + "If set, these will override the properties configured here.")
     private String propertyName = "SimpleOcr";

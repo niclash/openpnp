@@ -21,7 +21,7 @@ package org.openpnp.model;
 
 import java.util.Locale;
 
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A Location is a an immutable 3D point in X, Y, Z space with a rotation component. The rotation is
@@ -33,15 +33,15 @@ public class Location {
      * with the XML serialization.
      */
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private LengthUnit units;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double x;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double y;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double z;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double rotation;
 
     /**

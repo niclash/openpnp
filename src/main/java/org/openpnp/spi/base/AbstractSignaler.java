@@ -17,14 +17,14 @@ import org.openpnp.model.Configuration;
 import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.spi.Signaler;
 import org.openpnp.spi.WizardConfigurable;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractSignaler extends AbstractModelObject implements Signaler, WizardConfigurable {
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected String id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name;
     
     public AbstractSignaler() {

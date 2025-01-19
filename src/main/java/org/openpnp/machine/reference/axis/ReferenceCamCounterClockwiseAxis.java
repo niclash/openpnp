@@ -21,6 +21,7 @@
 
 package org.openpnp.machine.reference.axis;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.axis.wizards.ReferenceCamCounterClockwiseAxisConfigurationWizard;
 import org.openpnp.model.AxesLocation;
@@ -30,7 +31,6 @@ import org.openpnp.model.LengthUnit;
 import org.openpnp.spi.Locatable.LocationOption;
 import org.openpnp.spi.base.AbstractMachine;
 import org.openpnp.spi.base.AbstractSingleTransformedAxis;
-import org.simpleframework.xml.Element;
 
 /**
  * A TransformedAxis for heads with dual rocker or seesaw driven Z axes powered by one motor. 
@@ -64,18 +64,18 @@ public class ReferenceCamCounterClockwiseAxis extends AbstractSingleTransformedA
     final static double SINUS_CUTOFF = Math.sin(Math.toRadians(ANGLE_CUTOFF));
     final static double EXTENSION_SLOPE = 0.0001/180.0;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length camRadius = new Length(24.0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double camArmsAngle = 180.0;
 
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length camWheelRadius = new Length(0, LengthUnit.Millimeters);
 
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length camWheelGap = new Length(0, LengthUnit.Millimeters);
 
     public ReferenceCamCounterClockwiseAxis() {

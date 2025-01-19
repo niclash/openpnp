@@ -44,7 +44,7 @@ import org.openpnp.spi.MachineListener;
 import org.openpnp.spi.base.AbstractActuator;
 import org.openpnp.util.MovableUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * AbstractPreviewCamera handles the preview capture broadcasting aspects of a Camera. 
@@ -55,10 +55,10 @@ public abstract class AbstractBroadcastingCamera extends AbstractSettlingCamera 
     // a new image.
     protected Object captureNotifier = new Object();
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double fps = 5;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean suspendPreviewInTasks = false;
 
     private volatile Thread thread;

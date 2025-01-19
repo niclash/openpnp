@@ -48,7 +48,7 @@ import org.openpnp.model.Configuration;
 import org.openpnp.model.Configuration.VisionSettingsConfigurationHolder;
 import org.openpnp.model.FiducialVisionSettings;
 import org.openpnp.model.PartSettingsHolder;
-import org.simpleframework.xml.Serializer;
+import org.openpnp.util.XmlSerialize;
 
 public class VisionSettingsPanel extends JPanel implements WizardContainer {
 
@@ -275,10 +275,8 @@ public class VisionSettingsPanel extends JPanel implements WizardContainer {
             try {
                 VisionSettingsConfigurationHolder holder = new VisionSettingsConfigurationHolder();
                 holder.visionSettings.addAll(visionSettings);
-                Serializer s = Configuration.createSerializer();
-                StringWriter w = new StringWriter();
-                s.write(holder, w);
-                StringSelection stringSelection = new StringSelection(w.toString());
+                String xml = XmlSerialize.serialize(holder);
+                StringSelection stringSelection = new StringSelection(xml);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(stringSelection, null);
             }
@@ -299,11 +297,9 @@ public class VisionSettingsPanel extends JPanel implements WizardContainer {
         @Override
         public void actionPerformed(ActionEvent arg0) {
             try {
-                Serializer ser = Configuration.createSerializer();
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 String s = (String) clipboard.getData(DataFlavor.stringFlavor);
-                StringReader r = new StringReader(s);
-                VisionSettingsConfigurationHolder holder = ser.read(VisionSettingsConfigurationHolder.class, s);
+                VisionSettingsConfigurationHolder holder = XmlSerialize.serialization().read(VisionSettingsConfigurationHolder.class, s);
                 table.clearSelection();
                 for (AbstractVisionSettings visionSettings : holder.visionSettings) {
                     visionSettings.setId(Configuration.createId(visionSettings.getId().substring(0, 3)));

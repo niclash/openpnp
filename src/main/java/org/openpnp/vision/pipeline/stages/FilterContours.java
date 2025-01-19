@@ -9,24 +9,24 @@ import org.openpnp.model.Area;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Draws circles from a List<Circle> onto the working image. 
  */
 public class FilterContours extends CvStage {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String contoursStageName = null;
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Minimum area of the contour, or -1 if no minimum limit is wanted.")
     private double minArea = -1;
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum area of the contour, or -1 if no maximum limit is wanted.")
     private double maxArea = -1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of the property through which OpenPnP controls this stage. Use \"FilterContours\" for standard control.")
     private String propertyName = "FilterContours";
 

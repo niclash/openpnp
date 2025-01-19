@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.Camera.SettleOption;
@@ -16,9 +17,7 @@ import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.openpnp.vision.pipeline.TerminalException;
 import org.openpnp.vision.pipeline.ui.PipelinePropertySheetTable;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 @Stage(
@@ -26,27 +25,27 @@ import org.simpleframework.xml.core.Commit;
         description="Capture an image from the pipeline camera.")
 
 public class ImageCapture extends CvStage {
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Use the default camera lighting.")
     private boolean defaultLight = true;
 
-    @Element(required=false)
+    @JacksonXmlProperty
     @Property(description="Light actuator value or profile, if default camera lighting is disabled.")
     private Object light = null;
 
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private Boolean settleFirst;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Wait for the camera to settle before capturing an image.")
     private SettleOption settleOption;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Number of camera images to average.")
     private int count = 1;
 
-    @Commit
+    @PostDeserialize
     void commit() {
         if (settleFirst != null) {
             settleOption = SettleOption.Settle;

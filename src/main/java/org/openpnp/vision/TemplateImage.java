@@ -32,14 +32,14 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.openpnp.model.Configuration;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 
 /**
  * A simple wrapper for a vision template image. This will make sure only one instance is maintained
  * and persisted even if it is referenced many times by different OpenPnP objects. Also provides
- * transparent XML serialization, so a TempateImage can simply be added as an @Element.
+ * transparent XML serialization, so a TemplateImage can simply be added as an {@link JacksonXmlProperty}.
  * 
  */
 public class TemplateImage {
@@ -91,7 +91,7 @@ public class TemplateImage {
 
     private static Map<String, ImageSlot> imageRegister = new HashMap<>();
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private String hash;
 
     public TemplateImage() {}
@@ -110,14 +110,14 @@ public class TemplateImage {
         }
     }
 
-    @Commit
+    @PostDeserialize
     private void commit() throws IOException {
         if (!imageRegister.containsKey(hash)) {
             imageRegister.put(hash, new ImageSlot(hash));
         }
     }
 
-    @Persist
+    @PreSerialize
     private void persist() throws IOException {
         imageRegister.get(hash)
                      .persist();

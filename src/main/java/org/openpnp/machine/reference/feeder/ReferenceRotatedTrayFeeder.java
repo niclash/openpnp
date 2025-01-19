@@ -27,12 +27,11 @@ import org.openpnp.machine.reference.ReferenceFeeder;
 import org.openpnp.machine.reference.feeder.wizards.ReferenceRotatedTrayFeederConfigurationWizard;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.Nozzle;
 import org.openpnp.spi.PropertySheetHolder;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Implementation of Feeder that indexes based on an offset. This allows a tray
@@ -42,31 +41,35 @@ import org.simpleframework.xml.core.Commit;
  */
 public class ReferenceRotatedTrayFeeder extends ReferenceFeeder {
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int trayCountCols = 1;
-    @Attribute
+
+    @JacksonXmlProperty( isAttribute = true )
     private int trayCountRows = 1;
-    @Element
+
+    @JacksonXmlProperty
     private Location offsets = new Location(LengthUnit.Millimeters);
-    @Attribute
+
+    @JacksonXmlProperty( isAttribute = true )
     private int feedCount = 0;  // UI is base 1, 0 is ok because a pick operation always preceded by a feed, which increments feedCount to 1
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Deprecated
     private Double trayRotation = null;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double componentRotationInTray = 0;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean legacyPickingInProgress = false;
 
-    @Element
+    @JacksonXmlProperty
     protected Location lastComponentLocation = new Location(LengthUnit.Millimeters);
-    @Element
+
+    @JacksonXmlProperty
     protected Location firstRowLastComponentLocation = new Location(LengthUnit.Millimeters);
 
-    @Commit
+    @PostDeserialize
     public void commit() {
         if (trayRotation != null) {
             Logger.trace("Updating legacy Rotated Tray Feeder to latest version.");

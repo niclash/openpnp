@@ -21,12 +21,12 @@ package org.openpnp.model;
 
 import java.util.Locale;
 
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class Point {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     public double x;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     public double y;
 
     public Point() {

@@ -11,18 +11,18 @@ import org.openpnp.model.Configuration;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.PropertySheetHolder;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class Neoden4SwitcherCamera extends ReferenceCamera {
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private int switcher = 0;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private String cameraId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int exposure = 25;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int gain = 8;
     
     private static Map<Integer, Camera> switchers = new HashMap<>();

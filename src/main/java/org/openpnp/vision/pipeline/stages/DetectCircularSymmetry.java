@@ -34,7 +34,7 @@ import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Finds occurrences of maximum circular symmetry in the working image and stores the results as a List<Circle> on the model. 
@@ -42,55 +42,55 @@ import org.simpleframework.xml.Attribute;
 @Stage(description="Finds circular symmetry in the working image. Diameter range and maximum search distance can be specified.")
 public class DetectCircularSymmetry extends CvStage {
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Minimum diameter of the circle, in pixels.")
     private int minDiameter = 10;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum diameter of the circle, in pixels.")
     private int maxDiameter = 100;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum search distance (radius) from nominal center, in pixels.")
     private int maxDistance = 100;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum search width across nominal center, in pixels (0 = same as maximum search distance × 2).")
     private int searchWidth = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum search height across nominal center, in pixels (0 = same as maximum search distance × 2).")
     private int searchHeight = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum number of targets to be found.")
     private int maxTargetCount = 1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Minimum relative circular symmetry (overall pixel variance vs. circular pixel variance).")
     private double minSymmetry = 1.2;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Correlated minimum circular symmetry for multiple matches, i.e. other matches must have "
             + "at least this relative symmetry. Must be in the interval [0,1]. ")
     private double corrSymmetry = 0.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Relative outer diameter margin used when the propertyName is set.")
     private double outerMargin = 0.2;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Relative inner diameter margin used when the propertyName is set.")
     private double innerMargin = 0.4;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "To speed things up, only one pixel out of a square of subSampling × subSampling pixels is sampled. "
             + "The best region is then locally searched using iteration with smaller and smaller subSampling size.<br/>"
             + "The subSampling value will automatically be reduced for small diameters. "
             + "Use BlurGaussian before this stage if subSampling suffers from moiré effects.")
     private int subSampling = 8;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "The superSampling value can be used to achieve sub-pixel final precision: "
             + "1 means no supersampling, 2 means half sub-pixel precision etc.")
     private int superSampling = 1;
@@ -107,7 +107,7 @@ public class DetectCircularSymmetry extends CvStage {
             return 1;
         }
     }
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Set the symmetry score calculation method.<br/>"
             + "<ul>"
             + "<li>Overall variance vs. ring variance sum (default): tolerant circular symmetry score. Matches partial/scattered circular patterns.</li>"
@@ -117,17 +117,17 @@ public class DetectCircularSymmetry extends CvStage {
             + "</ul>")
     private SymmetryScore symmetryScore = SymmetryScore.OverallVarianceVsRingVarianceSum;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Property name as controlled by the vision operation using this pipeline.<br/>"
             + "<ul><li><i>propertyName</i>.diameter</li><li><i>propertyName</i>.maxDistance</li><li><i>propertyName</i>.center</li></ul>"
             + "If set, these will override the properties configured here.")
     private String propertyName = "";
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Display matches with circle and cross-hairs.")
     private boolean diagnostics = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Overlay a heat map indicating the local circular symmetry.")
     private boolean heatMap = false;
 

@@ -39,7 +39,7 @@ import org.openpnp.vision.pipeline.CvStage.Result.TemplateMatch;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * OpenCV based image template matching with local maxima detection improvements from FireSight:
@@ -51,7 +51,7 @@ import org.simpleframework.xml.Attribute;
 
 public class MatchPartTemplate extends CvStage {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Enable logging.")
     private boolean log = false;
 
@@ -66,21 +66,21 @@ public class MatchPartTemplate extends CvStage {
     /**
      * Name of a prior stage to load the template image from.
      */
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of a prior stage to load the template image from.")
     private String templateStageName;
 
     /**
      * Name of a prior stage to load the working model from.
      */
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of a prior stage to load the working model from.")
     private String modelStageName;
 
     /**
      * If maxVal is below this value, then no matches will be reported. Default is 0.4.
      */
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(
             description = "If maximum value is below this value, then no matches will be reported. Default is 0.4.")
     private double threshold = 0.4f;

@@ -45,12 +45,11 @@ import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.spi.base.AbstractActuator;
 import org.openpnp.util.UiUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferenceActuator extends AbstractActuator implements HeadMountable {
 
-    @Element
+    @JacksonXmlProperty
     private Location headOffsets = new Location(LengthUnit.Millimeters);
 
     public enum MachineStateActuation {
@@ -62,18 +61,18 @@ public class ReferenceActuator extends AbstractActuator implements HeadMountable
         ActuateOn
     };
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected MachineStateActuation enabledActuation = MachineStateActuation.AssumeUnknown;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected MachineStateActuation homedActuation = MachineStateActuation.LeaveAsIs;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected MachineStateActuation disabledActuation = MachineStateActuation.LeaveAsIs;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int index;
 
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length safeZ = null;
 
     protected Object lastActuationValue;
@@ -145,7 +144,7 @@ public class ReferenceActuator extends AbstractActuator implements HeadMountable
         this.index = index;
     }
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private ReferenceActuatorProfiles actuatorProfiles;
 
     @Override

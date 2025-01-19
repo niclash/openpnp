@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import com.fazecast.jSerialComm.SerialPort;
 
@@ -64,31 +64,31 @@ public class SerialPortCommunications extends ReferenceDriverCommunications {
         }
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String portName = "";
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int baud = 115200;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected FlowControl flowControl = FlowControl.Off;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected DataBits dataBits = DataBits.Eight;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected StopBits stopBits = StopBits.One;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Parity parity = Parity.None;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean setDtr = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean setRts = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name = "SerialPortCommunications";
 
 

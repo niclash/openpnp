@@ -12,80 +12,79 @@ import org.openpnp.machine.reference.driver.SerialPortCommunications.FlowControl
 import org.openpnp.machine.reference.driver.SerialPortCommunications.Parity;
 import org.openpnp.machine.reference.driver.SerialPortCommunications.StopBits;
 import org.openpnp.machine.reference.driver.wizards.AbstractReferenceDriverConfigurationWizard;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.base.AbstractDriver;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractReferenceDriver extends AbstractDriver {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected MotionControlType motionControlType = MotionControlType.ToolpathFeedRate; 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected SerialPortCommunications serial = new SerialPortCommunications();
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected TcpCommunications tcp = new TcpCommunications();
     
-    @Element(required = false)
+    @JacksonXmlProperty
     protected SimulatedCommunications simulated = new SimulatedCommunications();
 
     public enum CommunicationsType {
         serial, // lower case for legacy support.
         tcp
     }
-    @Attribute(required = false, name = "communications")
+    @JacksonXmlProperty(isAttribute = true, localName = "communications")
     protected CommunicationsType communicationsType = CommunicationsType.serial;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean connectionKeepAlive = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean syncInitialLocation = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean allowUnhomedMotion = false;
 
     /**
      * TODO The following properties are for backwards compatibility and can be removed after 2019-07-15. 
      */
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String portName;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Integer baud = 115200;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected FlowControl flowControl = FlowControl.Off;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected DataBits dataBits = DataBits.Eight;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected StopBits stopBits = StopBits.One;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Parity parity = Parity.None;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Boolean setDtr = false;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Boolean setRts = false;
     
     public AbstractReferenceDriver() {
     }
     
-    @Commit
+    @PostDeserialize
     public void commit() {
         if (portName != null && !portName.isEmpty()) {
             setPortName(this.portName);

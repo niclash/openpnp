@@ -4,12 +4,12 @@ import org.openpnp.ConfigurationListener;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.signaler.wizards.ActuatorSignalerConfigurationWizard;
 import org.openpnp.model.Configuration;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.base.AbstractJobProcessor;
 import org.openpnp.spi.base.AbstractSignaler;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * An ActuatorSignaler can signal certain device or job states by using a machine actuator e.g. signaling lights
@@ -18,10 +18,10 @@ public class ActuatorSignaler extends AbstractSignaler {
 
     protected Actuator actuator;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String actuatorId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected AbstractJobProcessor.State jobState;
 
     public ActuatorSignaler() {
@@ -34,7 +34,7 @@ public class ActuatorSignaler extends AbstractSignaler {
         });
     }
     
-    @Persist
+    @PreSerialize
     public void persist() {
         if (actuator != null) {
             actuatorId = actuator.getId();

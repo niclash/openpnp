@@ -35,7 +35,7 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Finds the object and angle with maximum rectlinear symmetry. 
@@ -45,37 +45,37 @@ import org.simpleframework.xml.Attribute;
         + "As a second step, the mid-points with the largest symmetry in the horizontal and vertical cross-sections is determined to detect the subject center.")
 public class DetectRectlinearSymmetry extends CvStage {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Expected angle of the subject to be detected.")
     private double expectedAngle = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Search distance around the center.")
     private double searchDistance = 100;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Search angle, two-sided around the expected angle.")
     private double searchAngle = 45;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum cross-section width of the subject to be detected.")
     private double maxWidth = 100;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum cross-section height of the subject to be detected.")
     private double maxHeight = 100;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Tells the stage whether the subject is left/right-symmetric (in the sense as seen at 0° subject rotation). "
             + "According to this switch, the stage either takes the <strong>symmetricFunction</strong>, or the <strong>asymmetricFunction</strong>.")
     private boolean symmetricLeftRight = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Tells the stage whether the subject is upper/lower-symmetric (in the sense as as seen at 0° subject rotation). "
             + "According to this switch, the stage either takes the <strong>symmetricFunction</strong>, or the <strong>asymmetricFunction</strong>.")
     private boolean symmetricUpperLower = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Determines how the cross-section is evaluated for <strong>symmetric</strong> subjects.<br/><ul>"
             + "<li><strong>FullSymmetry</strong> looks for full inner and outline symmetry. Use for truly symmetric subjects and best precision.</li>"
             + "<li><strong>EdgeSymmetry</strong> looks for full inner and outline symmetry of edges. Use for partially "
@@ -89,7 +89,7 @@ public class DetectRectlinearSymmetry extends CvStage {
             + "</li></ul>")
     private SymmetryFunction symmetricFunction = SymmetryFunction.FullSymmetry;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Determines how the cross-section is evaluated for <strong>asymmetric</strong> subjects.<br/><ul>"
             + "<li><strong>FullSymmetry</strong> looks for full inner and outline symmetry. Use for truly symmetric subjects and best precision.</li>"
             + "<li><strong>EdgeSymmetry</strong> looks for full inner and outline symmetry of edges. Use for partially "
@@ -103,39 +103,39 @@ public class DetectRectlinearSymmetry extends CvStage {
             + "</li></ul>")
     private SymmetryFunction asymmetricFunction = SymmetryFunction.OutlineSymmetryMasked;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Minimum relative symmetry. Values larger than 1.0 indicate symmetry.")
     private double minSymmetry = 10;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "To speed things up, only one pixel out of a square of subSampling × subSampling pixels is sampled. "
             + "The best region is then locally searched using iteration with smaller and smaller subSampling size.<br/>"
             + "The subSampling value will automatically be reduced when other search properties require it. "
             + "Use BlurGaussian before this stage if subSampling suffers from moiré effects.")
     private int subSampling = 8;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "The superSampling value can be used to achieve sub-pixel final precision:<br/>"
             + "1 means no supersampling, 2 means half sub-pixel precision etc.<br/>"
             + "Negative values can be used to stop refining subSampling, -2 means it will stop at a 2-pixel resolution.")
     private int superSampling = 1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Smoothing applied to the sampled cross-sections. Given as the Gaussian kernel size.<br/>"
             + "This is needed to eliminate interferences, when angular sampling coincides with the pixel raster or its diagonals.")
     private int smoothing = 5;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Gamma to be applied to the image. The input signal is raised to the power gamma. "
             + "With gammas > 1.0 the bright image parts are emphasized.")
     private double gamma = 2.5;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "When the <strong>OutlineSymmetryMasked</strong> function is used, only pixels with luminance greater "
             + "than the <strong>threshold</strong> are considered when determining the outline of the part.")
     private int threshold = 128;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "When the <strong>OutlineSymmetryMasked</strong> function is used, pixels are masked by the "
             + "<strong>threshold</strong> property. A cross-section pixel count over these masked pixels is then determined. "
             + "A cross-section bin only counts as \"detected\" when the pixel count is larger than "
@@ -143,15 +143,15 @@ public class DetectRectlinearSymmetry extends CvStage {
             + "This is used to remove masking imperfections, i.e. image specks and impurities up to a certain size and frequency.")
     private double minFeatureSize = 40;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Display the detection with cross-hairs and bounds.")
     private boolean diagnostics = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Overlay a diagnostic map indicating the angular reclinear contrast and rectlinear cross-section.")
     private boolean diagnosticsMap = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "determines the pipeline property name under which this stage is controlled by the vision operation. "
             + "If set, these will override some of the properties configured here. Use \"DetectRectlinearSymmetry\" for default control.")
     private String propertyName = "DetectRectlinearSymmetry";

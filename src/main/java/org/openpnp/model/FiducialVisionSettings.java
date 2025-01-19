@@ -3,21 +3,20 @@ package org.openpnp.model;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.vision.ReferenceFiducialLocator.PartSettings;
 import org.openpnp.machine.reference.vision.wizards.FiducialVisionSettingsConfigurationWizard;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class FiducialVisionSettings extends AbstractVisionSettings {
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length parallaxDiameter = new Length(0, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double parallaxAngle = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int maxVisionPasses = 3;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length maxLinearOffset = new Length(0.2, LengthUnit.Millimeters);
 
     @Override

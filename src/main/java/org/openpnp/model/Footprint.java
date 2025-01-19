@@ -27,44 +27,47 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.openpnp.gui.importer.KicadModImporter;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 /**
  * A Footprint is a group of SMD pads along with length unit information. Footprints can be rendered
  * to a Shape for easy display using 2D primitives.
  */
 public class Footprint extends AbstractModelObject{
-    @Attribute
+    @JacksonXmlProperty(isAttribute = true)
     private LengthUnit units = LengthUnit.Millimeters;
 
-    @ElementList(inline = true, required = false)
+    @JacksonXmlProperty(localName = "pad")
     private ArrayList<Pad> pads = new ArrayList<>();
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double bodyWidth;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double bodyHeight;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double outerDimension;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double innerDimension;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int padCount;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double padPitch;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double padAcross;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double padRoundness;
     
     public enum Generator {
@@ -212,30 +215,30 @@ public class Footprint extends AbstractModelObject{
     }
 
 
-
+    @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE)
     public static class Pad {
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private String name;
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private double x;
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private double y;
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private double width;
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private double height;
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private double rotation = 0;
 
         /**
          * Roundness as a percentage of the lesser of width and height. 0 is square, 100 is round.
          */
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private double roundness = 0;
 
         public String getName() {

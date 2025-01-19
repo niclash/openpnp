@@ -21,7 +21,7 @@ package org.openpnp.model;
 
 import java.util.Locale;
 
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 
@@ -30,9 +30,9 @@ public class Length {
         X, Y, Z
     }
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private double value;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private LengthUnit units;
 
     public Length() {

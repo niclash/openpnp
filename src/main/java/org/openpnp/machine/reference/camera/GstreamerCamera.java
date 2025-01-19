@@ -42,7 +42,7 @@ import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.camera.wizards.GstreamerCameraConfigurationWizard;
 import org.openpnp.spi.PropertySheetHolder;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A Camera implementation based on an arbitrary gst_parse_launch pipeline.
@@ -52,7 +52,7 @@ public class GstreamerCamera extends ReferenceCamera {
         Gst.init();
     }
 
-    @Attribute(name = "gstPipeline", required = true)
+    @JacksonXmlProperty(localName = "gstPipeline", isAttribute = true)
     private String gstPipeString;
 
     private BufferedImage currentImage;

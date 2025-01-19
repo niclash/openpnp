@@ -7,7 +7,7 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(
         category   ="Color Space", 
@@ -17,7 +17,7 @@ import org.simpleframework.xml.Attribute;
  * Converts the underlying numeric representation of the current working image from one color space to another.
  */
 public class ConvertColor extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Selects the from/to color space conversion.")
     private FluentCv.ColorCode conversion = FluentCv.ColorCode.Bgr2Gray;
 

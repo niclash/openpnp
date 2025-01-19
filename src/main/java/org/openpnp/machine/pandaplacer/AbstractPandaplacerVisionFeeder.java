@@ -40,8 +40,7 @@ import org.openpnp.util.FeederVisionHelper.FindFeaturesMode;
 import org.openpnp.util.FeederVisionHelper.PipelineType;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractPandaplacerVisionFeeder extends ReferenceFeeder {
 
@@ -50,57 +49,57 @@ public abstract class AbstractPandaplacerVisionFeeder extends ReferenceFeeder {
     // Conversely, feeder.location.rotation contains the orientation of the feeder itself
     // and it defines the local feeder coordinate system. The rotationInFeeder here can be removed
     // once it is inherited.
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Double rotationInFeeder = Double.valueOf(0.0);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean normalizePickLocation = true;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean snapToAxis = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location hole1Location = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location hole2Location = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length partPitch = new Length(4, LengthUnit.Millimeters);
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length feedPitch = new Length(4, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private long feedCount = 0;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CvPipeline pipeline = FeederVisionHelper.createDefaultPipeline(PipelineType.CircularSymmetry);
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected PipelineType pipelineType = PipelineType.CircularSymmetry;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length precisionWanted = new Length(0.1, LengthUnit.Millimeters);
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int calibrationCount = 0;
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length sumOfErrors = new Length(0, LengthUnit.Millimeters);
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length sumOfErrorSquares = new Length(0, LengthUnit.Millimeters);
 
 
     // These are not on the GUI but can be tweaked in the machine.xml /////////////////
 
     // initial calibration tolerance, i.e. how much the feeder can be shifted physically
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double calibrationToleranceMm = 1.95;
     // vision and comparison sprocket hole tolerance (in size, position)
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double sprocketHoleToleranceMm = 0.6;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int calibrateMaxPasses = 3;
     // how close the camera has to be to prevent one more pass
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double calibrateToleranceMm = 0.3;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int calibrateMinStatistic = 2;
 
     // Some EIA 481 standard constants.
@@ -120,7 +119,7 @@ public abstract class AbstractPandaplacerVisionFeeder extends ReferenceFeeder {
         OnEachTapeFeed
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected CalibrationTrigger calibrationTrigger = CalibrationTrigger.UntilConfident;
 
     public static final Location nullLocation = new Location(LengthUnit.Millimeters);

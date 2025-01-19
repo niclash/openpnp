@@ -1,11 +1,6 @@
 package org.openpnp.model;
 
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jdesktop.beansbinding.Converter;
 import org.openpnp.machine.reference.vision.AbstractPartSettingsHolder;
@@ -15,10 +10,11 @@ import org.openpnp.spi.PartAlignment;
 import org.openpnp.spi.VisionSettings;
 import org.openpnp.util.XmlSerialize;
 import org.openpnp.vision.pipeline.CvPipeline;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Serializer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 public abstract class AbstractVisionSettings extends AbstractModelObject implements VisionSettings {
     public static final String STOCK_BOTTOM_ID = "BVS_Stock";
@@ -29,19 +25,19 @@ public abstract class AbstractVisionSettings extends AbstractModelObject impleme
     public static final String DEFAULT_BOTTOM_ID = "BVS_Default";
     public static final String DEFAULT_FIDUCIAL_ID = "FVS_Default";
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private String id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String name;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean enabled;
 
-    @Element
+    @JacksonXmlProperty
     private CvPipeline cvPipeline;
 
-    @ElementMap(required = false)
+    @JacksonXmlProperty
     private Map<String, Object> pipelineParameterAssignments;
 
     protected AbstractVisionSettings() {
@@ -210,11 +206,11 @@ public abstract class AbstractVisionSettings extends AbstractModelObject impleme
     }
 
     public List<PartSettingsHolder> getUsedBottomVisionIn() {
-        return getUsedIn((h) -> h.getBottomVisionSettings());
+        return getUsedIn(PartSettingsHolder::getBottomVisionSettings);
     }
 
     public List<PartSettingsHolder> getUsedFiducialVisionIn() {
-        return getUsedIn((h) -> h.getFiducialVisionSettings());
+        return getUsedIn(PartSettingsHolder::getFiducialVisionSettings);
     }
 
     public static class ListConverter extends Converter<List<PartSettingsHolder>, String> {
@@ -273,26 +269,19 @@ public abstract class AbstractVisionSettings extends AbstractModelObject impleme
     }
 
     public static String createSettingsFingerprint(Object partSettings) {
-        Serializer serOut = XmlSerialize.createSerializer();
-        StringWriter sw = new StringWriter();
-        try {
-            serOut.write(partSettings, sw);
-        }
-        catch (Exception e) {
-        }
-        String serialized = sw.toString();
+        String xml = XmlSerialize.serialize(partSettings);
         if (partSettings instanceof AbstractVisionSettings) {
             // Must filter out the id.
             for (java.lang.reflect.Field field : AbstractVisionSettings.class.getDeclaredFields()) {
                 if (field.getName().equals("id")) {
-                    serialized = XmlSerialize.purgeFieldXml(serialized, field);
+                    xml = XmlSerialize.purgeFieldXml(xml, field);
                 }
                 else if (field.getName().equals("name")) {
-                    serialized = XmlSerialize.purgeFieldXml(serialized, field);
+                    xml = XmlSerialize.purgeFieldXml(xml, field);
                 }
             }
         }
-        String partSettingsSerializedHash = DigestUtils.shaHex(serialized);
+        String partSettingsSerializedHash = DigestUtils.shaHex(xml);
         return partSettingsSerializedHash;
     }
 }

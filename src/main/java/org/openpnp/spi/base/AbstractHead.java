@@ -13,6 +13,8 @@ import org.openpnp.model.Length;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Solutions;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.Head;
@@ -22,47 +24,43 @@ import org.openpnp.spi.MachineListener;
 import org.openpnp.spi.Nozzle;
 import org.openpnp.util.IdentifiableList;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractHead extends AbstractModelObject implements Head {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected String id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name;
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Nozzle> nozzles = new IdentifiableList<>();
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Actuator> actuators = new IdentifiableList<>();
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Camera> cameras = new IdentifiableList<>();
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location parkLocation = new Location(LengthUnit.Millimeters);
 
     @Deprecated
-    @Element(required=false)
+    @JacksonXmlProperty
     protected boolean softLimitsEnabled = false;
 
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location minLocation = null;
 
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location maxLocation = null;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     protected String zProbeActuatorName;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected String pumpActuatorName;
 
     public enum VacuumPumpControl {
@@ -72,10 +70,10 @@ public abstract class AbstractHead extends AbstractModelObject implements Head {
         KeepRunning;
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected VacuumPumpControl vacuumPumpControl = VacuumPumpControl.PartOn;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int pumpOnWaitMilliseconds = 0;
 
     /**
@@ -97,25 +95,25 @@ public abstract class AbstractHead extends AbstractModelObject implements Head {
         ResetToHomeLocation
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private VisualHomingMethod visualHomingMethod = VisualHomingMethod.None;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location homingFiducialLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location calibrationPrimaryFiducialLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location calibrationSecondaryFiducialLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length calibrationPrimaryFiducialDiameter = null;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length calibrationSecondaryFiducialDiameter = null;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length calibrationTestObjectDiameter = null;
 
     protected Machine machine;
@@ -154,14 +152,14 @@ public abstract class AbstractHead extends AbstractModelObject implements Head {
     }
 
     @SuppressWarnings("unused")
-    @Commit
+    @PostDeserialize
     private void commit() {
         for (HeadMountable hm : getHeadMountables()) {
             hm.setHead(this);
         }
     }
     
-    @Persist
+    @PreSerialize
     private void persist() {
         zProbeActuatorName = (zProbeActuator != null ? zProbeActuator.getName() : null); 
         pumpActuatorName = (pumpActuator != null ? pumpActuator.getName() : null); 

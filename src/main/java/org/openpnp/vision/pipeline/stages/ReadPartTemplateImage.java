@@ -40,31 +40,31 @@ import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Image Processing",
         description = "Read a template image from disk given a user defined file name, or infer the image's name from the id of the part loaded in the feeder and load it from a path defined by the user.")
 
 public class ReadPartTemplateImage extends CvStage {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(
             description = "Name of a template image, or name of a directory where an image can be found with a name inferred from part or package ID.")
     private String templateFile;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Extension of image file. Defaults to '.png'.")
     private String extension = ".png";
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Prefix of the filename. Used for automatic filename generation to distinguish between different uses (e.g. up/down camera). Default empty.")
     private String prefix = "";
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Enable logging.")
     private boolean log = false;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="The color space of the image.  Use to select the color space that the original image had when it was written.  Note that this does not change any of the numerical values that represent the image but rather their interpretation when the image is displayed in the pipeline editor.")
     private ColorSpace colorSpace = ColorSpace.Bgr;
     

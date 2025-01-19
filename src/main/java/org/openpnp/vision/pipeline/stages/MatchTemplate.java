@@ -16,7 +16,7 @@ import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.CvStage.Result.TemplateMatch;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * OpenCV based image template matching with local maxima detection improvements from FireSight:
@@ -30,14 +30,14 @@ public class MatchTemplate extends CvStage {
     /**
      * Name of a prior stage to load the template image from.
      */
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of a prior stage to load the template image from.")
     private String templateStageName;
 
     /**
      * If maxVal is below this value, then no matches will be reported. Default is 0.7.
      */
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "If maximum value is below this value, then no matches will be reported. Default is 0.7.")
     private double threshold = 0.7;
 
@@ -47,11 +47,11 @@ public class MatchTemplate extends CvStage {
      * methods, this is a minimum threshold for positive recognition; for all other methods, it is a
      * maximum threshold. Default is 0.85.
      */
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Normalized minimum recognition threshold for the CCOEFF_NORMED method, in the interval [0,1]. Default is 0.85.")
     private double corr = 0.85;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Normalize results to maximum value.")
     private boolean normalize = true;
 

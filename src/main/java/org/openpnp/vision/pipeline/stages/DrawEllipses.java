@@ -13,24 +13,20 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.openpnp.vision.pipeline.stages.convert.ColorConverter;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.convert.Convert;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Image Processing",
 description = "Draws RotatedRects from a stage's model. Input can be either a single RotatedRect or a List of RotatedRect")
 
 public class DrawEllipses extends CvStage {
-    @Element(required = false)
-    @Convert(ColorConverter.class)
+    @JacksonXmlProperty
     private Color color = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Stage to input FitEllipse RotatedRects from.")
     private String ellipsesStageName = null;
 
-    @Attribute(required = true)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Thickness of Ellipse outline.")
     private int thickness = 1;
 

@@ -29,41 +29,41 @@ import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Image Processing",
         description = "Filter rotated rects based on given width, length and aspect ratio limits.")
 public class FilterRects extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Max width of filtered rects.")
     private double widthMax = 50.0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Min width of filtered rects.")
     private double widthMin = 25.0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Max length of filtered rects.")
     private double lengthMax = 50.0;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Min length of filtered rects.")
     private double lengthMin = 25.0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(
             description = "Max aspect ratio for selecting rects, used if one or both of width and length are 0. If both width and length are 0, then any rect with size satisfying the aspect ratio limits will pass through.")
     private double aspectRatioMax = 0.0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(
             description = "Min aspect ratio for selecting rects, used if one or both of width and length are 0. If both width and length are 0, then any rect with size satisfying the aspect ratio limits will pass through.")
     private double aspectRatioMin = 0.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Enable logging of rect data.")
     private boolean enableLogging = false;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Previous pipeline stage that outputs rotated rects.")
     private String rotatedRectsStageName = null;
 

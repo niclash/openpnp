@@ -25,34 +25,32 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.openpnp.gui.MainFrame;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.util.IdentifiableList;
 import org.openpnp.util.Pair;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A Panel is a PlacementsHolder whose main purpose is to hold multiple Board and/or Panel Locations
  */
-@Root(name = "openpnp-panel")
+@JacksonXmlRootElement(localName = "openpnp-panel")
 public class Panel extends PlacementsHolder<Panel> implements PropertyChangeListener {
     public static final Double LATEST_VERSION = 2.0;
     
     /**
      * The version number of the Panel
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Double version = null;
     
     /**
      * @deprecated The Id is now carried by the {@link PanelLocation}
      */
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     public String id;
     
     /**
@@ -60,7 +58,7 @@ public class Panel extends PlacementsHolder<Panel> implements PropertyChangeList
      * their children
      */
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     public Integer columns = 1;
     
     /**
@@ -68,7 +66,7 @@ public class Panel extends PlacementsHolder<Panel> implements PropertyChangeList
      * their children
      */
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     public Integer rows = 1;
     
     /**
@@ -76,7 +74,7 @@ public class Panel extends PlacementsHolder<Panel> implements PropertyChangeList
      * their children
      */
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     public Length xGap;
     
     /**
@@ -84,7 +82,7 @@ public class Panel extends PlacementsHolder<Panel> implements PropertyChangeList
      * their children
      */
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     public Length yGap;
     
     /**
@@ -92,38 +90,38 @@ public class Panel extends PlacementsHolder<Panel> implements PropertyChangeList
      * their own Part 
      */
     @Deprecated
-    @Element(required=false)
+    @JacksonXmlProperty
     private String partId;
 
     /**
      * @deprecated the check fiducials flag is now carried by the {@link PanelLocation}
      */
     @Deprecated
-    @Element(required=false)
+    @JacksonXmlProperty
     private Boolean checkFids;
 
     /**
      * @deprecated Fiducials are now held in the placements List inherited from {@link PlacementsHolder}
      */
     @Deprecated
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Placement> fiducials;
     
     /**
      * The list of children contained by this Panel
      */
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<PlacementsHolderLocation<?>> children = new IdentifiableList<>();
     
     /**
      * A list of Ids that point to placements (fiducials) on the Panel's children that are to be 
      * used for panel alignment 
      */
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected ArrayList<String> pseudoPlacementIds = new ArrayList<>();
     
     /**
-     * A list of Placements corresponding to those identified in {@link pseudoPlacementIds}. These
+     * A list of Placements corresponding to those identified in {@link #pseudoPlacementIds}. These
      * placements are copies of those on the Panel's children and are only used for panel alignment, i.e, 
      * they will never actually be placed.
      */
@@ -132,7 +130,7 @@ public class Panel extends PlacementsHolder<Panel> implements PropertyChangeList
     /**
      * Runs just after de-serialization
      */
-    @Commit
+    @PostDeserialize
     protected void commit() {
         //Convert deprecated elements
         if (fiducials != null) {
@@ -150,7 +148,7 @@ public class Panel extends PlacementsHolder<Panel> implements PropertyChangeList
     /**
      * Runs just before serialization
      */
-    @Persist
+    @PreSerialize
     private void persist() {
         version = LATEST_VERSION;
         

@@ -20,35 +20,34 @@ import org.openpnp.spi.Camera;
 import org.openpnp.spi.Head;
 import org.openpnp.spi.HeadMountable;
 import org.openpnp.spi.VisionProvider;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractCamera extends AbstractHeadMountable implements Camera {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected String id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected Looking looking = Looking.Down;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean autoVisible = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean shownInMultiCameraView = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean beforeCaptureLightOn = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean userActionLightOn = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean afterCaptureLightOff = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean antiGlareLightOff = false;
 
     /**
@@ -61,7 +60,7 @@ public abstract class AbstractCamera extends AbstractHeadMountable implements Ca
      * 
      * Also see {@link #unitsPerPixelSecondary}.
      */
-    @Element
+    @JacksonXmlProperty
     protected Location unitsPerPixel = new Location(LengthUnit.Millimeters);
 
     /**
@@ -69,38 +68,38 @@ public abstract class AbstractCamera extends AbstractHeadMountable implements Ca
      * distance from the camera than the primary {@link #unitsPerPixel} so that the two together
      * can be used compute an object's true size (in units) assuming its actual z coordinate is known. 
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location unitsPerPixelSecondary = null;
 
     /**
      * The Z coordinate of camera at the primary units per pixel measurement for this camera. 
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length cameraPrimaryZ = null;
 
     /**
      * The Z coordinate of camera at the secondary units per pixel measurement for this camera. 
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length cameraSecondaryZ = null;
 
     /**
      * The Z coordinate at which objects are assumed to be if their true height is unknown. 
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length defaultZ = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     boolean enableUnitsPerPixel3D = false;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     boolean autoViewPlaneZ = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected VisionProvider visionProvider;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length roamingRadius = new Length(0, LengthUnit.Millimeters);
 
     protected Set<ListenerEntry> listeners = Collections.synchronizedSet(new HashSet<>());

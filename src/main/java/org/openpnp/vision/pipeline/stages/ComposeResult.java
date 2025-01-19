@@ -25,19 +25,19 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Image Processing",
         description = "Retrieves the result of a user defined stage, or the working result in the pipeline, when this stage is processed.")
 
 public class ComposeResult extends CvStage {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(
             description = "Name of a prior stage to retrieve the image from. An empty name will retrieve the working image.")
     // and working model")
     private String imageStageName;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of a prior stage to retrieve the model from.")
     // and working model")
     private String modelStageName;

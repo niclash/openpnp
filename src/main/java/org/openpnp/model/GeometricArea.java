@@ -26,25 +26,24 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 
 /**
  * Extends java.awt.geom.Area to be serializable and have length units
  */
 public class GeometricArea extends java.awt.geom.Area {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected LengthUnit units = LengthUnit.Millimeters;
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected Integer windingRule = null;
     
-    @ElementList
+    @JacksonXmlProperty
     protected ArrayList<Integer> segmentTypes;
     
-    @ElementList
+    @JacksonXmlProperty
     protected ArrayList<Double> segmentPoints;
     
     /**
@@ -90,7 +89,7 @@ public class GeometricArea extends java.awt.geom.Area {
     /**
      * Restores the area from the serializable elements immediately following their deserialization
      */
-    @Commit
+    @PostDeserialize
     public void commit() {
         if (windingRule != null && segmentTypes != null && segmentPoints != null) {
             Path2D path = new Path2D.Double(windingRule);
@@ -130,7 +129,7 @@ public class GeometricArea extends java.awt.geom.Area {
     /**
      * Sets the serializable elements from the area just prior to serialization
      */
-    @Persist
+    @PreSerialize
     public void persist() {
         PathIterator pathIter = getPathIterator(null);
         if (!pathIter.isDone()) {

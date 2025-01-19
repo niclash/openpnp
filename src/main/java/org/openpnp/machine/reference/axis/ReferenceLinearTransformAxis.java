@@ -37,8 +37,7 @@ import org.openpnp.spi.base.AbstractAxis;
 import org.openpnp.spi.base.AbstractMachine;
 import org.openpnp.spi.base.AbstractTransformedAxis;
 import org.openpnp.util.Matrix;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * The ReferenceLinearTransformAxis is a multi-input axis linear transformation for one output axis. Multiple
@@ -54,26 +53,26 @@ public class ReferenceLinearTransformAxis extends AbstractTransformedAxis {
     private AbstractAxis inputAxisZ;
     private AbstractAxis inputAxisRotation;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String inputAxisXId;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String inputAxisYId;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String inputAxisZId;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String inputAxisRotationId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double factorX = 0.0;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double factorY = 0.0;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double factorZ = 0.0;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double factorRotation = 0.0;
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length offset = new Length(0.0, LengthUnit.Millimeters);
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean compensation = false;
 
     public ReferenceLinearTransformAxis() {

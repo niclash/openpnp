@@ -32,8 +32,7 @@ import org.openpnp.machine.reference.camera.wizards.OpenCvCameraConfigurationWiz
 import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.util.OpenCvUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A Camera implementation based on the OpenCV FrameGrabbers.
@@ -43,15 +42,15 @@ public class OpenCvCamera extends ReferenceCamera implements Runnable {
         nu.pattern.OpenCV.loadLocally();
     }
 
-    @Attribute(name = "deviceIndex", required = true)
+    @JacksonXmlProperty(isAttribute = true)
     private int deviceIndex = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int preferredWidth;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int preferredHeight;
 
-    @ElementList(required=false)
+    @JacksonXmlProperty
     private List<OpenCvCapturePropertyValue> properties = new ArrayList<>();
 
     private VideoCapture fg = new VideoCapture();
@@ -270,13 +269,13 @@ public class OpenCvCamera extends ReferenceCamera implements Runnable {
     }
 
     public static class OpenCvCapturePropertyValue {
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         public OpenCvCaptureProperty property;
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         public double value;
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         public boolean setBeforeOpen;
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         public boolean setAfterOpen;
     }
 }

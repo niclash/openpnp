@@ -29,25 +29,25 @@ import org.openpnp.model.Configuration;
 import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.util.OpenCvUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A Camera implementation for ONVIF compatible IP cameras.
  */
 public class Neoden4Camera extends ReferenceCamera {
-	@Attribute(required = true)
+	@JacksonXmlProperty( isAttribute = true )
 	private int cameraId = 1;
 
-	@Attribute(required = false)
+	@JacksonXmlProperty( isAttribute = true )
 	private int width = 1024;
-	@Attribute(required = false)
+	@JacksonXmlProperty( isAttribute = true )
 	private int height = 1024;
-	@Attribute(required = false)
+	@JacksonXmlProperty( isAttribute = true )
 	private int timeout = 1000;
 
-	@Attribute(required = false)
+	@JacksonXmlProperty( isAttribute = true )
 	private int shiftX = 0;
-	@Attribute(required = false)
+	@JacksonXmlProperty( isAttribute = true )
 	private int shiftY = 0;
 
 	private boolean dirty = false;

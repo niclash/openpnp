@@ -13,24 +13,23 @@ import org.openpnp.vision.pipeline.Stage;
 import org.openpnp.vision.pipeline.TerminalException;
 import org.openpnp.vision.pipeline.ui.PipelinePropertySheetTable;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Performs simple actuator write. Machine must be connected, otherwise error is thrown.")
 public class ActuatorWrite extends CvStage {
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String actuatorName = "";
 
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private Actuator.ActuatorValueType actuatorType = null;
 
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double actuatorValue;
 
-    // For an Object property we need @Element persistence, therefore the original actuatorValue is deprecated.
-    @Element(required=false)
+    // For an Object property we need @JacksonXmlProperty persistence, therefore the original actuatorValue is deprecated.
+    @JacksonXmlProperty
     protected Object actuatorWriteValue = true;
 
     public String getActuatorName() {

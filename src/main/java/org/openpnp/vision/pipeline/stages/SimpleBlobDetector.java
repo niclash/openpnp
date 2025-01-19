@@ -37,51 +37,51 @@ import org.openpnp.model.Length;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 
 public class SimpleBlobDetector extends CvStage {
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double thresholdStep = 10.;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double thresholdMin = 50.;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double thresholdMax = 220.;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private int repeatability = 2;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double distBetweenBlobs = 10.;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean color = true;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double colorValue = 0;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean area = true;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double areaMin = 25.;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double areaMax = 5000.;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean circularity = false;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double circularityMin = 0.80000001192092896;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double circularityMax = -1;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean inertia = true;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double inertiaRatioMin = 1.0000000149011612E-001;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double inertiaRatioMax = -1;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean convexity = true;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double convexityMin = 9.4999998807907104E-001;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double convexityMax = -1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of the property through which OpenPnP controls this stage. Use \"SimpleBlobDetector\" for standard control.")
     private String propertyName = "SimpleBlobDetector";
 

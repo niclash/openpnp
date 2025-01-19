@@ -15,14 +15,14 @@ import org.openpnp.model.Package;
 import org.openpnp.model.Part;
 import org.openpnp.model.PartSettingsHolder;
 import org.openpnp.model.PartSettingsRoot;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.openpnp.serialization.PreSerialize;
 
 public abstract class AbstractPartSettingsHolder extends AbstractModelObject implements PartSettingsHolder  {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String bottomVisionId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String fiducialVisionId;
 
     protected BottomVisionSettings bottomVisionSettings;
@@ -38,7 +38,7 @@ public abstract class AbstractPartSettingsHolder extends AbstractModelObject imp
         });
     }
 
-    @Persist
+    @PreSerialize
     private void persist() {
         bottomVisionId = (bottomVisionSettings == null ? null : bottomVisionSettings.getId());
         fiducialVisionId = (fiducialVisionSettings == null ? null : fiducialVisionSettings.getId());

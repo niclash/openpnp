@@ -75,106 +75,105 @@ import org.openpnp.vision.LensCalibration;
 import org.openpnp.vision.LensCalibration.LensModel;
 import org.openpnp.vision.LensCalibration.Pattern;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class ReferenceCamera extends AbstractBroadcastingCamera implements HeadMountable {
     static {
         nu.pattern.OpenCV.loadLocally();
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int captureTryCount = 4;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int captureTryTimeoutMs = 2000;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location headOffsets = new Location(LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double rotation = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean flipX = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean flipY = false;
 
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length safeZ = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int offsetX = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int offsetY = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int cropWidth = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int cropHeight = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int scaleWidth = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int scaleHeight = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double redBalance = 1.0; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double greenBalance = 1.0; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double blueBalance = 1.0; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double redGamma = 1.0; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double greenGamma = 1.0; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double blueGamma = 1.0; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean deinterlace;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private LensCalibrationParams calibration = new LensCalibrationParams();
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private AdvancedCalibration advancedCalibration = new AdvancedCalibration();
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String lightActuatorId; 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean allowMachineActuators = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private FocusSensingMethod focusSensingMethod = FocusSensingMethod.None;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected FocusProvider focusProvider = new AutoFocusProvider();
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double whiteBalanceLeadFractile = 0.8;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double whiteBalanceClipFractile = 0.99;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double whiteBalanceGammaFractile = 0.5;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private double[] redColorMap;
-    @Element(required = false)
+    @JacksonXmlProperty
     private double[] greenColorMap;
-    @Element(required = false)
+    @JacksonXmlProperty
     private double[] blueColorMap;
 
 

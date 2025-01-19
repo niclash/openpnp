@@ -24,7 +24,7 @@ import org.openpnp.spi.Camera;
 import org.openpnp.util.VisionUtils;
 import org.openpnp.vision.FluentCv.ColorSpace;
 import org.openpnp.vision.pipeline.ui.PipelinePropertySheetTable;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Base class for a stage in a CvPipeline. A CvStage has a unique name within a pipeline and is able
@@ -32,10 +32,10 @@ import org.simpleframework.xml.Attribute;
  * and optional model data extracted from the image.
  */
 public abstract class CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private String name;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean enabled = true;
 
     private Map<String, Object> propertyOverrides;

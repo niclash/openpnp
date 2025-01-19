@@ -9,20 +9,20 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeoutException;
 
 import org.openpnp.util.GcodeServer;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A base class for basic TCP based Drivers. Includes functions for connecting,
  * disconnecting, reading and sending lines.
  */
 public class TcpCommunications extends ReferenceDriverCommunications {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String ipAddress = "127.0.0.1";
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int port = 23;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name = "TcpCommunications";
 
 

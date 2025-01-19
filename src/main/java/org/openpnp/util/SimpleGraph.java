@@ -32,48 +32,55 @@ import java.util.TreeMap;
 
 import javax.swing.UIManager;
 
-import org.openpnp.vision.pipeline.stages.convert.ColorConverter;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.convert.Convert;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class SimpleGraph {
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double relativePaddingLeft;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double relativePaddingRight;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean logarithmic;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private long zeroNanoTime = Long.MIN_VALUE;
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private long lastT = 0;
-    @ElementList(inline = true)
+
+//    @ElementList(inline = true)
+    @JacksonXmlProperty
     private List<DataScale> dataScales = new ArrayList<>();
 
     public static class DataScale {
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private String label;
-        @Attribute(required=false)
+
+        @JacksonXmlProperty( isAttribute = true )
         public boolean labelShown;
-        @Element(required=false)
-        @Convert(ColorConverter.class)
+
+        @JacksonXmlProperty
         private Color color = null;
-        @Attribute(required=false)
+
+        @JacksonXmlProperty( isAttribute = true )
         private double relativePaddingTop;
-        @Attribute(required=false)
+
+        @JacksonXmlProperty( isAttribute = true )
         private double relativePaddingBottom;
-        @Attribute(required=false)
+
+        @JacksonXmlProperty( isAttribute = true )
         private boolean logarithmic;
-        @Attribute(required=false)
+
+        @JacksonXmlProperty( isAttribute = true )
         private boolean symmetricIfSigned;
-        @Attribute(required=false)
+
+        @JacksonXmlProperty( isAttribute = true )
         private boolean squareAspectRatio;
-        @ElementList(inline = true)
+
+//        @ElementList(inline = true)
+        @JacksonXmlProperty
         private List<DataRow> dataRows = new ArrayList<>();
 
         private DataScale() {
@@ -254,23 +261,28 @@ public class SimpleGraph {
     }
 
     public static class DataRow {
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private String label;
-        @Element(required=false)
-        @Convert(ColorConverter.class)
+
+        @JacksonXmlProperty
         private Color color;
-        @Attribute(required=false)
+
+        @JacksonXmlProperty( isAttribute = true )
         private boolean markerShown = false;
-        @Attribute(required=false)
+
+        @JacksonXmlProperty( isAttribute = true )
         private boolean lineShown = true;
-        @Attribute(required=false)
+
+        @JacksonXmlProperty( isAttribute = true )
         private int displayCycleMask = 1; // Displayed on mask 1
+
         //@ElementMap too large in xml, instead we stream it into a simple x, y array.
         private TreeMap<Double, Double> data = new TreeMap<>();
-        @Element(required=false)
+
+        @JacksonXmlProperty
         private double [] xyValues;
 
-        @Persist
+        @PreSerialize
         void persist() {
             xyValues = new double[data.size()*2];
             int i= 0;
@@ -279,7 +291,7 @@ public class SimpleGraph {
                 xyValues[i++] = entry.getValue();
             }
         }
-        @Commit
+        @PostDeserialize
         void commit() {
             if (xyValues != null) {
                 for (int i = 0; i < xyValues.length;) {

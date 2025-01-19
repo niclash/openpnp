@@ -34,69 +34,69 @@ import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.spi.base.AbstractActuator;
 import org.openpnp.util.MovableUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class SchultzFeeder extends ReferenceFeeder {
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String actuatorName;
     
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Actuator.ActuatorValueType actuatorType = null;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double actuatorValue;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String postPickActuatorName;
     
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Actuator.ActuatorValueType postPickActuatorType = null;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String feedCountActuatorName;
     
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Actuator.ActuatorValueType feedCountActuatorType = null;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String clearCountActuatorName;
     
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Actuator.ActuatorValueType clearCountActuatorType = null;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String pitchActuatorName;
     
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Actuator.ActuatorValueType pitchActuatorType = null;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String togglePitchActuatorName;
     
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Actuator.ActuatorValueType togglePitchActuatorType = null;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String statusActuatorName;
     
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Actuator.ActuatorValueType statusActuatorType = null;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String idActuatorName;
     
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Actuator.ActuatorValueType idActuatorType = null;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String fiducialPart;
     
     @Override

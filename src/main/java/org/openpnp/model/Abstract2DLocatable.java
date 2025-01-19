@@ -20,9 +20,9 @@
 package org.openpnp.model;
 
 import java.beans.PropertyChangeListener;
+
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.openpnp.spi.Definable;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
 
 /**
  * A class to represent an abstraction of a physical 2D object that has a position and orientation
@@ -63,19 +63,19 @@ public abstract class Abstract2DLocatable<T extends Abstract2DLocatable<T>> exte
      * Indicates which surface of the object is facing in the direction of its local 3D coordinate
      * system's +Z axis
      */
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected Side side = Side.Top;
     
     /**
      * The position and orientation in the local 3D coordinate system
      */
-    @Element
+    @JacksonXmlProperty
     protected Location location;
 
     /**
      * An identifier for this Abstract2DLocatable
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String id;
     
     /**

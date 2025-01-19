@@ -9,11 +9,11 @@ import org.opencv.core.RotatedRect;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Convert a variety of built in types to Points. Currently handles KeyPoints, Circles and RotatedRects. The center point of each is stored. If the input model is a single value the result will be a single value. If the input is a List the result will be a List.")
 public class ConvertModelToPoints extends CvStage {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String modelStageName;
     
     public String getModelStageName() {

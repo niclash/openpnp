@@ -10,16 +10,16 @@ import org.opencv.imgproc.Imgproc;
 import org.openpnp.vision.FluentCv;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Mask everything in the working image outside of a circle centered at the center of the image with
  * the specified diameter.
  */
 public class MaskRectangle extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int width = 100;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int height = 100;
 
 

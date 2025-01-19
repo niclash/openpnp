@@ -32,6 +32,7 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.openpnp.gui.JobPanel;
 import org.openpnp.gui.MainFrame;
 import org.openpnp.gui.support.Wizard;
@@ -67,11 +68,11 @@ import org.openpnp.util.UiUtils;
 import org.openpnp.util.Utils2D;
 import org.openpnp.util.VisionUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-@Root
+import static java.util.Comparator.comparing;
+
+@JacksonXmlRootElement
 public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
     interface Step {
         public Step step() throws JobProcessorException;
@@ -82,31 +83,31 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
         Part
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected JobOrderHint jobOrder = JobOrderHint.PartHeight;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int maxVisionRetries = 3;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     boolean steppingToNextMotion = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     boolean optimizeMultipleNozzles = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     boolean allowImmediateNozzleTipCalibration = false;
 
     /**
-     * Number of ficudial nesting level to check separately before checking the remaining all at once.
-     * Default is 1 to check root-level panels/boards separately avoiding missdetections and/or extra
+     * Number of fiducial nesting level to check separately before checking the remaining all at once.
+     * Default is 1 to check root-level panels/boards separately avoiding mis-detections and/or extra
      * camera movements while checking fiducials on other layers while still preserving some benefit
      * of an optimized route.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     int fiducialLevel = 1;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     public PnpJobPlanner planner = new SimplePnpJobPlanner();
 
     protected Job job;
@@ -169,19 +170,16 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
 
     /**
      * Create some internal shortcuts to various buried objects.
-     * 
      * Check for obvious setup errors in the job: Feeders are available and enabled, Placements all
      * have valid parts, Parts all have height values set, Each part has at least one compatible
      * nozzle tip.
-     * 
      * Populate the jobPlacements list with all the placements that we'll perform for the entire
      * job.
-     * 
      * Safe-Z the machine, discard any currently picked parts.
      * 
-     * @throws Exception
      */
     protected class PreFlight implements Step {
+
         public Step step() throws JobProcessorException {
             startTime = System.currentTimeMillis();
             totalPartsPlaced = 0;
@@ -432,7 +430,7 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
 
             // filter placements holder locations that are not yet completed
             locations = locations.stream()
-                    .filter(l -> { return !completed.contains(l.getPlacementsHolderLocation()); })
+                    .filter(l -> !completed.contains(l.getPlacementsHolderLocation()))
                     .collect(Collectors.toList());
 
             // if all locations have been processed, continue with next tep
@@ -545,14 +543,13 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
             if (jobOrder.equals(JobOrderHint.Part)) {
                 // Get the list of unfinished placements and sort them by part.
                     jobPlacements = getPendingJobPlacements().stream()
-                            .sorted(Comparator.comparing(JobPlacement::getPartId))
+                            .sorted(comparing(JobPlacement::getPartId))
                             .collect(Collectors.toList());
             } 
             else {
                 // Get the list of unfinished placements and sort them by part height.
                     jobPlacements = getPendingJobPlacements().stream()
-                            .sorted(Comparator
-                                .comparing(JobPlacement::getPartHeight)
+                            .sorted(comparing(JobPlacement::getPartHeight)
                                 .thenComparing(JobPlacement::getPartId))
                             .collect(Collectors.toList());
             }
@@ -700,19 +697,19 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
             final Part part = placement.getPart();
             final BoardLocation boardLocation = jobPlacement.getBoardLocation();
             
-            /**
+            /*
              * If anything goes wrong that causes us to fail all the retries, this is the error
              * that will get thrown. 
              */
             JobProcessorException lastException = null;
             for (int partPickTry = 0; partPickTry < 1 + part.getPickRetryCount(); partPickTry++) {
-                /**
+                /*
                  * Find an available feeder. If one cannot be found this will throw. There's nothing
                  * else we can do with this part.
                  */
                 final Feeder feeder = findFeeder(machine, part);
                 
-                /**
+                /*
                  * Run the placement starting script. An error here will throw. That's the user's
                  * problem.
                  */
@@ -733,7 +730,7 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
                     throw new JobProcessorException(null, e);
                 }
                 
-                /**
+                /*
                  * Feed the feeder, retrying up to feedRetryCount times. That happens within the
                  * feed method. It will either succeed or throw after the retries. We catch the
                  * Exception so that we can continue the loop.
@@ -746,7 +743,7 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
                     continue;
                 }
 
-                /**
+                /*
                  * Currently this will throw and abort the placement if it fails. Probably it should
                  * discard and retry, and really it should probably be done before we attempt to
                  * feed. I *think* this has been debated as to whether or not it's useful
@@ -763,14 +760,10 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
                     discard(nozzle);
                     continue;
                 }
-                
-                /**
-                 * If we get here with no problems then we are done.
-                 */
                 return this;
             }
             
-            /**
+            /*
              * If we didn't return in the loop above then we didn't succeed, so throw
              * the recorded error.
              */
@@ -1477,11 +1470,6 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
         abstract public Location getLocation(PlannedPlacement p);
         
         /**
-         * toString is used in log messages to generate meaningful messages where it locator as been used.
-         */
-        abstract public String toString();
-        
-        /**
          * Return the location of the head when the headmountable hm is at location ref.
          * This method is used to convert locations, calculated for eg. a nozzle to a head
          * location to return it via getLocation() above.
@@ -1586,8 +1574,6 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
          * 
          * @param plannedPlacement The plannedPlacement to process, or null if there are no more
          * to process. Null is a special case which means "Return the next step."
-         * @return
-         * @throws JobProcessorException
          */
         protected abstract Step stepImpl(PlannedPlacement plannedPlacement) throws JobProcessorException;
 
@@ -1597,7 +1583,7 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
          * to the caller.  
          */
         public Step step() throws JobProcessorException {
-            /**
+            /*
              * Get the first planned placement from the list that is still in processing status
              * and that is not marked completed.
              */
@@ -1638,7 +1624,7 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
      * and does not support nozzle tip changes. The planner will return placements that work
      * with the loaded nozzle tips until none are left, and then the job will end.
      */
-    @Root
+    @JacksonXmlRootElement
     public static class TrivialPnpJobPlanner implements PnpJobPlanner {
         // this methods are no used here and have to be present because they are required at interface level
         public Strategy getStrategy() {
@@ -1651,16 +1637,16 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
         
         @Override
         public List<PlannedPlacement> plan(Head head, List<JobPlacement> jobPlacements) {
-            /**
+            /*
              * Create a List<PlannedPlacement> that we will fill up and then return.
              */
             List<PlannedPlacement> plannedPlacements = new ArrayList<>();
             
-            /**
+            /*
              * Loop over each nozzle in the head and assign a placement to it.
              */
             for (Nozzle nozzle : head.getNozzles()) {
-                /**
+                /*
                  * If the nozzle does not have a nozzle tip attached then we won't process it. We
                  * could choose to specify a nozzle tip change, but for the purpose of this simple
                  * example we assume the user only wants to process using the currently loaded
@@ -1670,14 +1656,14 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
                     continue;
                 }
                 
-                /**
+                /*
                  * If there are no more placements to process then we're done, so exit the loop.
                  */
                 if (jobPlacements.isEmpty()) {
                     break;
                 }
                 
-                /**
+                /*
                  * Loop through the remaining job placements and find the first one that is
                  * compatible with the nozzle and nozzle tip. Note that we use an Iterator here,
                  * instead of the normal for each loop. The reason is that we need to remove
@@ -1686,12 +1672,12 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
                  * method of Iterator.remove() which allows this.
                  */
                 for (Iterator<JobPlacement> iterator = jobPlacements.iterator(); iterator.hasNext(); ) {
-                    /**
+                    /*
                      * Get the next JobPlacement from the Iterator.
                      */
                     JobPlacement jobPlacement = iterator.next();
                     
-                    /**
+                    /*
                      * Assign some local temporary variables to make the code below easier to read. 
                      */
                     Placement placement = jobPlacement.getPlacement();
@@ -1699,23 +1685,23 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
                     org.openpnp.model.Package packag = part.getPackage();
                     NozzleTip nozzleTip = nozzle.getNozzleTip();
                     
-                    /**
+                    /*
                      * Check if the job placemen't package is compatible with the nozzle tip
                      * attached to this nozzle.
                      */
                     if (packag.getCompatibleNozzleTips().contains(nozzleTip)) {
-                        /**
+                        /*
                          * It's compatible, so create a PlannedPlacement which is a holder for a 
                          * nozzle, nozzle tip and a job placement.
                          */
                         PlannedPlacement plannedPlacement = new PlannedPlacement(nozzle, nozzle.getNozzleTip(), jobPlacement);
                         
-                        /**
+                        /*
                          * Store it in the results.
                          */
                         plannedPlacements.add(plannedPlacement);
                         
-                        /**
+                        /*
                          * And remove the job placement from the list. This ensures we don't process
                          * the same one again later.
                          */
@@ -1728,10 +1714,6 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
                     }
                 }
             }
-            
-            /**
-             * Return the results
-             */
             return plannedPlacements;
         }
     }    
@@ -1739,16 +1721,14 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
     /**
      * A simple two-pass planner which tries to fill each nozzle with a placement on
      * each cycle while minimizing nozzle tip changes.
-     * 
      * The first pass tries to find a placement for each nozzle which will not require a
      * nozzle tip change.
-     * 
      * The second pass allows nozzle tip changes while respecting any already used nozzle
      * tips for the cycle.
      */
-    @Root
+    @JacksonXmlRootElement
     public static class SimplePnpJobPlanner implements PnpJobPlanner {
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected Strategy strategy = Strategy.Minimize;
         
         private boolean restart;
@@ -1770,26 +1750,26 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
         
         @Override
         public List<PlannedPlacement> plan(Head head, List<JobPlacement> jobPlacements) {
-            /**
+            /*
              * Create an empty List<PlannedPlacement> which will hold the results.
              */
             List<PlannedPlacement> plannedPlacements = new ArrayList<>();
             
-            /**
+            /*
              * Get a list of all the nozzles. We make a copy of the list so that we can modify
              * it within this function without modifying the machine. This makes the logic below
              * easier. As we plan a nozzle we'll remove it from the list until none are left.
              */
             List<Nozzle> nozzles = new ArrayList<>(head.getNozzles());
             
-            /**
+            /*
              * Same as above, except for NozzleTips.
              */
             List<NozzleTip> nozzleTips = new ArrayList<>(head.getMachine().getNozzleTips());
             
             if (    strategy == Strategy.Minimize
                 || (strategy == Strategy.StartAsPlanned && !restart)) {
-                /**
+                /*
                  * First we plan any placements that can be done without a nozzle change. For each
                  * nozzle we see if there is a placement that we can handle without doing a nozzletip
                  * change. If there is, we remove the nozzle, nozzle tip and job placement from their
@@ -1807,7 +1787,7 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
             }
             restart = false;
             
-            /**
+            /*
              * Now we'll try to plan any nozzles that didn't get planned on the first pass by
              * seeing if a nozzle change helps. This is nearly the same as above, except this
              * time we allow a nozzle tip change to happen.
@@ -1822,15 +1802,12 @@ public class ReferencePnpJobProcessor extends AbstractPnpJobProcessor {
                 }
             }
 
-            /**
+            /*
              * Finally, we sort any planned placements by the nozzle name so that they are
              * performed in the order of nozzle name. This is not really necessary but some users
              * prefer it that way and it does no harm
              */
-            plannedPlacements.sort(Comparator.comparing(plannedPlacement -> {
-                return plannedPlacement.nozzle.getName();
-            }));
-
+            plannedPlacements.sort(comparing(plannedPlacement -> plannedPlacement.nozzle.getName()));
             return plannedPlacements;
         }
         

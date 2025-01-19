@@ -82,8 +82,8 @@ import org.openpnp.spi.Feeder;
 import org.openpnp.spi.FiducialLocator;
 import org.openpnp.spi.PartAlignment;
 import org.openpnp.util.UiUtils;
+import org.openpnp.util.XmlSerialize;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Serializer;
 
 @SuppressWarnings("serial")
 public class PartsPanel extends JPanel implements WizardContainer {
@@ -381,10 +381,8 @@ public class PartsPanel extends JPanel implements WizardContainer {
                 return;
             }
             try {
-                Serializer s = Configuration.createSerializer();
-                StringWriter w = new StringWriter();
-                s.write(part, w);
-                StringSelection stringSelection = new StringSelection(w.toString());
+                String xml = XmlSerialize.serialize(part);
+                StringSelection stringSelection = new StringSelection(xml);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(stringSelection, null);
             }
@@ -419,11 +417,9 @@ public class PartsPanel extends JPanel implements WizardContainer {
                 return;
             }
             try {
-                Serializer ser = Configuration.createSerializer();
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 String s = (String) clipboard.getData(DataFlavor.stringFlavor);
-                StringReader r = new StringReader(s);
-                Part part = ser.read(Part.class, s);
+                Part part = XmlSerialize.serialization().read(Part.class, s);
                 part.setId(id);
                 Configuration.get().addPart(part);
                 tableModel.fireTableDataChanged();

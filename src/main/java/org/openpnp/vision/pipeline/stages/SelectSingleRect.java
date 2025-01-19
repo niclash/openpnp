@@ -27,16 +27,16 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Image Processing",
         description = "Selects a single rotated rectangle from a list. Main purpose convert the data type.")
 public class SelectSingleRect extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Position (0=first, 1=second, -1=last)")
     private int position = 0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Previous pipeline stage that outputs rotated rects.")
     private String rotatedRectsStageName = null;
 

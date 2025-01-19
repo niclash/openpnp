@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.apache.commons.io.IOUtils;
 import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
@@ -28,6 +29,7 @@ import org.openpnp.model.Length;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Point;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.HeadMountable;
 import org.openpnp.spi.Nozzle;
@@ -42,15 +44,12 @@ import org.openpnp.vision.FluentCv;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage.Result;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-@Root
+@JacksonXmlRootElement
 public class ReferenceNozzleTipCalibration extends AbstractModelObject {
-    public static interface RunoutCompensation {
+
+    public interface RunoutCompensation {
 
         Location getOffset(double angle);
 
@@ -63,7 +62,7 @@ public class ReferenceNozzleTipCalibration extends AbstractModelObject {
     }
 
     public static class TableBasedRunoutCompensation implements ReferenceNozzleTipCalibration.RunoutCompensation {
-        @Element(required = false)
+        @JacksonXmlProperty
         List<Location> nozzleTipMeasuredLocations;
 
         public TableBasedRunoutCompensation() {
@@ -146,19 +145,19 @@ public class ReferenceNozzleTipCalibration extends AbstractModelObject {
     public static class ModelBasedRunoutCompensation implements ReferenceNozzleTipCalibration.RunoutCompensation {
         protected List<Location> nozzleTipMeasuredLocations;
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected double centerX = 0;
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected double centerY = 0;
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected double radius = 0;
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected double phaseShift;
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected LengthUnit units = LengthUnit.Millimeters;
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected Double peakError;
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected Double rmsError;
 
         public ModelBasedRunoutCompensation() {
@@ -477,32 +476,33 @@ public class ReferenceNozzleTipCalibration extends AbstractModelObject {
     }
 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CvPipeline pipeline = createDefaultPipeline();
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int angleSubdivisions = 6;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int allowMisdetections = 0;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double angleStart = -180;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double angleStop = 180;
     // The excenter radius as a ratio of the camera minimum dimension.  
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double excenterRatio = 0.25;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean enabled;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean failHoming = true;
 
     private boolean calibrating;
 
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     private RunoutCompensation runoutCompensation = null;
-    @ElementMap(required = false)
+
+    @JacksonXmlProperty
     private Map<String, RunoutCompensation> runoutCompensationLookup = new HashMap<>();
 
     public enum RunoutCompensationAlgorithm {
@@ -513,85 +513,85 @@ public class ReferenceNozzleTipCalibration extends AbstractModelObject {
         NozzleTipChange, NozzleTipChangeInJob, MachineHome,  Manual
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private ReferenceNozzleTipCalibration.RunoutCompensationAlgorithm runoutCompensationAlgorithm =
         RunoutCompensationAlgorithm.ModelCameraOffsetAffine;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double version = 1.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private RecalibrationTrigger recalibrationTrigger = RecalibrationTrigger.NozzleTipChangeInJob;
 
     public enum BackgroundCalibrationMethod {
         None, Brightness, BrightnessAndKeyColor
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private BackgroundCalibrationMethod backgroundCalibrationMethod = BackgroundCalibrationMethod.None;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length minimumDetailSize = new Length(0.2, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundMinHue; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundMaxHue; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundTolHue = 8; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundMinSaturation; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundMaxSaturation; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundTolSaturation = 8; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundMinValue; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundMaxValue; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundTolValue = 8; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String backgroundDiagnostics; 
 
 
     /**
      * Minimum brightness (value, range 0..255) at which to consider hue masking.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int minBackgroundMaskValue = 32;  
 
     /**
      * Maximum brightness (value, range 0..255) at which to consider hue masking.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int maxBackgroundMaskValue = 128;
 
     /**
      * A key color should always be quite vivid, the worst saturation is set here.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundWorstSaturation = 255/4;
 
     /**
      * A key color should be quite consistent, the worst hue span (max - min) is set here. 
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundWorstHueSpan = 255/6; // The hue span should not be larger than 60°.
 
     /**
      * A background (minus the key color) should be quite dark. 
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backgroundWorstValue = 255/2; 
 
     private List<byte []> backgroundImages = new ArrayList<>();
@@ -600,10 +600,10 @@ public class ReferenceNozzleTipCalibration extends AbstractModelObject {
      * TODO Left for backward compatibility. Unused. Can be removed after Feb 7, 2020.
      */
     @Deprecated
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private Double angleIncrement = null;
 
-    @Commit
+    @PostDeserialize
     public void commit() {
         angleIncrement = null;
         
@@ -628,20 +628,20 @@ public class ReferenceNozzleTipCalibration extends AbstractModelObject {
     }
 
     // Max allowed linear distance w.r.t. bottom camera for an offset measurement - measurements above threshold are removed from pipelines results 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Deprecated
     private Double offsetThreshold = 0.0;
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length offsetThresholdLength = new Length(0.5, LengthUnit.Millimeters);
     /**
      * Vision detection search distance margin, relative to the threshold: we want to detect nozzle tips outside the threshold and
      * get positive falses rather than false positives.  
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double detectionThresholdMargin = 0.4;
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length calibrationZOffset = new Length(0.0, LengthUnit.Millimeters);
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length calibrationTipDiameter = new Length(0.0, LengthUnit.Millimeters);
 
     private List<BufferedImage> backgroundCalibrationImages;

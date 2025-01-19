@@ -31,6 +31,7 @@ import org.openpnp.model.Location;
 import org.openpnp.model.Part;
 import org.openpnp.model.Solutions;
 import org.openpnp.model.Solutions.Milestone;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Actuator.ActuatorValueType;
 import org.openpnp.spi.Camera;
@@ -49,9 +50,7 @@ import org.openpnp.util.MovableUtils;
 import org.openpnp.util.SimpleGraph;
 import org.openpnp.util.UiUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferenceNozzle extends AbstractNozzle implements HeadMountable {
     public static class ManualUnloadException extends JobProcessor.JobProcessorException {
@@ -70,51 +69,51 @@ public class ReferenceNozzle extends AbstractNozzle implements HeadMountable {
         }
     }
 
-    @Element
+    @JacksonXmlProperty
     private Location headOffsets = new Location(LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int pickDwellMilliseconds;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int placeDwellMilliseconds;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String currentNozzleTipId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean changerEnabled = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean nozzleTipChangedOnManualFeed = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location manualNozzleTipChangeLocation = new Location(LengthUnit.Millimeters);
 
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length safeZ = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean enableDynamicSafeZ = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private String vacuumSenseActuatorName;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private String vacuumActuatorName;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private String blowOffActuatorName;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean blowOffClosingValve = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int version; // the OpenPnP target version/migration status (version x 100)
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean limitRotation = true;
 
     private Actuator vacuumSenseActuator;
@@ -189,7 +188,7 @@ public class ReferenceNozzle extends AbstractNozzle implements HeadMountable {
         }
     }
 
-    @Persist
+    @PreSerialize
     protected void persist() {
         // Make sure the latest actuator names are persisted.
         vacuumSenseActuatorName = (vacuumSenseActuator == null ? null : vacuumSenseActuator.getName());
@@ -244,7 +243,6 @@ public class ReferenceNozzle extends AbstractNozzle implements HeadMountable {
      * 
      * @param headOffsetsOld
      * @param headOffsetsNew
-     * @param offsetsDiff
      */
     private void adjustHeadOffsetsDependencies(Location headOffsetsOld, Location headOffsetsNew) {
         Location offsetsDiff = headOffsetsNew.subtract(headOffsetsOld).convertToUnits(LengthUnit.Millimeters);

@@ -35,27 +35,27 @@ import org.openpnp.machine.reference.camera.wizards.MjpgCaptureCameraWizard;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.spi.PropertySheetHolder;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 
 public class MjpgCaptureCamera extends ReferenceCamera {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String mjpgURL = "";
     // TEST URLs 
     // http://213.193.89.202/axis-cgi/mjpg/video.cgi
     // http://192.168.1.66:5802
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int width = 960;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int height = 720;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int timeout = 3000;
 
     private InputStream mjpgStream; // BufferedInputStream mjpgStream;

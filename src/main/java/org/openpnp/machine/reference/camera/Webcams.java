@@ -28,7 +28,7 @@ import java.util.List;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.camera.wizards.WebcamConfigurationWizard;
 import org.openpnp.spi.PropertySheetHolder;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamImageTransformer;
@@ -41,12 +41,12 @@ import com.github.sarxos.webcam.util.jh.JHGrayFilter;
  */
 public class Webcams extends ReferenceCamera implements Runnable, WebcamImageTransformer {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String deviceId = "###DEVICE###";
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int preferredWidth = 0;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int preferredHeight = 0;
 
     protected Webcam webcam;

@@ -7,17 +7,17 @@ import org.openpnp.model.Configuration;
 import org.openpnp.util.LogUtils;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Save the working image as an image file in the debug directory using the specified prefix and
  * suffix. The suffix should be a file extension (including the period).
  */
 public class ImageWriteDebug extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private String prefix = "debug";
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private String suffix = ".png";
 
     public String getPrefix() {

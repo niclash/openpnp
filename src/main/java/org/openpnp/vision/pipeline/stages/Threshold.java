@@ -4,16 +4,16 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class Threshold extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int threshold = 100;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private boolean auto = false;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private boolean invert = false;
 
     public int getThreshold() {

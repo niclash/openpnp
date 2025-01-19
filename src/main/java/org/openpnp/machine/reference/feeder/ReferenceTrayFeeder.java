@@ -31,8 +31,7 @@ import org.openpnp.model.Location;
 import org.openpnp.spi.Nozzle;
 import org.openpnp.spi.PropertySheetHolder;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 /**
@@ -42,13 +41,16 @@ import org.simpleframework.xml.Element;
 public class ReferenceTrayFeeder extends ReferenceFeeder {
 
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int trayCountX = 1;
-    @Attribute
+
+    @JacksonXmlProperty( isAttribute = true )
     private int trayCountY = 1;
-    @Element
+
+    @JacksonXmlProperty
     private Location offsets = new Location(LengthUnit.Millimeters);
-    @Attribute
+
+    @JacksonXmlProperty( isAttribute = true )
     private int feedCount = 0;  // UI is base 1, 0 is ok because a pick operation always preceded by a feed, which increments feedCount to 1
 
     @Override

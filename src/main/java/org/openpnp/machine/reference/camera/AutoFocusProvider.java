@@ -36,20 +36,19 @@ import org.openpnp.spi.HeadMountable;
 import org.openpnp.util.ImageUtils;
 import org.openpnp.util.MovableUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class AutoFocusProvider implements FocusProvider {
-    @Element(required = false)
+    @JacksonXmlProperty
     Length focalResolution = new Length(0.05, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     int averagedFrames = 1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     double focusSpeed = 0.5;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     boolean showDiagnostics = true;
 
     public Length getFocalResolution() {

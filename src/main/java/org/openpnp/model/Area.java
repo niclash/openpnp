@@ -21,16 +21,16 @@ package org.openpnp.model;
 
 import java.util.Locale;
 
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 /**
  * A class to represent a quantity of 2D space
  */
 public class Area {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private double value;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private AreaUnit units;
 
     public Area() {

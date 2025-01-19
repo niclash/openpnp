@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.wizards.HttpActuatorConfigurationWizard;
 import org.openpnp.model.Solutions;
@@ -36,25 +37,24 @@ import org.openpnp.model.Solutions.Milestone;
 import org.openpnp.model.Solutions.Severity;
 import org.openpnp.util.TextUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Element;
 
 public class HttpActuator extends ReferenceActuator {
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected String onUrl = "";
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected String offUrl = "";
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected String paramUrl = "";
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected String regex = "";
 
     // The actuation state should not be persisted.
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     protected boolean on = false;
 
     // Instead we remember the last formed URL per session. 
@@ -62,7 +62,7 @@ public class HttpActuator extends ReferenceActuator {
     // configuration changes. 
     protected String lastActuationUrl = null;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected String readUrl = "";
 
     public HttpActuator() {}

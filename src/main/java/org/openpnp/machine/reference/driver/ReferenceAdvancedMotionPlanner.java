@@ -50,8 +50,7 @@ import org.openpnp.spi.HeadMountable;
 import org.openpnp.util.MovableUtils;
 import org.openpnp.util.NanosecondTime;
 import org.openpnp.util.SimpleGraph;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * The Advanced Motion Planner applies any optimizing to the planned path. 
@@ -59,51 +58,51 @@ import org.simpleframework.xml.Element;
  */
 public class ReferenceAdvancedMotionPlanner extends AbstractMotionPlanner {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean allowContinuousMotion = false;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean allowUncoordinated = false;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean diagnosticsEnabled = false;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean interpolationRetiming = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double minimumSpeed = 0.05;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean showApproximation = true;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     Location startLocation = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+    @JacksonXmlProperty
     Location midLocation1 = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+    @JacksonXmlProperty
     Location midLocation2 = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+    @JacksonXmlProperty
     Location endLocation = new Location(LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     double toMid1Speed = 1.0;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     double toMid2Speed = 1.0;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     double toEndSpeed = 1.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean startLocationEnabled = false;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean mid1LocationEnabled = false;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean mid2LocationEnabled = false;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean endLocationEnabled = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean toMid1SafeZ = true;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean toMid2SafeZ = true;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean toEndSafeZ = true;
 
 

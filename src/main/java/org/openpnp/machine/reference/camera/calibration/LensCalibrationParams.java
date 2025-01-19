@@ -23,26 +23,26 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.openpnp.model.AbstractModelObject;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class LensCalibrationParams extends AbstractModelObject {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean enabled = false;
 
-    @Element(name = "cameraMatrix", required = false)
+    @JacksonXmlProperty(localName = "camera-matrix")
     private double[] cameraMatrixArr = new double[9];
 
-    @Element(name = "distortionCoefficients", required = false)
+    @JacksonXmlProperty(localName = "distortion-coefficients")
     private double[] distortionCoefficientsArr = new double[5];
 
     protected Mat cameraMatrix = Mat.zeros(3, 3, CvType.CV_64FC1);
     protected Mat distortionCoefficients = Mat.zeros(5, 1, CvType.CV_64FC1);
 
-    @Commit void commit() {
+    @PostDeserialize
+    void commit() {
         cameraMatrix.put(0, 0, cameraMatrixArr);
         distortionCoefficients.put(0, 0, distortionCoefficientsArr);
         if (!Core.checkRange(distortionCoefficients, true, -10e6, +10e6)) {
@@ -52,7 +52,8 @@ public class LensCalibrationParams extends AbstractModelObject {
         }
     }
 
-    @Persist void persist() {
+    @PreSerialize
+    void persist() {
         cameraMatrix.get(0, 0, cameraMatrixArr);
         distortionCoefficients.get(0, 0, distortionCoefficientsArr);
     }

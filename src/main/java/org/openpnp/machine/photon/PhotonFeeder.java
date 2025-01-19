@@ -20,8 +20,7 @@ import org.openpnp.model.Location;
 import org.openpnp.model.Solutions;
 import org.openpnp.spi.*;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -33,17 +32,17 @@ public class PhotonFeeder extends ReferenceFeeder {
     public static final String ACTUATOR_DATA_NAME = "PhotonFeederData";
     PhotonProperties photonProperties;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String hardwareId;
 
     protected Integer slotAddress = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int partPitch = 4;
 
     protected boolean initialized = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location offset;
 
     private static PhotonBusInterface photonBus;

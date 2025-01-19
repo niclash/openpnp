@@ -39,8 +39,7 @@ import org.openpnp.util.NanosecondTime;
 import org.openpnp.util.TravellingSalesman;
 import org.openpnp.util.Utils2D;
 import org.openpnp.util.VisionUtils;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A Footprint is a group of SMD pads along with length unit information. Footprints can be rendered
@@ -103,19 +102,19 @@ public class VisionCompositing extends AbstractModelObject{
         }
     }
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private CompositingMethod compositingMethod = CompositingMethod.Restricted;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length maxPickTolerance = new Length(0, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double minLeverageFactor = 0.2; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int extraShots = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean allowInside = true;
 
     private static final double minCameraRadiusOverlap = 0.02; // 2% overlap, ~7 pixels at 720p/2
@@ -808,7 +807,6 @@ public class VisionCompositing extends AbstractModelObject{
         /**
          * Compute the needed compositing solution for the given package footprint. 
          * 
-         * @param pkg
          * @return
          * @throws Exception
          */

@@ -64,51 +64,50 @@ import org.openpnp.util.UiUtils;
 import org.openpnp.util.VisionUtils;
 import org.openpnp.vision.pipeline.CvStage.Result.Circle;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * This helper class implements the Issues & Solutions for the Calibration Milestone. 
  */
 public class CalibrationSolutions implements Solutions.Subject {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int backlashCalibrationPasses = 4;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double errorDampening = 0.9;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double backlashTestMoveMm = 10;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double backlashTestMoveLargeMm = 90;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double stepTestMm = 1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double maxSneakUpOffsetMm = 2.5;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double acceptableSneakUpOffsetMm = 0.8;
 
-    @Element(required=false)
+    @JacksonXmlProperty
     private double[] backlashProbingSpeeds = new double [] { 0.25, 0.33, 0.5, 0.75, 1 };
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double backlashDistanceFactor = Math.pow(2.0, 0.5); 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int nozzleOffsetAngles = 6;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private long extraVacuumDwellMs = 300;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private long machineSettleMs = 500;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double upLookingSecondaryOffsetZMm = 2;
 
     /**
@@ -116,7 +115,7 @@ public class CalibrationSolutions implements Solutions.Subject {
      * automationLevel = 1: Automated process, but stops at the Z level change.<br/>
      * automationLevel = 2: Fully automated.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int automationLevel = 2;
 
     public CalibrationSolutions setMachine(ReferenceMachine machine) {

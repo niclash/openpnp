@@ -16,26 +16,22 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.openpnp.vision.pipeline.stages.convert.ColorConverter;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.convert.Convert;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Image Processing",
         description = "Mask an image with model shapes originating from previous stages.")
 
 public class MaskModel extends CvStage {
 
-    @Element(required = false)
-    @Convert(ColorConverter.class)
+    @JacksonXmlProperty
     @Property(description = "Color of mask.")
     private Color color = Color.black;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of stage to input model data from.")
     private String modelStageName = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Filter or mask the image.")
     private boolean isMask = false;
 

@@ -9,8 +9,7 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category="Image Processing", description="Performs adaptive thresholding on the working image.")
 public class ThresholdAdaptive extends CvStage {
@@ -30,7 +29,7 @@ public class ThresholdAdaptive extends CvStage {
         }
     }
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Adaptive thresholding algorithm to use: 'Mean' is a mean of the (blockSize x blockSize) neighborhood of a pixel minus cParm. 'Gaussian' is a weighted sum (cross-correlation with a Gaussian window) of the (blockSize x blockSize) neighborhood of a pixel minus cParm")
     private AdaptiveMethod adaptiveMethod = AdaptiveMethod.Mean;
     
@@ -42,7 +41,7 @@ public class ThresholdAdaptive extends CvStage {
         this.adaptiveMethod = adaptiveMethod;
     }
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Thresholding type that must be either binary (default) or inverted binary")
     private boolean invert = false;
     
@@ -54,7 +53,7 @@ public class ThresholdAdaptive extends CvStage {
         this.invert = invert;
     }
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Size of a pixel neighborhood that is used to calculate a threshold value for the pixel. Should be and odd number greater than or equal to 3")
     private int blockSize = 127;
 
@@ -67,7 +66,7 @@ public class ThresholdAdaptive extends CvStage {
         return blockSize;
     }
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Constant subtracted from the mean or weighted mean. Can take negative values too.")
     private int cParm = 80;
 

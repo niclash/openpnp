@@ -38,6 +38,7 @@ import org.openpnp.model.Length;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Rectangle;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.Head;
@@ -46,9 +47,7 @@ import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.spi.VisionProvider;
 import org.openpnp.util.MovableUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Vision System Description
@@ -66,19 +65,25 @@ public class ReferenceLeverFeeder extends ReferenceFeeder {
 
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    @Element
+    @JacksonXmlProperty
     protected Location feedStartLocation = new Location(LengthUnit.Millimeters);
-    @Element
+
+    @JacksonXmlProperty
     protected Location feedEndLocation = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+
+    @JacksonXmlProperty
     private Length partPitch = new Length(4, LengthUnit.Millimeters);
-    @Element(required = false)
+
+    @JacksonXmlProperty
     protected double feedSpeed = 1.0;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     protected String actuatorName;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     protected String peelOffActuatorName;
-    @Element(required = false)
+
+    @JacksonXmlProperty
     protected Vision vision = new Vision();
 
     protected Location pickLocation;
@@ -397,15 +402,15 @@ public class ReferenceLeverFeeder extends ReferenceFeeder {
     }
 
     public static class Vision {
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private boolean enabled;
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private String templateImageName;
-        @Element(required = false)
+        @JacksonXmlProperty
         private Rectangle areaOfInterest = new Rectangle();
-        @Element(required = false)
+        @JacksonXmlProperty
         private Location templateImageTopLeft = new Location(LengthUnit.Millimeters);
-        @Element(required = false)
+        @JacksonXmlProperty
         private Location templateImageBottomRight = new Location(LengthUnit.Millimeters);
 
         private BufferedImage templateImage;
@@ -425,7 +430,7 @@ public class ReferenceLeverFeeder extends ReferenceFeeder {
         }
 
         @SuppressWarnings("unused")
-        @Persist
+        @PreSerialize
         private void persist() throws IOException {
             if (templateImageDirty) {
                 File file = null;

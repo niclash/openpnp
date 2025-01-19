@@ -8,27 +8,26 @@ import org.openpnp.machine.reference.vision.ReferenceBottomVision.PartSettings;
 import org.openpnp.machine.reference.vision.ReferenceBottomVision.PartSizeCheckMethod;
 import org.openpnp.machine.reference.vision.ReferenceBottomVision.PreRotateUsage;
 import org.openpnp.machine.reference.vision.wizards.BottomVisionSettingsConfigurationWizard;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class BottomVisionSettings extends AbstractVisionSettings {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected PreRotateUsage preRotateUsage = PreRotateUsage.Default;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected PartSizeCheckMethod checkPartSizeMethod = PartSizeCheckMethod.Disabled;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int checkSizeTolerancePercent = 20;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected MaxRotation maxRotation = MaxRotation.Adjust;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean asymmetric = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location visionOffset = new Location(LengthUnit.Millimeters);
 
     @Override

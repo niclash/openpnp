@@ -1,18 +1,21 @@
 package org.openpnp.model;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class RegionOfInterest {
-    @Element
+    @JacksonXmlProperty
     protected Location upperLeftCorner;
-    @Element
+
+    @JacksonXmlProperty
     protected Location upperRightCorner;
-    @Element
+
+    @JacksonXmlProperty
     protected Location lowerLeftCorner;
-    @Attribute
+
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean rectify;
-    @Element(required = false)
+
+    @JacksonXmlProperty
     protected Location offsets;
     
     public RegionOfInterest()

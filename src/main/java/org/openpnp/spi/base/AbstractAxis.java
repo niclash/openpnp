@@ -40,7 +40,7 @@ import org.openpnp.spi.HeadMountable;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.Locatable.LocationOption;
 import org.openpnp.spi.PropertySheetHolder;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * The Abstract Axis implements the common denominator of all the sub-classes. 
@@ -48,13 +48,13 @@ import org.simpleframework.xml.Attribute;
  */
 public abstract class AbstractAxis extends AbstractModelObject implements Axis {
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected String id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Axis.Type type;
 
     public AbstractAxis() {

@@ -4,16 +4,16 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Performs Canny edge detection on the working image, updating it with the results.
  */
 public class DetectEdgesCanny extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     double threshold1 = 40;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     double threshold2 = 180;
 
     public double getThreshold1() {

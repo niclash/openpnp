@@ -26,12 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.stream.Format;
-import org.simpleframework.xml.stream.HyphenStyle;
-import org.simpleframework.xml.stream.Style;
+import org.openpnp.serialization.XmlObjectMapperSerializer;
 
 public class XmlSerialize {
     public static String serialize(Object o) {
@@ -275,24 +270,26 @@ public class XmlSerialize {
         return out.toString();
     }
 
+
+    private static XmlObjectMapperSerializer mapper;
+
+    static {
+        mapper = new XmlObjectMapperSerializer();
+    }
+
     /**
-     * Create a standard OpenPnP Configuration serializer.
-     * 
-     * @return
+     * Returns a OpenPnP Configuration serializer/deserializer.
+     *
      */
-    public static Serializer createSerializer() {
-        Style style = new HyphenStyle();
-        Format format = new Format(style);
-        AnnotationStrategy strategy = new AnnotationStrategy();
-        Serializer serializer = new Persister(strategy, format);
-        return serializer;
+    public static XmlObjectMapperSerializer serialization() {
+        return mapper;
     }
 
     /**
      * Purges serialized properties of the given class from the serialized XML.
      * Note this does not care about XML structure (no CDATA support etc.), it just assumes each element or
      * attribute pattern is unique within the serialized string (which is not unreasonable).
-     * 
+     *
      * @param cls
      * @param serialized
      * @return
@@ -306,50 +303,49 @@ public class XmlSerialize {
     }
 
     public static String purgeFieldXml(String serialized, Field f) {
-        HyphenStyle hyphenStyle = new HyphenStyle();
         // Handle all fields with xml annotation.
         for (Annotation annotation : f.getAnnotations()) {
-            if (annotation.annotationType().getPackage().getName().equals("org.simpleframework.xml")) {
+            if (annotation.annotationType().getPackage().getName().equals("com.fasterxml.jackson")) {
                 // Try element syntax.
-                String elementName = hyphenStyle.getElement(f.getName());
-                int begin = Math.max(serialized.indexOf("<"+elementName+">"),
-                        serialized.indexOf("<"+elementName+" "));
+//                String elementName = hyphenStyle.getElement(f.getName());
+                String elementName = f.getName();
+                int begin = Math.max(serialized.indexOf("<" + elementName + ">"),
+                    serialized.indexOf("<" + elementName + " "));
                 if (begin >= 0) {
                     // Element without closing tag.
-                    int end = serialized.indexOf("/>", begin+elementName.length()+2);
+                    int end = serialized.indexOf("/>", begin + elementName.length() + 2);
                     if (end > begin) {
                         end += 2;
                         serialized = serialized.substring(0, begin)
-                                + serialized.substring(end);
-                    }
-                    else {
+                            + serialized.substring(end);
+                    } else {
                         // Element with closing tag.
-                        end = serialized.indexOf("</"+elementName+">", begin+elementName.length()+2);
+                        end = serialized.indexOf("</" + elementName + ">", begin + elementName.length() + 2);
                         if (end > begin) {
-                            end += elementName.length()+3;
+                            end += elementName.length() + 3;
                             serialized = serialized.substring(0, begin)
-                                    + serialized.substring(end);
+                                + serialized.substring(end);
                         }
                     }
-                }
-                else {
+                } else {
                     // Empty Element.
-                    begin = serialized.indexOf("<"+elementName+"/>");
+                    begin = serialized.indexOf("<" + elementName + "/>");
                     if (begin >= 0) {
-                        int end = begin+elementName.length()+3;
+                        int end = begin + elementName.length() + 3;
                         serialized = serialized.substring(0, begin)
-                                + serialized.substring(end);
+                            + serialized.substring(end);
                     }
                 }
                 // Try attribute syntax.
-                String attributeName = hyphenStyle.getAttribute(f.getName());
-                begin = serialized.indexOf(" "+attributeName+"=\"");
+//                String attributeName = hyphenStyle.getAttribute(f.getName());
+                String attributeName = f.getName();
+                begin = serialized.indexOf(" " + attributeName + "=\"");
                 if (begin >= 0) {
-                    int end = serialized.indexOf("\"", begin+attributeName.length()+3);
+                    int end = serialized.indexOf("\"", begin + attributeName.length() + 3);
                     if (end >= begin) {
                         end += 1;
                         serialized = serialized.substring(0, begin)
-                                + serialized.substring(end);
+                            + serialized.substring(end);
                     }
                 }
                 break;//annotation

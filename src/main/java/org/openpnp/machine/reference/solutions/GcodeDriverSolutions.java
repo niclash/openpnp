@@ -58,7 +58,6 @@ import org.openpnp.util.GcodeServer;
 import org.openpnp.util.UiUtils;
 import org.openpnp.util.XmlSerialize;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Serializer;
 
 /**
  * This helper class implements the Issues & Solutions for the GcodeDriver and GcodeAsyncDriver. 
@@ -1160,18 +1159,13 @@ public class GcodeDriverSolutions implements Solutions.Subject {
      */
     public static void convertToAsync(GcodeDriver gcodeDriver) throws Exception {
         // Serialize the GcodeDriver
-        Serializer serOut = XmlSerialize.createSerializer();
-        StringWriter sw = new StringWriter();
-        serOut.write(gcodeDriver, sw);
-        String gcodeDriverSerialized = sw.toString();
-        // Patch it.
-        gcodeDriverSerialized.replace(
+        String xml = XmlSerialize.serialize(gcodeDriver);
+        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
+        xml = xml.replace(
                 gcodeDriver.getClass().getCanonicalName(), 
                 GcodeAsyncDriver.class.getCanonicalName());
         // De-serialize it.
-        Serializer serIn = XmlSerialize.createSerializer();
-        StringReader sr = new StringReader(gcodeDriverSerialized);
-        GcodeAsyncDriver asyncDriver = serIn.read(GcodeAsyncDriver.class, sr);
+        GcodeAsyncDriver asyncDriver = XmlSerialize.serialization().read(GcodeAsyncDriver.class, xml);
         // Triple the timeout as asynchronously executed move sequences can be longer than single moves.
         asyncDriver.setTimeoutMilliseconds(asyncDriver.getTimeoutMilliseconds()*3);
         replaceDriver(asyncDriver);
@@ -1186,20 +1180,15 @@ public class GcodeDriverSolutions implements Solutions.Subject {
      */
     public static void convertToPlain(GcodeAsyncDriver asyncDriver) throws Exception {
         // Serialize the GcodeDriver
-        Serializer serOut = XmlSerialize.createSerializer();
-        StringWriter sw = new StringWriter();
-        serOut.write(asyncDriver, sw);
-        String gcodeDriverSerialized = sw.toString();
-        // Patch it.
-        gcodeDriverSerialized.replace(
+        String xml = XmlSerialize.serialize(asyncDriver);
+        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
+        xml = xml.replace(
                 asyncDriver.getClass().getCanonicalName(), 
                 GcodeAsyncDriver.class.getCanonicalName());
         // Remove the sub-class properties. 
-        gcodeDriverSerialized = XmlSerialize.purgeSubclassXml(GcodeAsyncDriver.class, gcodeDriverSerialized);
+        xml = XmlSerialize.purgeSubclassXml(GcodeAsyncDriver.class, xml);
         // De-serialize it.
-        Serializer serIn = XmlSerialize.createSerializer();
-        StringReader sr = new StringReader(gcodeDriverSerialized);
-        GcodeDriver gcodeDriver = serIn.read(GcodeDriver.class, sr);
+        GcodeDriver gcodeDriver = XmlSerialize.serialization().read(GcodeDriver.class, xml);
         replaceDriver(gcodeDriver);
     }
 

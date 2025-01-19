@@ -5,14 +5,14 @@ import java.io.File;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Save the working image to the specified path. The format is chosen based on the filename's
  * extension.
  */
 public class ImageWrite extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private File file = new File("");
 
     public File getFile() {

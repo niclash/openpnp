@@ -30,27 +30,27 @@ import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Image Processing",
         description = "Write a template image to disk given a user defined file name, or infer the image's name from the id of the part loaded in the feeder and write it to the path defined by the user.")
 
 public class WritePartTemplateImage extends CvStage {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(
             description = "Name of the template image to write, or name of a directory where the image should be written with a name inferred from the part ID.")
     private String templateFile;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Extension of image file. Defaults to '.png'.")
     private String extension = ".png";
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Prefix of the filename. Used for automatic filename generation to distinguish between different uses (e.g. up/down camera). Default empty.")
     private String prefix = "";
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Write image as a package template.")
     private boolean asPackage = false;
 

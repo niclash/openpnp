@@ -17,7 +17,7 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Finds the smallest rotated rectangle that encloses pixels that fall within the given range.
@@ -26,39 +26,39 @@ import org.simpleframework.xml.Attribute;
 @Stage(description="Finds the smallest rotated rectangle that encloses pixels that fall within the given range.\n"
         + "Input should be a grayscale image.")
 public class MinAreaRect extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Threshold minimum grayscale value of the pixel to be considered \"set\".")
     private int thresholdMin;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Threshold mayimum grayscale value of the pixel to be considered \"set\".")
     private int thresholdMax;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Expected angle of the rectangular hull to be detected.")
     private double expectedAngle = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Search angle, two-sided around the expected angle.")
     private double searchAngle = 45;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Detect the left edge of the rectangle (rotated to expectedAngle).")
     private boolean leftEdge = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Detect the right edge of the rectangle (rotated to expectedAngle).")
     private boolean rightEdge = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Detect the top edge of the rectangle (rotated to expectedAngle).")
     private boolean topEdge = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Detect the bottom edge of the rectangle (rotated to expectedAngle).")
     private boolean bottomEdge = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Display the detection result diagnostics.")
     private boolean diagnostics = false;
 
@@ -142,7 +142,7 @@ public class MinAreaRect extends CvStage {
         this.propertyName = propertyName;
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "determines the pipeline property name under which this stage is controlled by the vision operation. "
             + "If set, these will override some of the properties configured here. Use \"MinAreaRect\" for default control.")
     private String propertyName = "MinAreaRect";

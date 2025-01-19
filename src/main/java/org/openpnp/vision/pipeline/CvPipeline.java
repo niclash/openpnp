@@ -11,22 +11,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+import org.openpnp.util.XmlSerialize;
 import org.openpnp.vision.FluentCv.ColorSpace;
 import org.openpnp.vision.pipeline.CvStage.Result;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.stream.Format;
-import org.simpleframework.xml.stream.HyphenStyle;
-import org.simpleframework.xml.stream.Style;
 
 /**
  * A CvPipeline performs computer vision operations on a working image by processing in series a
@@ -47,13 +42,13 @@ import org.simpleframework.xml.stream.Style;
  * 
  * TODO: Add info showing pixel coordinates when mouse is in image window.
  */
-@Root
+@JacksonXmlRootElement
 public class CvPipeline implements AutoCloseable {
     static {
         nu.pattern.OpenCV.loadLocally();
     }
 
-    @ElementList
+    @JacksonXmlProperty
     private ArrayList<CvStage> stages = new ArrayList<>();
 
     private Map<CvStage, Result> results = new HashMap<CvStage, Result>();
@@ -383,23 +378,18 @@ public class CvPipeline implements AutoCloseable {
      */
     public String toXmlString() throws Exception {
         resetToDefaults();
-        Serializer ser = createSerializer();
-        StringWriter sw = new StringWriter();
-        ser.write(this, sw);
-        return sw.toString();
+        return XmlSerialize.serialize(this);
     }
 
     /**
      * Parse the pipeline in the given String and replace the current pipeline with the results.
      * 
-     * @param s
+     * @param xml serialized input
      * @throws Exception
      */
-    public void fromXmlString(String s) throws Exception {
+    public void fromXmlString(String xml) throws Exception {
         release();
-        Serializer ser = createSerializer();
-        StringReader sr = new StringReader(s);
-        CvPipeline pipeline = ser.read(CvPipeline.class, sr);
+        CvPipeline pipeline = XmlSerialize.serialization().read(CvPipeline.class, xml);
         stages.clear();
         for (CvStage stage : pipeline.getStages()) {
             add(stage);
@@ -458,14 +448,6 @@ public class CvPipeline implements AutoCloseable {
     public void resetReusedPipeline() {
         properties = new HashMap<>();
         compositeShots = new ArrayList<>();
-    }
-
-    private static Serializer createSerializer() {
-        Style style = new HyphenStyle();
-        Format format = new Format(style);
-        AnnotationStrategy strategy = new AnnotationStrategy();
-        Serializer serializer = new Persister(strategy, format);
-        return serializer;
     }
 
     public BufferedImage getLastCapturedImage() {

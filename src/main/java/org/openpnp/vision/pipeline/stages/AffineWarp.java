@@ -36,7 +36,7 @@ import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Extracts a rectangular (parallelogrammatic) region of interest from the image that can have any position, size, "
         + "rotation, scale, <em>shear</em> or even be mirrored. A so-called Affine Transformation Warp.<br/>"
@@ -44,44 +44,44 @@ import org.simpleframework.xml.Attribute;
         + "This allows the pipeline to be independent of camera model and resolution, lens, focus distance etc. <br/>"
         + "To setup, pin the previous stage and read off length unit coordinates from the mouse position.")
 public class AffineWarp extends CvStage {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Length unit used in this stage.")
     private LengthUnit lengthUnit = LengthUnit.Millimeters;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "What will become the left upper corner of the extracted area. X offset from camera location.")
     private double x0 = 0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "What will become the left upper corner of the extracted area. Y offset from camera location.")
     private double y0 = 0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "What will become the right upper corner of the extracted area. X offset from camera location.")
     private double x1 = 0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "What will become the right upper corner of the extracted area. Y offset from camera location.")
     private double y1 = 0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "What will become the left lower corner of the extracted area. X offset from camera location.")
     private double x2 = 0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "What will become the left lower corner of the extracted area. Y offset from camera location.")
     private double y2 = 0;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Scale of the transformation. NOTE: subsequent stages must be aware that the camera pixel to units scale has changed.")
     private double scale = 1.0;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Rectify the transformation to be rectangular. The point [x2, y2] is not interpreted "
             + "as a corner but as a height indicator.")
     private boolean rectify = true;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "The caller of the pipeline can override the region of interest under this name.")
     private String regionOfInterestProperty = "regionOfInterest";
 

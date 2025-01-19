@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.swing.Action;
 import javax.swing.Icon;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.apache.commons.io.IOUtils;
 import org.opencv.core.KeyPoint;
 import org.openpnp.ConfigurationListener;
@@ -53,10 +54,7 @@ import org.openpnp.util.Utils2D;
 import org.openpnp.util.VisionUtils;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import com.google.common.collect.Sets;
 
@@ -64,27 +62,27 @@ import com.google.common.collect.Sets;
  * Implements an algorithm for finding a set of fiducials on a board and returning the correct
  * orientation for the board.
  */
-@Root
+@JacksonXmlRootElement
 public class ReferenceFiducialLocator extends AbstractPartSettingsHolder implements PartSettingsRoot, FiducialLocator {
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     protected CvPipeline pipeline;
 
     @Deprecated
-    @ElementMap(required = false)
+    @JacksonXmlProperty
     protected Map<String, PartSettings> partSettingsByPartId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean enabledAveraging = false;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Integer repeatFiducialRecognition = null;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length maxDistance = new Length(4, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected FiducialLocatorTolerances tolerances = new FiducialLocatorTolerances();
 
     public static class FiducialLocatorTolerances {
@@ -798,15 +796,15 @@ public class ReferenceFiducialLocator extends AbstractPartSettingsHolder impleme
         return new FiducialVisionSettingsConfigurationWizard(visionSettings, partSettingsHolder);
     }
 
-    @Root
+    @JacksonXmlRootElement
     @Deprecated
     public static class PartSettings {
         @Deprecated
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         protected boolean enabled = true;
 
         @Deprecated
-        @Element
+        @JacksonXmlProperty
         protected CvPipeline pipeline;
 
         @Deprecated

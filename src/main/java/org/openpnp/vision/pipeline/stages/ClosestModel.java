@@ -30,31 +30,31 @@ import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Image Processing",
         description = "Filter RotatedRects that fit in the template's size, with a tolerance and find the closest RotatedRect to the center of the screen.")
 
 public class ClosestModel extends CvStage {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Allow log messages in the log.")
     private boolean log = false;
 
-    @Attribute(required = true)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(
             description = "Name of a prior stage to load the filter size from. The filter stage should contain a single RotatedRect model.")
     private String filterStageName;
 
-    @Attribute(required = true)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of a prior stage to load the model from.")
     private String modelStageName;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Filter tolerance.")
     private double tolerance = 0.2f;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Scale filter by this value.")
     private double scale = 1.0f;
 

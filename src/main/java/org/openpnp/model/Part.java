@@ -21,9 +21,9 @@ package org.openpnp.model;
 
 import org.openpnp.ConfigurationListener;
 import org.openpnp.machine.reference.vision.AbstractPartSettingsHolder;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Feeder;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A Part is a single part that can be picked and placed. It has a graphical outline, is retrieved
@@ -31,25 +31,25 @@ import org.simpleframework.xml.core.Persist;
  * many boards and should generally represent a single part in the real world.
  */
 public class Part extends AbstractPartSettingsHolder {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private String id;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String name;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private LengthUnit heightUnits = LengthUnit.Millimeters;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private double height;
 
     private Package packag;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private String packageId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double speed = 1.0;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int pickRetryCount = 0;
 
     @SuppressWarnings("unused")
@@ -67,7 +67,7 @@ public class Part extends AbstractPartSettingsHolder {
         });
     }
 
-    @Persist
+    @PreSerialize
     private void persist() {
         packageId = (packag == null ? null : packag.getId());
     }

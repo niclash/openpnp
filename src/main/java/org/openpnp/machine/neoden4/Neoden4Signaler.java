@@ -11,14 +11,14 @@ import org.openpnp.spi.Driver;
 import org.openpnp.spi.base.AbstractJobProcessor;
 import org.openpnp.spi.base.AbstractSignaler;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class Neoden4Signaler extends AbstractSignaler implements Runnable {
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean enableErrorSound;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean enableFinishedSound;
 
 	private boolean playError = false;

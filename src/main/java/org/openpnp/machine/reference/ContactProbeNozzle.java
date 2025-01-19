@@ -60,10 +60,7 @@ import org.openpnp.util.UiUtils;
 import org.openpnp.util.VisionUtils;
 import org.openpnp.util.XmlSerialize;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Serializer;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ContactProbeNozzle extends ReferenceNozzle {
 
@@ -75,26 +72,26 @@ public class ContactProbeNozzle extends ReferenceNozzle {
         super(id);
     }
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private String contactProbeActuatorName = "";
     private boolean isDisabled; // for scripts: temporarily disable probing 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length contactProbeStartOffsetZ = new Length(1, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length contactProbeDepthZ = new Length(2, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length sniffleIncrementZ = new Length(0.1, LengthUnit.Millimeters); 
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double contactProbeSpeed = 0.05;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private long sniffleDwellTime = 250;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length contactProbeAdjustZ = new Length(0, LengthUnit.Millimeters);
 
     public enum ContactProbeMethod {
@@ -106,7 +103,7 @@ public class ContactProbeNozzle extends ReferenceNozzle {
             return this == ContactSenseActuator;
         }
     };
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private ContactProbeMethod contactProbeMethod = ContactProbeMethod.ContactSenseActuator;
 
     public enum ContactProbeTrigger {
@@ -116,29 +113,29 @@ public class ContactProbeNozzle extends ReferenceNozzle {
         EachTime
     };
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private ContactProbeTrigger feederHeightProbing = ContactProbeTrigger.EachTime;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private ContactProbeTrigger partHeightProbing = ContactProbeTrigger.EachTime;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean discardProbing = false; 
 
-    @Element(required=false)
+    @JacksonXmlProperty
     private Length calibrationOffsetZ = null;
 
-    @Element(required=false)
+    @JacksonXmlProperty
     private Length unloadedCalibrationOffsetZ = null;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double maxZOffsetMm = 2.0;
 
-    @ElementMap(required = false)
-    private HashMap<String, Length> probedFeederHeightOffsets = new HashMap<>();
+    @JacksonXmlProperty
+    private Map<String, Length> probedFeederHeightOffsets = new HashMap<>();
 
-    @ElementMap(required = false)
-    private HashMap<String, Length> probedPartHeightOffsets = new HashMap<>();
+    @JacksonXmlProperty
+    private Map<String, Length> probedPartHeightOffsets = new HashMap<>();
 
     private ReferenceNozzleTip zCalibratedNozzleTip;
 
@@ -1025,18 +1022,13 @@ public class ContactProbeNozzle extends ReferenceNozzle {
      */
     public static ContactProbeNozzle convertToContactProbe(ReferenceNozzle nozzle) throws Exception {
         // Serialize the nozzle
-        Serializer serOut = XmlSerialize.createSerializer();
-        StringWriter sw = new StringWriter();
-        serOut.write(nozzle, sw);
-        String serialized = sw.toString();
-        // Patch it.
-        serialized.replace(
+        String xml = XmlSerialize.serialize(nozzle);
+        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
+        xml = xml.replace(
                 nozzle.getClass().getCanonicalName(), 
                 ContactProbeNozzle.class.getCanonicalName());
         // De-serialize it.
-        Serializer serIn = XmlSerialize.createSerializer();
-        StringReader sr = new StringReader(serialized);
-        ContactProbeNozzle contactProbeNozzle = serIn.read(ContactProbeNozzle.class, sr);
+        ContactProbeNozzle contactProbeNozzle = XmlSerialize.serialization().read(ContactProbeNozzle.class, xml);
         contactProbeNozzle.setHead(nozzle.getHead());
         contactProbeNozzle.applyConfiguration(Configuration.get());
         contactProbeNozzle.setNozzleTip(nozzle.nozzleTip);
@@ -1052,20 +1044,15 @@ public class ContactProbeNozzle extends ReferenceNozzle {
      */
     public static ReferenceNozzle convertToReferenceNozzle(ContactProbeNozzle nozzle) throws Exception {
         // Serialize the nozzle
-        Serializer serOut = XmlSerialize.createSerializer();
-        StringWriter sw = new StringWriter();
-        serOut.write(nozzle, sw);
-        String serialized = sw.toString();
-        // Patch it.
-        serialized.replace(
+        String xml = XmlSerialize.serialize(nozzle);
+        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
+        xml = xml.replace(
                 nozzle.getClass().getCanonicalName(), 
                 ReferenceNozzle.class.getCanonicalName());
         // Remove sub-class settings.
-        serialized = XmlSerialize.purgeSubclassXml(ContactProbeNozzle.class, serialized);
+        xml = XmlSerialize.purgeSubclassXml(ContactProbeNozzle.class, xml);
         // De-serialize it.
-        Serializer serIn = XmlSerialize.createSerializer();
-        StringReader sr = new StringReader(serialized);
-        ReferenceNozzle referenceNozzle = serIn.read(ReferenceNozzle.class, sr);
+        ReferenceNozzle referenceNozzle = XmlSerialize.serialization().read(ReferenceNozzle.class, xml);
         referenceNozzle.setHead(nozzle.getHead());
         referenceNozzle.applyConfiguration(Configuration.get());
         referenceNozzle.setNozzleTip(nozzle.nozzleTip);

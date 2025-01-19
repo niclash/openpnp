@@ -1,5 +1,6 @@
 package org.openpnp.vision.pipeline.stages;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
@@ -8,10 +9,9 @@ import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.openpnp.vision.pipeline.stages.ThresholdAdaptive.AdaptiveMethod;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-@Root
+@JacksonXmlRootElement
 @Stage(description="Applies histogram equalization to the selected channels of the image.  For gray scale images this will increase the image contrast.  For color images, the results will vary depending on the image format and channels selected for equalization.  Generally applying histogram equalization to a color image will result in a false color image; however, contrast enhancement can be achieved on HSV formats by applying equalization to only the third channel (V).")
 public class HistogramEqualize extends CvStage {
 
@@ -35,7 +35,7 @@ public class HistogramEqualize extends CvStage {
         }
     }
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Selects which channel(s) of the image to equalize.  This setting has no effect on single channel (gray scale) images.")
     private ChannelsToEqualize channelsToEqualize = ChannelsToEqualize.All;
     

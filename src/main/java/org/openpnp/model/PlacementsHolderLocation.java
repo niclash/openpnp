@@ -24,9 +24,9 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.io.IOException;
 
 import org.openpnp.gui.MainFrame;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.util.Utils2D;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A PlacementsHolderLocation is an abstraction of a container for a subtype of a PlacementsHolder 
@@ -40,13 +40,13 @@ public abstract class PlacementsHolderLocation<T extends PlacementsHolderLocatio
     
     public static final String ID_DELIMITTER = "\u21D2"; //unicode character ⇒
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String fileName;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean checkFiducials = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean locallyEnabled = true;
 
     protected PanelLocation parent;
@@ -58,7 +58,7 @@ public abstract class PlacementsHolderLocation<T extends PlacementsHolderLocatio
     protected AffineTransform localToParentTransform;
     protected PlacementsTransformStatus placementsTransformStatus = PlacementsTransformStatus.NotSet;
     
-    @Commit
+    @PostDeserialize
     protected void commit() {
         setLocation(getLocation());
         setPlacementsHolder(placementsHolder);
@@ -259,7 +259,7 @@ public abstract class PlacementsHolderLocation<T extends PlacementsHolderLocatio
 
     /**
      * Sets the state of this PlacementsHolderLocation's locallyEnabled flag
-     * @param enabledStateMap - the state to set the flag 
+     * @param enabled - the state to set the flag
      */
     public void setLocallyEnabled(boolean enabled) {
         boolean oldValue = this.locallyEnabled;

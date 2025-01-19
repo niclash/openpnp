@@ -23,18 +23,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.openpnp.Translations;
 import org.openpnp.gui.support.PropertySheetWizardAdapter;
 import org.openpnp.machine.reference.ReferenceActuator;
@@ -59,6 +55,7 @@ import org.openpnp.model.Location;
 import org.openpnp.model.Motion.MoveToCommand;
 import org.openpnp.model.Named;
 import org.openpnp.model.Solutions;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Axis.Type;
 import org.openpnp.spi.Camera;
@@ -78,16 +75,11 @@ import org.openpnp.spi.base.AbstractTransformedAxis;
 import org.openpnp.util.NanosecondTime;
 import org.openpnp.util.TextUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import com.google.common.base.Joiner;
 
-@Root
+@JacksonXmlRootElement
 public class GcodeDriver extends AbstractReferenceDriver implements Named {
     public enum CommandType {
         COMMAND_CONFIRM_REGEX,
@@ -161,13 +153,14 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
     }
 
     public static class Command {
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         public String headMountableId;
 
-        @Attribute(required = true)
+        @JacksonXmlProperty( isAttribute = true )
         public CommandType type;
 
-        @ElementList(required = false, inline = true, entry = "text", data = true)
+//        @ElementList(required = false, inline = true, entry = "text", data = true)
+        @JacksonXmlProperty
         public ArrayList<String> commands = new ArrayList<>();
 
         public Command(String headMountableId, CommandType type, String text) {
@@ -195,95 +188,99 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
         }
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected LengthUnit units = LengthUnit.Millimeters;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int maxFeedRate = 1000;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double backlashOffsetX = -1;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double backlashOffsetY = -1;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double backlashOffsetZ = 0;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double backlashOffsetR = 0;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double nonSquarenessFactor = 0;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double backlashFeedRateFactor = 0.1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int timeoutMilliseconds = 20000;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int connectWaitTimeMilliseconds = 3000;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int dollarWaitTimeMilliseconds = 50;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean visualHomingEnabled = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean backslashEscapedCharactersEnabled = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean removeComments;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean compressGcode;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String compressionExcludes = "[]\"";
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean loggingGcode;
 
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location homingFiducialLocation = new Location(LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     boolean supportingPreMove = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     boolean usingLetterVariables = true;
     
-    @Attribute(required = false) 
+    @JacksonXmlProperty( isAttribute = true ) 
     int infinityTimeoutMilliseconds = 60000; // 1 Minute is considered an "eternity" for a controller.
 
-    @Element(required = false, data=true) 
+//    @Element(required = false, data=true)
+    @JacksonXmlProperty
     String detectedFirmware = null; 
 
-    @Element(required = false, data=true) 
-    String reportedAxes = null; 
+//    @Element(required = false, data=true)
+    @JacksonXmlProperty
+    String reportedAxes = null;
 
-    @Element(required = false, data=true)
+//    @Element(required = false, data=true)
+    @JacksonXmlProperty
     String configuredAxes = null;
 
-    @ElementList(required = false, inline = true)
+//    @ElementList(required = false, inline = true)
+    @JacksonXmlProperty
     public ArrayList<Command> commands = new ArrayList<>();
 
     @Deprecated
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected List<GcodeDriver> subDrivers = null;
 
     @Deprecated
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected List<Axis> axes = null;
 
     private ReaderThread readerThread;
@@ -330,10 +327,10 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
     // used to support sending feedRate, acceleration and jerk only when they have changed
     static class SendOnChange {
         // objects stored in machine.xml
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected boolean sendOnChange = false; // configuration flag: if set the value is only send if it has changed
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         protected Double relativeDeviation;     // configuration flag: relative deviation between new and last value that is considered as value has change
 
         // This object is designed to be initialized on creation. However, the de-serializer used to
@@ -343,7 +340,7 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
         // harder to understand. Storing the value in the machine.xml configuration file circumvents
         // the problem. However now content thats compile-time defined becomes part of the
         // configuration file...
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private String variable;                // variable to be replaced in the (g-code) command
 
         // local objects
@@ -396,11 +393,11 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
     }
     
     // define feedRate, acceleration and jerk as SendOnChange types to handle them in a unified way
-    @Element(required = false)
+    @JacksonXmlProperty
     protected SendOnChange sendOnChangeFeedRate;
-    @Element(required = false)
+    @JacksonXmlProperty
     protected SendOnChange sendOnChangeAcceleration;
-    @Element(required = false)
+    @JacksonXmlProperty
     protected SendOnChange sendOnChangeJerk;
 
     // provide getter methods to read sendOnChange<...> and initialize then on the fly
@@ -460,7 +457,7 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
         return command;
     }
     
-    @Commit
+    @PostDeserialize
     public void commit() {
         super.commit();
 
@@ -2259,22 +2256,23 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
     @Deprecated
     private static class Axis {
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private String name;
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private Type type;
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private double homeCoordinate = 0;
 
-        @ElementList(required = false)
+        @JacksonXmlProperty
         private Set<String> headMountableIds = new HashSet<String>();
 
-        @Element(required = false)
+        @JacksonXmlProperty
         private AxisTransform transform;
 
-        @Element(required = false, data = true)
+//        @Element(required = false, data = true)
+        @JacksonXmlProperty
         private String preMoveCommand;
 
         private Axis() {
@@ -2292,31 +2290,31 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
      */
     @Deprecated
     public static class NegatingTransform implements AxisTransform {
-        @Element
+        @JacksonXmlProperty
         private String negatedHeadMountableId;
 
     }
 
     @Deprecated
     public static class CamTransform implements AxisTransform {
-        @Element
+        @JacksonXmlProperty
         private String negatedHeadMountableId;
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private double camRadius = 24;
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private double camWheelRadius = 9.5;
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private double camWheelGap = 2;
 
     }
 
     @Deprecated
     public static class OffsetTransform implements AxisTransform {
-        @ElementMap(required=false)
-        HashMap<String, Double> offsetsByHeadMountableId = new HashMap<>();
+        @JacksonXmlProperty
+        Map<String, Double> offsetsByHeadMountableId = new HashMap<>();
 
         public OffsetTransform() {
         }
@@ -2325,7 +2323,7 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
     @Deprecated
     public static class ScalingTransform implements AxisTransform {
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private double scaleFactor = 1;
     }
 }

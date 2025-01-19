@@ -27,37 +27,36 @@ import java.util.Set;
 
 import org.openpnp.machine.reference.vision.AbstractPartSettingsHolder;
 import org.openpnp.spi.NozzleTip;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Version;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class Package extends AbstractPartSettingsHolder {
-    @Version(revision=1.1)
+//    @Version(revision=1.1)
+    // TODO; What/How was this used?
+    @JacksonXmlProperty(isAttribute = true)
     private double version;    
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private String id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String description;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String tapeSpecification;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double pickVacuumLevel;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double placeBlowOffLevel;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Footprint footprint;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     private VisionCompositing visionCompositing;
     
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected List<String> compatibleNozzleTipIds = new ArrayList<>();
 
     protected Set<NozzleTip> compatibleNozzleTips; 

@@ -59,28 +59,21 @@ import org.openpnp.util.Collect;
 import org.openpnp.util.GcodeServer;
 import org.openpnp.util.NanosecondTime;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Add a basic simulation mode to the ReferenceMachine. 
- * 
  * These are just the foundations of something that could become bigger with time.
  * The idea is to be able to put any machine configuration in simulation mode. 
- * 
- * For a NullDriver this is the only operating mode, for GcodeDriver this mode could mean to redirect 
+ * For a NullDriver this is the only operating mode, for GcodeDriver this mode could mean to redirect
  * its communications to a GcodeServer back-end. 
- *  
- * Cameras should be redirected to either a SimulatedUpCamera or and ImageCamera. Ideally the image source could  
+ * Cameras should be redirected to either a SimulatedUpCamera or and ImageCamera. Ideally the image source could
  * one day be scanned off the real machine table by the regular camera (some concepts exist).  
- * 
- * Because of the new Axis design, multiple simulated drivers must be supported to test new features (in the future), 
+ * Because of the new Axis design, multiple simulated drivers must be supported to test new features (in the future),
  * plus the cameras are obviously involved. Therefore this simulation switchboard must be in the Machine, rather than 
  * the driver. 
- * 
- * For now this only works with NullDriver, SimulatedUpCamera and ImageCamera. Some physical imperfections are 
+ * For now this only works with NullDriver, SimulatedUpCamera and ImageCamera. Some physical imperfections are
  * simulated.  
- *
  */
 public class SimulationModeMachine extends ReferenceMachine {
 
@@ -110,67 +103,67 @@ public class SimulationModeMachine extends ReferenceMachine {
             return this.ordinal() > StaticImperfectionsMachine.ordinal();
         }
     }
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private SimulationMode simulationMode = SimulationMode.Off;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean replacingDrivers = true;
 
     /**
      * The simulated non-squareness is applied to what the simulated cameras see.
      * Works on the ImageCamera.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double simulatedNonSquarenessFactor = 0.0;
 
     /**
      * Simulated runout on nozzle tips (currently all noozle tips get the same).
      * Works on the SimulatedUpCamera.
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length simulatedRunout = new Length(0, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double simulatedRunoutPhase = 30;
 
     /**
      * Simulated camera noise (number of sparks per frame) to test camera settle. 
      * Works on ImageCamera and SimulatedUpCamera.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int simulatedCameraNoise = 0;
 
     /**
      * Simulated camera lag [s] to test camera settle. 
      * Works on ImageCamera and SimulatedUpCamera.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double simulatedCameraLag= 0;
 
     /**
      * Simulated vibration to test camera settle. Initial max. amplitude.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double simulatedVibrationAmplitude = 0;
 
     /**
      * Simulated vibration to test camera settle. Duration in seconds to ~1%.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double simulatedVibrationDuration = 0.2;
 
     /**
      * Simulated homing error. Introduces an initial location error that Visual Homing needs to correct.
      * Works on ImageCamera.
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location homingError = new Location(LengthUnit.Millimeters);
 
     /**
      * Checks Picks/Places by visually locating the tape pocket/solder lands in the ImageCamera.
      * Throws errors instead.
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     private boolean pickAndPlaceChecking = false;
 
     @Override

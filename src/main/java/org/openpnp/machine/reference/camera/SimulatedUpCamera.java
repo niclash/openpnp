@@ -13,6 +13,7 @@ import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.util.ConcurrentModificationException;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.openpnp.Translations;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.SimulationModeMachine;
@@ -33,38 +34,36 @@ import org.openpnp.spi.Machine;
 import org.openpnp.spi.Nozzle;
 import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.util.Utils2D;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
-@Root
+@JacksonXmlRootElement
 public class SimulatedUpCamera extends ReferenceCamera {
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int width = 640;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int height = 480;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean simulateFocalBlur;
 
-    @Element(required=false)
+    @JacksonXmlProperty
     private Location errorOffsets = new Location(LengthUnit.Millimeters);
 
-    @Element(required=false)
+    @JacksonXmlProperty
     private Location simulatedLocation;
 
-    @Element(required=false)
+    @JacksonXmlProperty
     private Location simulatedUnitsPerPixel;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean simulatedFlipped;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length focalLength = new Length(6, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length sensorDiagonal = new Length(4.4, LengthUnit.Millimeters);
 
     public enum BackgroundScenario {
@@ -90,7 +89,7 @@ public class SimulatedUpCamera extends ReferenceCamera {
         }
     }
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected BackgroundScenario backgroundScenario = BackgroundScenario.Dark;
 
     public SimulatedUpCamera() {

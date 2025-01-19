@@ -11,7 +11,7 @@ import org.openpnp.machine.reference.signaler.wizards.SoundSignalerConfiguration
 import org.openpnp.model.Configuration;
 import org.openpnp.spi.base.AbstractJobProcessor;
 import org.openpnp.spi.base.AbstractSignaler;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * The SoundSignaler can acoustically indicate certain states of the machine or a job processor like errors or
@@ -19,10 +19,10 @@ import org.simpleframework.xml.Attribute;
  */
 public class SoundSignaler extends AbstractSignaler {
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean enableErrorSound;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean enableFinishedSound;
 
     private ClassLoader classLoader = getClass().getClassLoader();

@@ -31,12 +31,11 @@ import org.openpnp.model.AxesLocation;
 import org.openpnp.model.Length;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Solutions;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.Axis;
 import org.openpnp.spi.base.AbstractControllerAxis;
 import org.openpnp.util.SimpleGraph;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferenceControllerAxis extends AbstractControllerAxis {
     // The more implementation specific properties are in the ReferenceControllerAxis
@@ -95,26 +94,26 @@ public class ReferenceControllerAxis extends AbstractControllerAxis {
         }
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private BacklashCompensationMethod backlashCompensationMethod = BacklashCompensationMethod.None;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length acceptableTolerance = new Length(0.025, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length backlashOffset = new Length(0.0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length sneakUpOffset = new Length(0.0, LengthUnit.Millimeters);
 
-    @Attribute(required = false) 
+    @JacksonXmlProperty( isAttribute = true ) 
     private double backlashSpeedFactor = 0.25; 
 
     /**
      * If limitRotation is enabled the nozzle will reverse directions when commanded to rotate past
      * 180 degrees. So, 190 degrees becomes -170 and -190 becomes 170.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean limitRotation = false;
 
     /**
@@ -122,46 +121,47 @@ public class ReferenceControllerAxis extends AbstractControllerAxis {
      * with limitRotation the rotation angle will be reset on the controller to stay within +/-180° (if supported 
      * by the driver setup i.e. needs special G-Code).
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean wrapAroundRotation = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean invertLinearRotational;
 
-    @Element(required = false, data = true)
+//    @Element(required = false, data = true)
+    @JacksonXmlProperty
     private String preMoveCommand;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length softLimitLow = new Length(0.0, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean softLimitLowEnabled = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length softLimitHigh = new Length(0.0, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean softLimitHighEnabled = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length safeZoneLow = new Length(0.0, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean safeZoneLowEnabled = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length safeZoneHigh = new Length(0.0, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean safeZoneHighEnabled = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length feedratePerSecond = new Length(250, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length accelerationPerSecond2 = new Length(500, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length jerkPerSecond3 = new Length(2000, LengthUnit.Millimeters);
 
     /**
@@ -171,20 +171,20 @@ public class ReferenceControllerAxis extends AbstractControllerAxis {
      * Comparing coordinates rounded to resolution will also suppress false differences from floating point artifacts 
      * prompted by forward/backward raw <-> transformed calculations. 
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     private double resolution = 0.0001; // 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private SimpleGraph stepTestGraph;
-    @Element(required = false)
+    @JacksonXmlProperty
     private SimpleGraph backlashDistanceTestGraph;
-    @Element(required = false)
+    @JacksonXmlProperty
     private SimpleGraph backlashSpeedTestGraph;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double version;
 
-    @Commit
+    @PostDeserialize
     void commit() {
         if (version < 2.0) {
             version = 2.0;

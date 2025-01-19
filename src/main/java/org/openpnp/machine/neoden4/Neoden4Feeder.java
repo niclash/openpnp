@@ -19,6 +19,7 @@ import org.openpnp.model.Length;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Rectangle;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.Head;
@@ -26,29 +27,26 @@ import org.openpnp.spi.Nozzle;
 import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.spi.VisionProvider;
 import org.pmw.tinylog.Logger;
-import org.python.modules.thread.thread;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 public class Neoden4Feeder extends ReferenceFeeder {
 
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String actuatorName;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int feedCount = 0;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length partPitchInTape = new Length(4, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private int partRotationInTape = 0;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Vision vision = new Vision();
 
     protected Location pickLocation;
@@ -339,15 +337,15 @@ public class Neoden4Feeder extends ReferenceFeeder {
     }
 
     public static class Vision {
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private boolean enabled;
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private String templateImageName;
-        @Element(required = false)
+        @JacksonXmlProperty
         private Rectangle areaOfInterest = new Rectangle();
-        @Element(required = false)
+        @JacksonXmlProperty
         private Location templateImageTopLeft = new Location(LengthUnit.Millimeters);
-        @Element(required = false)
+        @JacksonXmlProperty
         private Location templateImageBottomRight = new Location(LengthUnit.Millimeters);
 
         private BufferedImage templateImage;
@@ -373,7 +371,7 @@ public class Neoden4Feeder extends ReferenceFeeder {
         }
 
         @SuppressWarnings("unused")
-        @Persist
+        @PreSerialize
         private void persist() throws IOException {
             if (templateImageDirty) {
                 File file = null;

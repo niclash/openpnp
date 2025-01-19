@@ -59,7 +59,7 @@ import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.util.NanosecondTime;
 import org.openpnp.util.Utils2D;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * The AbstractMotionPlanner does all the boring legwork for a typical MotionPlanner and provides the basis for 
@@ -78,7 +78,7 @@ import org.simpleframework.xml.Attribute;
  */
 public abstract class AbstractMotionPlanner extends AbstractModelObject implements MotionPlanner, PropertySheetHolder {
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double maximumPlanHistory = 60; // s
 
     private ReferenceMachine machine;

@@ -12,7 +12,7 @@ import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.CvStage.Result.TemplateMatch;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Result model coordinates obtained from images gone through AfficeWarp are not usable as camera "
         + "coordinates. This stage applies the proper reverse Affine Transformation to reconstruct camera coordinates. "
@@ -20,11 +20,11 @@ import org.simpleframework.xml.Attribute;
         + "For transformations with stretch and shear, some of the model properties are approximated. ")
 public class AffineUnwarp extends CvStage {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Stage name of the AffineWarp.")
     private String warpStageName = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Stage name of the results to unwarp. If empty, takes the working model.")
     private String resultsStageName = null;
 

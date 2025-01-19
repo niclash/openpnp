@@ -59,50 +59,50 @@ import org.openpnp.util.ImageUtils;
 import org.openpnp.util.OpenCvUtils;
 import org.openpnp.vision.FluentCv;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ImageCamera extends ReferenceCamera {
-    @Element
+
+    @JacksonXmlProperty
     private String sourceUri = "classpath://samples/pnp-test/pnp-test.png";
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int width = 640;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int height = 480;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location imageUnitsPerPixel;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location imageOffset = new Location(LengthUnit.Millimeters, 0, 0, 0, 0);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double simulatedRotation = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double simulatedScale = 1.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double simulatedDistortion = 0.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double simulatedYRotation = 0.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean simulatedFlipped = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length focalLength = new Length(6, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length sensorDiagonal = new Length(4.4, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location primaryFiducial = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location secondaryFiducial = new Location(LengthUnit.Millimeters);
 
     private BufferedImage source;
@@ -110,23 +110,23 @@ public class ImageCamera extends ReferenceCamera {
     /**
      * In pick location checking, this is the maximum distance allowed.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double pickLocationToleranceMm = 0.1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double pickLocationMinimumScore = 0.87;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double placeLocationToleranceMm = 0.1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double placeLocationMinimumScore = 0.58;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     boolean filterTestImageVision = true;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean subPixelRendering = true;
 
     private double projectionFactor;
@@ -535,7 +535,6 @@ public class ImageCamera extends ReferenceCamera {
      * shape of the blackened footprint is there.
      * 
      * @param physicalLocation
-     * @param part
      * @return
      * @throws Exception
      */
@@ -549,7 +548,6 @@ public class ImageCamera extends ReferenceCamera {
      * shape of footprint pads are there.
      * 
      * @param physicalLocation
-     * @param part
      * @return
      * @throws Exception
      */

@@ -25,26 +25,25 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 
 /**
  * Extends java.awt.geom.Path2D to be serializable and have length units
  */
 @SuppressWarnings("serial")
 public class GeometricPath2D extends Path2D.Double {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected LengthUnit units = LengthUnit.Millimeters;
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected Integer windingRule = null;
     
-    @ElementList
+    @JacksonXmlProperty
     protected ArrayList<Integer> segmentTypes = null;
     
-    @ElementList
+    @JacksonXmlProperty
     protected ArrayList<java.lang.Double> segmentPoints = null;;
     
     GeometricPath2D() {
@@ -106,7 +105,7 @@ public class GeometricPath2D extends Path2D.Double {
     /**
      * Restores the path from the serializable elements immediately following their deserialization
      */
-    @Commit
+    @PostDeserialize
     public void commit() {
         if (windingRule != null) {
             setWindingRule(windingRule);
@@ -144,7 +143,7 @@ public class GeometricPath2D extends Path2D.Double {
     /**
      * Sets the serializable elements from the path just prior to serialization
      */
-    @Persist
+    @PreSerialize
     public void persist() {
         windingRule = getWindingRule();
         PathIterator pathIter = getPathIterator(null);

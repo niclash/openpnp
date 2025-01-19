@@ -30,25 +30,24 @@ import org.openpnp.model.Location;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Nozzle;
 import org.openpnp.spi.PropertySheetHolder;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class RapidFeeder extends ReferenceFeeder {
     static String actuatorName = "RAPIDFEEDER";
     
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location scanStartLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location scanEndLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Length scanIncrement = new Length(4, LengthUnit.Millimeters);
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String address;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int pitch = 4;
 
     @Override

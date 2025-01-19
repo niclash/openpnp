@@ -11,7 +11,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 
@@ -23,11 +23,11 @@ import org.simpleframework.xml.Attribute;
  */
 public class GrabCut extends CvStage {
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int sideSquare = 50;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int backGroundOriginX = 50;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int backGroundOriginY = 50;
 
 

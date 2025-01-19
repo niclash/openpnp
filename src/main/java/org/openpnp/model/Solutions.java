@@ -54,18 +54,17 @@ import org.openpnp.util.UiUtils;
 import org.openpnp.util.VisionUtils;
 import org.openpnp.util.XmlSerialize;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class Solutions extends AbstractTableModel {
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     private Set<String> dismissedSolutions = new HashSet<>();
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     private Set<String> solvedSolutions = new HashSet<>();
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean showIndicator = true;
 
     private boolean showSolved;
@@ -150,7 +149,7 @@ public class Solutions extends AbstractTableModel {
             return "#"+tag+"-milestone";
         }
     }
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Milestone targetMilestone;
 
     // Lacking multiple inheritance, we can't inherit from AbstractModelObject 
@@ -175,7 +174,7 @@ public class Solutions extends AbstractTableModel {
     public interface Subject {
         /**
          * Report any detected issue and proposed solution in the list. 
-         * @param report
+         * @param solutions
          */
         public default void findIssues(Solutions solutions) {
         }

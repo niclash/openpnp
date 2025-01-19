@@ -23,11 +23,10 @@ import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A container for a Board that gives the board a physical Location relative to its parent. It 
@@ -44,7 +43,7 @@ public class BoardLocation extends PlacementsHolderLocation<BoardLocation> {
      * from {@link PlacementsHolderLocation}
      */
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String boardFile;
 
     /**
@@ -53,7 +52,7 @@ public class BoardLocation extends PlacementsHolderLocation<BoardLocation> {
      * belongs.
      */
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String panelId; 
 
     /**
@@ -61,7 +60,7 @@ public class BoardLocation extends PlacementsHolderLocation<BoardLocation> {
      * field inherited from {@link PlacementsHolderLocation}
      */
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Boolean enabled; 
 
     /**
@@ -69,7 +68,7 @@ public class BoardLocation extends PlacementsHolderLocation<BoardLocation> {
      * field of the {@link Job}
      */
     @Deprecated
-    @ElementMap(required = false)
+    @JacksonXmlProperty
     private Map<String, Boolean> placed = new HashMap<>();
 
     /**
@@ -99,7 +98,7 @@ public class BoardLocation extends PlacementsHolderLocation<BoardLocation> {
     /**
      * Called immediately after de-serialization
      */
-    @Commit
+    @PostDeserialize
     protected void commit() {
         super.commit();
         
@@ -117,7 +116,7 @@ public class BoardLocation extends PlacementsHolderLocation<BoardLocation> {
     /**
      * Called just prior to serialization
      */
-    @Persist
+    @PreSerialize
     protected void persist() {
         //Remove deprecated fields
         boardFile = null;

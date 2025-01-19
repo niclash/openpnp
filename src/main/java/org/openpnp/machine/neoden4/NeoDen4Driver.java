@@ -24,12 +24,13 @@ import org.openpnp.spi.HeadMountable;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.MotionPlanner.CompletionType;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import org.openpnp.util.Utils2D;
 
-@Root
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class NeoDen4Driver extends AbstractReferenceDriver {
     // So, turns out it's just CRC16-CCITT
     // https://www.embeddedrelated.com/showthread/msp430/29689-1.php
@@ -96,29 +97,29 @@ public class NeoDen4Driver extends AbstractReferenceDriver {
     public static final String ACT_N4_BLOW = "N4-Blow";
 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected LengthUnit units = LengthUnit.Millimeters;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int timeoutMilliseconds = 5000;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int connectWaitTimeMilliseconds = 3000;
 
     protected boolean isAlreadyHomed = false;
 
     //    @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double homeCoordinateX = -437.;
 
     @Deprecated
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double homeCoordinateY = 437.; /* Maybe this needs to be 400. - needs more testing  */
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double scaleFactorX = 1.0501;   // slightly bigger, might be between +.0001 and +.0009
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double scaleFactorY = 1.04947526;
 
     private boolean connected;

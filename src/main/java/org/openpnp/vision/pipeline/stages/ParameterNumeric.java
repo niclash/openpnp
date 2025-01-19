@@ -33,20 +33,20 @@ import org.openpnp.vision.pipeline.CvAbstractScalarParameterStage;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Exposes a numeric stage property as an external parameter to this pipeline.")
 public class ParameterNumeric extends CvAbstractScalarParameterStage {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Minimum value of the parameter.")
     private double minimumValue = 0.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum value of the parameter.")
     private double  maximumValue = 1.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Default value of the parameter.")
     private double defaultValue = 0.5;
 
@@ -102,7 +102,7 @@ public class ParameterNumeric extends CvAbstractScalarParameterStage {
         }
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Type and unit of numeric.")
     private NumericType numericType = NumericType.Double;
 

@@ -21,7 +21,7 @@ import org.openpnp.spi.HeadMountable;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.MotionPlanner.CompletionType;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractHeadMountable extends AbstractModelObject implements HeadMountable {
     private AbstractAxis axisX;
@@ -29,13 +29,13 @@ public abstract class AbstractHeadMountable extends AbstractModelObject implemen
     private AbstractAxis axisZ;
     private AbstractAxis axisRotation;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String axisXId;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String axisYId;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String axisZId;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String axisRotationId;
 
     public AbstractHeadMountable() {

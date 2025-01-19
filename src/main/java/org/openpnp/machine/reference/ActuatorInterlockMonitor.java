@@ -36,11 +36,10 @@ import org.openpnp.spi.HeadMountable;
 import org.openpnp.spi.base.AbstractActuator;
 import org.openpnp.spi.base.AbstractMachine;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ActuatorInterlockMonitor extends AbstractModelObject implements Actuator.InterlockMonitor {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     InterlockType interlockType;
 
     // The interlock axes of the interlock actuator. Any of these can be null. 
@@ -52,29 +51,41 @@ public class ActuatorInterlockMonitor extends AbstractModelObject implements Act
     // Another Actuator that this one interlocks with.   
     private Actuator conditionalActuator;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String interlockAxis1Id;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     private String interlockAxis2Id;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     private String interlockAxis3Id;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     private String interlockAxis4Id;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     private double confirmationGoodMin;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     private double confirmationGoodMax;
-    @Element(required = false, data=true)
+
+//    @Element(required = false, data=true)
+    @JacksonXmlProperty
     private String confirmationPattern;
-    @Attribute(required = false)
-    private boolean confirmationByRegex;  
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
+    private boolean confirmationByRegex;
+
+    @JacksonXmlProperty( isAttribute = true )
     private String conditionalActuatorId;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     private ActuatorState conditionalActuatorState = ActuatorState.SwitchedOn;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     private double conditionalSpeedMin = 0.0;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     private double conditionalSpeedMax = 1.0;
 
     public enum InterlockType {

@@ -19,11 +19,9 @@
 
 package org.openpnp.model;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Version;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 
 
 /**
@@ -53,24 +51,26 @@ public class Placement extends Abstract2DLocatable<Placement> {
      * 1.3: Removed checkFids attribute.
      * 1.4: Changed Type.Place to Type.Placement, and removed Type.Ignore.
      */
-    @Version(revision = 1.4)
+//    @Version(revision = 1.4)
+    // TODO: How was this used?
+    @JacksonXmlProperty(isAttribute = true)
     private double version;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String partId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Type type;
 
     private Part part;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private String comments;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     private ErrorHandling errorHandling = ErrorHandling.Alert;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean enabled = true;
 
     @SuppressWarnings("unused")
@@ -96,12 +96,12 @@ public class Placement extends Abstract2DLocatable<Placement> {
         this.type = Type.Placement;
     }
 
-    @Persist
+    @PreSerialize
     private void persist() {
         partId = (part == null ? null : part.getId());
     }
 
-    @Commit
+    @PostDeserialize
     private void commit() {
         setLocation(getLocation());
         if (getPart() == null) {

@@ -41,7 +41,7 @@ import org.onvif.ver10.schema.VideoResolution;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.camera.wizards.OnvifIPCameraConfigurationWizard;
 import org.openpnp.spi.PropertySheetHolder;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import de.onvif.soap.OnvifDevice;
 import de.onvif.soap.devices.InitialDevices;
@@ -52,18 +52,18 @@ import de.onvif.soap.devices.MediaDevices;
  */
 public class OnvifIPCamera extends ReferenceCamera implements Runnable {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String preferredResolution;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int resizeWidth;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int resizeHeight;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String hostIP;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String username;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String password;
 
     private boolean dirty = false;

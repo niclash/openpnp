@@ -8,7 +8,7 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Model Transforms",
         description = "Sets the angle of a RotatedRect or List<RotatedRect> to match the specified orientation, either landscape or portrait.")
@@ -20,17 +20,17 @@ public class OrientRotatedRects extends CvStage {
         SnapToAngle,
     }
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of a prior stage containing a RotatedRect or List<RotatedRect>.")
     private String rotatedRectsStageName;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Orientation orientation = Orientation.Landscape;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean negateAngle = false;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Expected angle during perfect pick operation")
     private int snapAngle = 0;
     

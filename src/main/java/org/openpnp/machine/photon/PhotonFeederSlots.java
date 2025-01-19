@@ -3,12 +3,10 @@ package org.openpnp.machine.photon;
 import org.openpnp.model.Identifiable;
 import org.openpnp.model.Location;
 import org.openpnp.util.IdentifiableList;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class PhotonFeederSlots {
-    @ElementList
+    @JacksonXmlProperty
     IdentifiableList<Slot> slots = new IdentifiableList<>();
 
     public Slot getSlot(int address) {
@@ -24,10 +22,10 @@ public class PhotonFeederSlots {
     }
 
     public static class Slot implements Identifiable {
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private int address;
 
-        @Element(required = false)
+        @JacksonXmlProperty
         private Location location;
 
         private Slot() {}

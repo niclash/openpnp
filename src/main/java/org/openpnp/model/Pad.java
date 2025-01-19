@@ -4,10 +4,10 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class Pad extends AbstractModelObject {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected LengthUnit units = LengthUnit.Millimeters;
 
     public abstract Shape getShape();
@@ -27,16 +27,16 @@ public abstract class Pad extends AbstractModelObject {
     // TODO: Line doesn't really work as a shape, so I am removing it
     // until we really have a need for it at which point it can be revisited.
     // public static class Line extends Pad {
-    // @Attribute
+    // @JacksonXmlProperty( isAttribute = true )
     // private double x1;
     //
-    // @Attribute
+    // @JacksonXmlProperty( isAttribute = true )
     // private double y1;
     //
-    // @Attribute
+    // @JacksonXmlProperty( isAttribute = true )
     // private double x2;
     //
-    // @Attribute
+    // @JacksonXmlProperty( isAttribute = true )
     // private double y2;
     //
     // public double getX1() {
@@ -89,10 +89,10 @@ public abstract class Pad extends AbstractModelObject {
     // }
 
     public static class Ellipse extends Pad {
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private double width;
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private double height;
 
         public double getWidth() {
@@ -131,7 +131,7 @@ public abstract class Pad extends AbstractModelObject {
 
 
     public static class Circle extends Pad {
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private double radius;
 
         public double getRadius() {
@@ -158,13 +158,13 @@ public abstract class Pad extends AbstractModelObject {
     }
 
     public static class RoundRectangle extends Pad {
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private double width;
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private double height;
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private double roundness;
 
         public double getWidth() {

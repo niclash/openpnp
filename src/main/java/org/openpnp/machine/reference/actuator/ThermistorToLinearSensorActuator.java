@@ -3,7 +3,7 @@ package org.openpnp.machine.reference.actuator;
 import org.openpnp.gui.support.PropertySheetWizardAdapter;
 import org.openpnp.machine.reference.ReferenceActuator;
 import org.openpnp.machine.reference.actuator.wizards.ThermistorToLinearSensorActuatorTransforms;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Performs inverse Steinhart-Hart and voltage divider calculations to convert
@@ -13,31 +13,31 @@ import org.simpleframework.xml.Attribute;
  * essentially reverses what happens inside Smoothie. 
  */
 public class ThermistorToLinearSensorActuator extends ReferenceActuator {
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double a = 0.000722378300319346;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double b = 0.000216301852054578;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double c = 9.2641025635702e-08;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double adcMax = 4095;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double vRef = 3.3;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double r1 = 0;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double r2 = 4700;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double scale = 1;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double offset = 0;
 
     private double temperatureToResistance(double t) {

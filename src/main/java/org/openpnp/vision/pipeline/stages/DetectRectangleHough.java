@@ -17,49 +17,49 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.pmw.tinylog.Logger;
 
 @Stage(description="Find expected rectangle centered on nozzle.")
 public class DetectRectangleHough extends CvStage {
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Index of rectangle to return.")
     private int index = 0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Minimum accumulator count to be considered a line.")
     private int threshold = 20;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Weight of accumulator count that contributes to score")
     private double accWeight = 0.1;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum angle deviation of lines to be considered a pair.")
     private double deltaTheta = 0.03;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum angle deviation of pairs to be considered a rectangle")
     private double deltaAlpha = 0.03;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Maximum symmetry deviation of lines to be considered a pair")
     private double deltaRho = 20;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Minimum line separation to be considered a pair")
     private double minRho = 10;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Estimated pair distance A")
     private double rhoA = 15;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Estimated pair distance B")
     private double rhoB = 15;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Draw selected Hough lines to help with parameter tuning.")
     private boolean drawLines = false;
 

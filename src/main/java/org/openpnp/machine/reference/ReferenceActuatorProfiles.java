@@ -37,31 +37,29 @@ import org.openpnp.spi.Actuator.ActuatorValueType;
 import org.openpnp.spi.Head;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.base.AbstractActuator;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferenceActuatorProfiles extends AbstractTableModel {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String actuator1Id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String actuator2Id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String actuator3Id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String actuator4Id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String actuator5Id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String actuator6Id;
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     private ArrayList<Profile> profiles = new ArrayList<Profile>();
 
     private Actuator actuator1;
@@ -235,23 +233,23 @@ public class ReferenceActuatorProfiles extends AbstractTableModel {
     }
 
     static public class Profile extends AbstractModelObject implements Named {
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private String name = "";
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private boolean defaultOn;
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private boolean defaultOff;
-        @Element(required = false)
+        @JacksonXmlProperty
         private Object value1;
-        @Element(required = false)
+        @JacksonXmlProperty
         private Object value2;
-        @Element(required = false)
+        @JacksonXmlProperty
         private Object value3;
-        @Element(required = false)
+        @JacksonXmlProperty
         private Object value4;
-        @Element(required = false)
+        @JacksonXmlProperty
         private Object value5;
-        @Element(required = false)
+        @JacksonXmlProperty
         private Object value6;
 
         private ReferenceActuatorProfiles container;

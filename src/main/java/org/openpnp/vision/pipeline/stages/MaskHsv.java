@@ -11,6 +11,7 @@ import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.vision.FluentCv;
 import org.openpnp.vision.FluentCv.ColorSpace;
 import org.openpnp.vision.pipeline.CvPipeline;
@@ -18,60 +19,59 @@ import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Mask color from an image based on the HSV color space. Pixels that fall between (hueMin, saturationMin, valueMin) and (hueMax, saturationMax, valueMax) are set to black in the output image. This stage expects the input to be in HSV_FULL format, so you should do a ConvertColor with Bgr2HsvFull before this stage and ConvertColor Hsv2BgrFull after. These are not applied internally as to not complicate the use of multiple instances of this stage in series. Note that this stage can be used with any 3 channel, 8 bit per channel color space. The order of the filtered channels is hue, saturation, value, but you can use these ranges for other channels.")
 public class MaskHsv extends CvStage {
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Sets each channel's min and max limits such that the pixels falling in and around the channel's histogram peak bin are masked.  The number of histogram bins that get masked is controlled by the value of the fractionToMask parameter.")
     private Boolean auto = false;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="When the auto flag is set, the min and max limits are set so that the fraction of pixels in the image that get masked is approximately equal to this value.  The pixels with the most commonly occurring colors are masked first.   Valid range is from 0.0 to 1.0 (inclusive).")
     private double fractionToMask = 0.0;
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="First hue to be masked.  Note hues range from 0 to 255 (inclusive) but in a circular fashion so that 255 is directly adjacent to 0 (as 359 degrees is adjacent to 0 degrees).  To mask hues that cross the 255-0 boundary, set hueMin greater than hueMax.  As a rough guide, yellows fall in the range 21 to 64, greens 64 to 107, cyans 107 to 149, blues 149 to 192, magentas 192 to 235, and reds 235 to 21.")
     private int hueMin = 31;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Last hue to be masked.  Note hues range from 0 to 255 (inclusive) but in a circular fashion so that 255 is directly adjacent to 0 (as 359 degrees is adjacent to 0 degrees).  To mask hues that cross the 255-0 boundary, set hueMin greater than hueMax.  As a rough guide, yellows fall in the range 21 to 64, greens 64 to 107, cyans 107 to 149, blues 149 to 192, magentas 192 to 235, and reds 235 to 21.")
     private int hueMax = 116;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Minimum saturation to be masked.  Note saturations range from 0 to 255 (inclusive). Setting saturationMin greater than saturationMax will result in no pixels being masked.")
     private int saturationMin = 0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Maximum saturation to be masked.  Note saturations range from 0 to 255 (inclusive). Setting saturationMax less than saturationMin will result in no pixels being masked.")
     private int saturationMax = 255;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Minimum value to be masked.  Note values range from 0 to 255 (inclusive). Setting valueMin greater than valueMax will result in no pixels being masked.")
     private int valueMin = 0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Maximum value to be masked.  Note values range from 0 to 255 (inclusive). Setting valueMax less than valueMin will result in no pixels being masked.")
     private int valueMax = 255;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Soft edge of the HSV mask bounding box. If not 0, the mask is computed and applied with gradual impact, creating a more natural result.")
     private int softEdge = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Soft factor, i.e. how strongly the mask is applied, from 0 ... 1.0.")
     private double softFactor = 1;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Inverts the selection of pixels to mask.")
     private Boolean invert;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "If set, the mask is returned directly as a grayscale image with the masked area black, the unmasked white. Otherwise the masked area is blackened in the source image.")
     private boolean binaryMask = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of the property through which OpenPnP controls this stage. Use \"MaskHsv\" for standard control.")
     private String propertyName = "MaskHsv";
 
@@ -181,7 +181,7 @@ public class MaskHsv extends CvStage {
         this.propertyName = propertyName;
     }
 
-    @Commit
+    @PostDeserialize
     public void commit() {
         //This method gets called by the deserializer when configuration .xml files are loading.  It checks the format of
         //each maskHsv and converts any that are in the old format (without an invert flag) to the new format (with an

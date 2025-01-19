@@ -22,12 +22,11 @@ package org.openpnp.model;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.Definable;
 import org.openpnp.util.IdentifiableList;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * A PlacementsHolder is an abstraction of an object that has physical 2D extent and contains
@@ -39,32 +38,32 @@ public abstract class PlacementsHolder<T extends PlacementsHolder<T>>
     /**
      * The name of this PlacementsHolder
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name;
     
     /**
      * The physical extent of this PlacementsHolder
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location dimensions = new Location(LengthUnit.Millimeters);
 
     /**
      * The list of Placements contained by this PlacementsHolder
      */
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Placement> placements = new IdentifiableList<>();
 
     /**
      * The physical outline of this PlacementsHolder
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     protected GeometricPath2D profile = null;
     
     protected transient T definition;
     protected transient File file;
     protected transient boolean dirty;
 
-    @Commit
+    @PostDeserialize
     protected void commit() {
         for (Placement placement : placements) {
             placement.addPropertyChangeListener(this);

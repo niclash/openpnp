@@ -79,8 +79,7 @@ import org.openpnp.vision.pipeline.CvStage.Result;
 import org.openpnp.vision.pipeline.stages.SimpleOcr;
 import org.openpnp.vision.pipeline.stages.SimpleOcr.OcrModel;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 /**
@@ -92,74 +91,74 @@ import org.simpleframework.xml.Element;
  */
 public class BlindsFeeder extends ReferenceFeeder {
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location fiducial1Location = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location fiducial2Location = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location fiducial3Location = new Location(LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean normalize = true;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length tapeLength = new Length(0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length feederExtent = new Length(0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length pocketCenterline = new Length(0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length pocketPitch = new Length(0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length pocketSize = new Length(0, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CvPipeline pipeline = createDefaultPipeline();
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean visionEnabled = true;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int feedCount = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int feederNo = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int feedersTotal = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String feederGroupName = defaultGroupName;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int pocketCount = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int firstPocket = 1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int lastPocket = 0;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length sprocketPitch = new Length(4, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length edgeOpenDistance = new Length(2, LengthUnit.Millimeters); 
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length edgeClosedDistance = new Length(2, LengthUnit.Millimeters); 
 
     // we have 1mm push edge standard and the smallest CP40 nozzle tip has 0.8mm usable tip shaft
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length pushZOffset = new Length(0.25, LengthUnit.Millimeters); 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double pushSpeed = 0.1;
 
     public enum OcrAction {
@@ -167,46 +166,46 @@ public class BlindsFeeder extends ReferenceFeeder {
         CheckCorrect,
         ChangePart
     }
-    @Attribute(required = false) 
+    @JacksonXmlProperty( isAttribute = true ) 
     private OcrAction ocrAction = OcrAction.None;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length ocrMargin = new Length(20, LengthUnit.Millimeters); 
 
-    @Attribute(required = false) 
+    @JacksonXmlProperty( isAttribute = true ) 
     private String ocrFontName = "Liberation Mono";
 
-    @Attribute(required = false) 
+    @JacksonXmlProperty( isAttribute = true ) 
     private double ocrFontSizePt = 7.0;
 
     public enum OcrTextOrientation {
         AwayFromTape,
         TowardsTape
     };
-    @Attribute(required = false) 
+    @JacksonXmlProperty( isAttribute = true ) 
     private OcrTextOrientation ocrTextOrientation = OcrTextOrientation.AwayFromTape;
 
 
     // These internal setting are not on the GUI but can be changed in the XML.
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int fidLocMaxPasses = 3;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double fidLocToleranceMm = 0.5;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double pocketPosToleranceMm = 0.1;
 
     /**
      * Maximum label size (derived from the fact that even 8mm tape labels must fit).
      */
-    @Attribute(required = false) 
+    @JacksonXmlProperty( isAttribute = true ) 
     private double maxLabelSizeMm = 10.0;
 
     /**
      * Offset of the tape center from the pocket center according to EIA 481 (derived).
      */
-    @Attribute(required = false) 
+    @JacksonXmlProperty( isAttribute = true ) 
     private double tapeCenterOffsetMm = -1.0625; 
 
     // Transient state
@@ -1294,10 +1293,10 @@ public class BlindsFeeder extends ReferenceFeeder {
         Manual, CheckOpen, OpenOnFirstUse, OpenOnJobStart
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private CoverType coverType = CoverType.BlindsCover;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private CoverActuation coverActuation = CoverActuation.OpenOnJobStart;
 
     public static List<BlindsFeeder> getFeedersWithCoverToActuate(List<Feeder> feederPool, 

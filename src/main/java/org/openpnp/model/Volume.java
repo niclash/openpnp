@@ -21,16 +21,16 @@ package org.openpnp.model;
 
 import java.util.Locale;
 
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 /**
  * A class to represent a quantity of three dimensional space
  */
 public class Volume {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private double value;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private VolumeUnit units;
 
     public Volume() {

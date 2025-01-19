@@ -38,15 +38,13 @@ import org.openpnp.machine.reference.camera.ReferenceCamera;
 import org.openpnp.model.Length;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Camera.SettleOption;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.stages.ImageCapture;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementArray;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class AdvancedCalibration extends LensCalibrationParams {
     // Prior to version 1.2, no explicit version attribute existed. Version 1.0 (implicit) was the
@@ -59,16 +57,16 @@ public class AdvancedCalibration extends LensCalibrationParams {
     // Moving to version 1.5 - adds attributes to save the image size
     private static final Double LATEST_VERSION = 1.5;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean overridingOldTransformsAndDistortionCorrectionSettings = false;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Boolean valid = false;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Boolean dataAvailable = false;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     private CvPipeline pipeline = createDefaultPipeline();
 
     protected static CvPipeline createDefaultPipeline() {
@@ -82,102 +80,102 @@ public class AdvancedCalibration extends LensCalibrationParams {
                  "</cv-pipeline>");
     }
 
-    @Element(name = "virtualCameraMatrix", required = false)
+    @JacksonXmlProperty(localName = "virtual-camera-matrix")
     private double[] virtualCameraMatrixArr = new double[9];
 
-    @Element(name = "rectificationMatrix", required = false)
+    @JacksonXmlProperty(localName = "rectification-matrix")
     private double[] rectificationMatrixArr = new double[9];
 
-    @Element(name = "vectorFromMachToPhyCamInMachRefFrame", required = false)
+    @JacksonXmlProperty(localName = "vector-from-mach-to-phy-cam-in-mach-ref-frame")
     private double[] vectorFromMachToPhyCamInMachRefFrameArr = new double[3];
 
-    @Element(name = "unitVectorPhyCamZInMachRefFrame", required = false)
+    @JacksonXmlProperty(localName = "unit-vector-phy-camZ-In-Mach-Ref-Frame")
     private double[] unitVectorPhyCamZInMachRefFrameArr = new double[3];
 
-    @Element(name = "vectorFromMachToVirCamInMachRefFrame", required = false)
+    @JacksonXmlProperty(localName = "vector-from-mach-to-vir-cam-in-mach-ref-frame")
     private double[] vectorFromMachToVirCamInMachRefFrameArr = new double[3];
 
-    @Element(name = "vectorFromPhyCamToDesiredPrincipalPointInPhyCamRefFrame", required = false)
+    @JacksonXmlProperty(localName = "vector-from-phy-cam-to-desired-principal-point-in-phy-cam-ref-frame")
     private double[] vectorFromPhyCamToDesiredPrincipalPointInPhyCamRefFrameArr = new double[3];
     
-    @Attribute(required = false) int alphaPercent = 100;
+    @JacksonXmlProperty( isAttribute = true ) int alphaPercent = 100;
     
-    @ElementArray(required = false)
+    @JacksonXmlProperty
     private double[][][] savedTestPattern3dPointsList = new double[0][0][0];
     
-    @ElementArray(required = false)
+    @JacksonXmlProperty
     private double[][][] savedTestPatternImagePointsList = new double[0][0][0]; 
     
-    @ElementArray(required = false)
+    @JacksonXmlProperty
     private double[][][] modeledTestPatternImagePointsList = new double[0][0][0]; 
     
-    @ElementArray(required = false)
+    @JacksonXmlProperty
     private Integer[] outlierPoints = new Integer[0];
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double rotationErrorZ = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double rotationErrorY = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double rotationErrorX = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double rmsError = 0;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int desiredRadialLinesPerTestPattern = 32;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double testPatternFillFraction = 0.90;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double walkingLoopGain = 0.50;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length trialStep = new Length(0.5, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double approximateCameraF = 1000;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double mirrored = 1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double apparentMotionDirection = 1;
     
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location calibratedOffsets = new Location(LengthUnit.Millimeters);
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double widthFov;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double heightFov;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double virtualWidthFov;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double virtualHeightFov;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean disableTiltCorrection = false;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean disableDistortionCorrection = false;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean disableTangentialDistortionCorrection = true;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Double version;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Integer rawCroppedImageWidth = null;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Integer rawCroppedImageHeight = null;
     
     private Mat virtualCameraMatrix = Mat.eye(3, 3, CvType.CV_64FC1);
@@ -206,7 +204,7 @@ public class AdvancedCalibration extends LensCalibrationParams {
     private int sumCount = 0;
 
     
-    @Commit 
+    @PostDeserialize
     public void commit() {
         super.commit();
         virtualCameraMatrix.put(0, 0, virtualCameraMatrixArr);
@@ -311,7 +309,7 @@ public class AdvancedCalibration extends LensCalibrationParams {
         
     }
     
-    @Persist
+    @PreSerialize
     public void persist() {
         super.persist();
         virtualCameraMatrix.get(0, 0, virtualCameraMatrixArr);
@@ -782,7 +780,7 @@ public class AdvancedCalibration extends LensCalibrationParams {
     }
 
     /**
-     * @param heightFov the heightFov to set
+     * @param virtualHeightFov the heightFov to set
      */
     public void setVirtualHeightFov(double virtualHeightFov) {
         double oldSetting = this.virtualHeightFov;

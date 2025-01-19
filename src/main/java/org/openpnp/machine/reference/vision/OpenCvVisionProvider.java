@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.opencv.core.Core;
 import org.opencv.core.Core.MinMaxLocResult;
 import org.opencv.core.CvType;
@@ -44,9 +45,8 @@ import org.openpnp.util.LogUtils;
 import org.openpnp.util.OpenCvUtils;
 import org.openpnp.util.VisionUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Root;
 
-@Root
+@JacksonXmlRootElement
 public class OpenCvVisionProvider implements VisionProvider {
 
 

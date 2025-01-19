@@ -33,34 +33,26 @@ import org.openpnp.machine.reference.ReferenceActuator;
 import org.openpnp.machine.reference.ReferenceMachine;
 import org.openpnp.machine.neoden4.wizards.NeoDen4FeederActuatorConfigurationWizard;
 import org.openpnp.model.Configuration;
-import org.openpnp.model.Length;
-import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Motion.MotionOption;
-import org.openpnp.spi.Camera;
-import org.openpnp.spi.Driver;
-import org.openpnp.spi.PropertySheetHolder;
-import org.openpnp.spi.PropertySheetHolder.PropertySheet;
-import org.openpnp.spi.base.AbstractActuator;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class NeoDen4FeederActuator extends ReferenceActuator{
 
-	@Attribute(required = true)
+	@JacksonXmlProperty( isAttribute = true )
     private int feederId = 1;
 	
-    @Attribute(required = true)
+    @JacksonXmlProperty( isAttribute = true )
     private int peelerId = 1;
     
-    @Attribute(required = true)
+    @JacksonXmlProperty( isAttribute = true )
     private int feedStrength = 50;
     
-    @Attribute(required = true)
+    @JacksonXmlProperty( isAttribute = true )
     private int peelStrength = 30;
     
-    @Attribute(required = true) 
+    @JacksonXmlProperty( isAttribute = true ) 
     private int peelLength = 100; // 100% -> 5*feedLength
     
     

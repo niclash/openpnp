@@ -24,6 +24,7 @@ import org.openpnp.model.AbstractModelObject;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Solutions;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Axis;
 import org.openpnp.spi.Camera;
@@ -39,11 +40,7 @@ import org.openpnp.spi.PartAlignment;
 import org.openpnp.spi.Signaler;
 import org.openpnp.util.IdentifiableList;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import com.google.common.util.concurrent.FutureCallback;
 
@@ -58,43 +55,43 @@ public abstract class AbstractMachine extends AbstractModelObject implements Mac
      * JobPlanner.
      */
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Axis> axes = new IdentifiableList<>();
 
-    @ElementList
+    @JacksonXmlProperty
     protected IdentifiableList<Head> heads = new IdentifiableList<>();
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Signaler> signalers = new IdentifiableList<>();
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Feeder> feeders = new IdentifiableList<>();
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Camera> cameras = new IdentifiableList<>();
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Actuator> actuators = new IdentifiableList<>();
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<PartAlignment> partAlignments = new IdentifiableList<>();
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<Driver> drivers = new IdentifiableList<>();
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location discardLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location defaultBoardLocation = new Location(LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double speed = 1.0D;
-    
-    @ElementMap(required = false)
+
+    @JacksonXmlProperty
     protected HashMap<String, Object> properties = new HashMap<>();
     
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected IdentifiableList<NozzleTip> nozzleTips = new IdentifiableList<>();
 
     protected Set<MachineListener> listeners = Collections.synchronizedSet(new HashSet<>());
@@ -106,7 +103,7 @@ public abstract class AbstractMachine extends AbstractModelObject implements Mac
     protected AbstractMachine() {}
 
     @SuppressWarnings("unused")
-    @Commit
+    @PostDeserialize
     protected void commit() {
         for (Head head : heads) {
             head.setMachine(this);

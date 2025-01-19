@@ -8,7 +8,7 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.imgproc.Imgproc;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class FindContours extends CvStage {
     public enum RetrievalMode {
@@ -46,10 +46,10 @@ public class FindContours extends CvStage {
         }
     }
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private RetrievalMode retrievalMode = RetrievalMode.List;
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private ApproximationMethod approximationMethod = ApproximationMethod.None;
     
     public RetrievalMode getRetrievalMode() {

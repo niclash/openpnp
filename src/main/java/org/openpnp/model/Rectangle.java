@@ -19,17 +19,17 @@
 
 package org.openpnp.model;
 
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 public class Rectangle {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int x;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int y;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int width;
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int height;
 
     public Rectangle() {

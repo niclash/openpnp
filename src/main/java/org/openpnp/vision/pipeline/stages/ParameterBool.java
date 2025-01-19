@@ -25,16 +25,16 @@ import org.openpnp.vision.pipeline.CvAbstractScalarParameterStage;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Exposes a Boolean stage property as an external parameter to this pipeline.")
 public class ParameterBool extends CvAbstractScalarParameterStage {
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Invert the sense of the Boolean, as presented to the user.")
     private boolean invert = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Default value of the parameter.")
     private boolean defaultValue = false;
 

@@ -76,8 +76,7 @@ import org.openpnp.vision.pipeline.stages.DetectCircularSymmetry;
 import org.openpnp.vision.pipeline.stages.DetectCircularSymmetry.ScoreRange;
 import org.openpnp.vision.pipeline.stages.DetectCircularSymmetry.SymmetryScore;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * This helper class implements the Issues & Solutions for the Vision milestone. 
@@ -88,45 +87,45 @@ public class VisionSolutions implements Solutions.Subject {
     // These values can be changed in the machine.xml but they are not exposed in the UI.  
 
     // See org.openpnp.vision.pipeline.stages.DetectCircularSymmetry.findCircularSymmetry for what these mean.
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double minSymmetry = 1.5;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int subSampling = 8;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int superSampling = 4;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private DetectCircularSymmetry.SymmetryScore symmetryScore = SymmetryScore.OverallVarianceVsRingVarianceSum;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected long diagnosticsMilliseconds = 4000;
 
     /**
      * Maximum fiducial sensitive size, relative to the camera size (min of width and height)
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double maxCameraRelativeFiducialAreaDiameter = 0.2; 
     /**
      * Maximum subject size, relative to the camera size (min of width and height). Larger sizes are needed for the test object.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double maxCameraRelativeSubjectDiameter = 0.7; 
     /**
      * The extra search range, relative to the camera size (min of width and height) when 
      * doing auto-calibration, not knowing anything about the camera.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double zeroKnowledgeDisplacementRatio = 0.2;
     /**
      * How far the camera or camera subject should be moved to explore camera units per pixels, rotation 
      * and mirroring, before we know anything about the camera. The default value is thought to be 
      * universally covered by OpenPnP cameras, due to the nature of the application.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double zeroKnowledgeDisplacementMm = 1;
     /**
      * The required minimum offset between primary and secondary calibration fiducial Z.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double fiducialsMinimumZOffsetMm = 2;
     /**
      * How to perform one-sided backlash compensation, before we know anything about the machine. 
@@ -134,39 +133,39 @@ public class VisionSolutions implements Solutions.Subject {
      * give a "final approach vector". Hence the negative sign, to be as compatible as possible with backlash 
      * compensation (more specifically with sneak-up offsets), once these are calibrated in turn.
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location zeroKnowledgeBacklashOffsets = new Location(LengthUnit.Millimeters, -1, -1, 0.0, -5);
     /**
      * How many times we drill down on fiducials, before we know anything about the machine. 
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int zeroKnowledgeFiducialLocatorPasses = 3;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double fiducialMargin = 1.1;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int zeroKnowledgeRunoutCompensationShots = 2;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double zeroKnowledgeAutoFocusDepthMm = 2.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double zeroKnowledgeBacklashSpeed = 0.2;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private long zeroKnowledgeSettleTimeMs = 600;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double settleWantedResolutionMm = 0.05;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double settleAcceptableComputeTime = 25;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double settleMaximumPixelDiff = 8;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double settleTestMoveMm = 1;
 
     public VisionSolutions setMachine(ReferenceMachine machine) {

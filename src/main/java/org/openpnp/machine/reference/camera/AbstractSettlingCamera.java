@@ -41,14 +41,14 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.openpnp.gui.MainFrame;
 import org.openpnp.model.Configuration;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.MotionPlanner.CompletionType;
 import org.openpnp.spi.base.AbstractCamera;
 import org.openpnp.util.NanosecondTime;
 import org.openpnp.util.OpenCvUtils;
 import org.openpnp.util.SimpleGraph;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractSettlingCamera extends AbstractCamera {
     public enum SettleMethod {
@@ -156,54 +156,54 @@ public abstract class AbstractSettlingCamera extends AbstractCamera {
      * Maximum assumed motion relative to the camera (or mask) dimension. 
      * Larger motion should register as no template match, and max out.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double maxRelativeMotion = 0.05;
     /**
      * Minimum motion template image matching score.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double minMotionTemplateMatchScore = 0.9;
     /**
      * Minimum image channel (brightness) range for contrast enhancement.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double minContrastRange = 16;
 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected SettleMethod settleMethod = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected long settleTimeMs = 250;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected long settleTimeoutMs = 500;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double settleThreshold = 0.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int settleDebounce = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean settleFullColor = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int settleGaussianBlur = 0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean settleGradients = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double settleMaskCircle = 0.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double settleContrastEnhance = 0.0;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean settleDiagnostics = false;
 
-    @Commit
+    @PostDeserialize
     protected void commit() throws Exception {
         if (settleMethod == null) {
             if (settleTimeMs < 0) {

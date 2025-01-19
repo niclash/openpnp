@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import com.l2fprod.common.beans.BeanUtils;
 
@@ -13,10 +13,10 @@ import com.l2fprod.common.beans.BeanUtils;
  * object is stored as this stage's model. 
  */
 public class ReadModelProperty extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private String modelStageName;
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private String propertyName;
     
     public String getModelStageName() {

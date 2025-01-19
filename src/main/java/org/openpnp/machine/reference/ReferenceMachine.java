@@ -98,6 +98,7 @@ import org.openpnp.model.Length;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Solutions;
 import org.openpnp.model.Solutions.Milestone;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Axis;
 import org.openpnp.spi.Camera;
@@ -119,51 +120,48 @@ import org.openpnp.util.Collect;
 import org.openpnp.util.MovableUtils;
 import org.openpnp.util.UiUtils;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferenceMachine extends AbstractMachine {
     @Deprecated
-    @Element(required = false)
+    @JacksonXmlProperty
     private Driver driver = null;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected PnpJobProcessor pnpJobProcessor = new ReferencePnpJobProcessor();
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected FiducialLocator fiducialLocator = new ReferenceFiducialLocator();
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected MotionPlanner motionPlanner = new NullMotionPlanner();
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private boolean homeAfterEnabled = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private boolean parkAfterHomed = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean autoToolSelect = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean safeZPark = true;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length unsafeZRoamingDistance = new Length(10, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private boolean poolScriptingEngines = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private boolean autoLoadMostRecentJob = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Solutions solutions = new Solutions();
 
     @Deprecated // now in the Solutions object.
-    @ElementList(required = false)
+    @JacksonXmlProperty
     Set<String> dismissedSolutions = null;
 
     private boolean enabled;
@@ -176,7 +174,7 @@ public class ReferenceMachine extends AbstractMachine {
 
     private List<Class<? extends Driver>> registeredDriverClasses = new ArrayList<>();
 
-    @Commit
+    @PostDeserialize
     protected void commit() {
         super.commit();
     }
@@ -615,20 +613,20 @@ public class ReferenceMachine extends AbstractMachine {
         return solutions;
     }
 
-    //@Element(required = false)
+    //@JacksonXmlProperty
     private KinematicSolutions kinematicSolutions = new KinematicSolutions(); 
 
-    //@Element(required = false)
+    //@JacksonXmlProperty
     private NozzleTipSolutions nozzleTipSolutions = new NozzleTipSolutions();
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private VisionSolutions visualSolutions = new VisionSolutions();
 
     public VisionSolutions getVisionSolutions() {
         return visualSolutions;
     }
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CalibrationSolutions calibrationSolutions = new CalibrationSolutions(); 
 
     public CalibrationSolutions getCalibrationSolutions() {

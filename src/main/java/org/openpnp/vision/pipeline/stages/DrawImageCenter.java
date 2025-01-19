@@ -11,30 +11,26 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.openpnp.vision.pipeline.stages.convert.ColorConverter;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.convert.Convert;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(
   category   ="Image Processing", 
   description="Draw a mark at the center of the image.")
   
 public class DrawImageCenter extends CvStage {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Show a mark at the center of the image.")
     private boolean showImageCenter = true;
     
-    @Element(required = false)
-    @Convert(ColorConverter.class)
+    @JacksonXmlProperty
     @Property(description="Color for the center mark.")
     private Color color = null;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Thickness of center mark.")
     private int thickness = 2;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Size of center mark.")
     private int size = 40;
 

@@ -20,25 +20,26 @@
 
 package org.openpnp.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.openpnp.serialization.PostDeserialize;
+
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.Version;
-import org.simpleframework.xml.core.Commit;
-
 /**
  * A Board describes the physical properties of a PCB and has a list of Placements that will be used
  * to specify pick and place operations.
  */
-@Root(name = "openpnp-board")
+@JacksonXmlRootElement(localName = "openpnp-board")
 public class Board extends PlacementsHolder<Board> implements PropertyChangeListener {
 
-    @Version(revision=1.1)
+//    @Version(revision=1.1)
+    // TODO: What/how was this used?
+    @JacksonXmlProperty(isAttribute = true)
     private double version;    
 
     /**
@@ -46,13 +47,13 @@ public class Board extends PlacementsHolder<Board> implements PropertyChangeList
      * {@link PlacementsHolder}
      */
     @Deprecated
-    @ElementList(required = false)
+    @JacksonXmlProperty
     private ArrayList<Fiducial> fiducials = new ArrayList<>();
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     private ArrayList<BoardPad> solderPastePads = new ArrayList<>();
 
-    @Commit
+    @PostDeserialize
     protected void commit() {
         super.commit();
         for (BoardPad pad : solderPastePads) {

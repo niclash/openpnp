@@ -43,7 +43,7 @@ import org.openpnp.spi.Locatable.LocationOption;
 import org.openpnp.spi.PropertySheetHolder;
 import org.openpnp.spi.base.AbstractHead;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferenceHead extends AbstractHead {
 
@@ -173,9 +173,9 @@ public class ReferenceHead extends AbstractHead {
         DualCam
     }
 
-    @Attribute(required=false) 
+    @JacksonXmlProperty( isAttribute = true ) 
     private NozzleSolution nozzleSolution;
-    @Attribute(required=false) 
+    @JacksonXmlProperty( isAttribute = true ) 
     int nozzleSolutionsMultiplier = 1;
 
     public NozzleSolution getNozzleSolution() {

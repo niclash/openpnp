@@ -4,14 +4,14 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.wizards.ScriptActuatorConfigurationWizard;
 import org.openpnp.model.Configuration;
 import org.openpnp.scripting.Scripting;
-import org.simpleframework.xml.Element;
 
 public class ScriptActuator extends ReferenceActuator {
-    @Element(required=false)
+    @JacksonXmlProperty
     protected String scriptName = "";
 
     private void execute(Map<String, Object> globals) throws Exception {

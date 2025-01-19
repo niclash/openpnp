@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.Action;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.apache.commons.io.IOUtils;
 import org.opencv.core.RotatedRect;
 import org.openpnp.ConfigurationListener;
@@ -21,6 +22,8 @@ import org.openpnp.model.Location;
 import org.openpnp.model.Motion;
 import org.openpnp.model.Named;
 import org.openpnp.model.Part;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.MotionPlanner.CompletionType;
@@ -33,12 +36,7 @@ import org.openpnp.util.OpenCvUtils;
 import org.openpnp.util.VisionUtils;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage.Result;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * 
@@ -60,20 +58,20 @@ public class ReferenceHeapFeeder extends ReferenceFeeder {
      * Also used to turn parts by dropping them again and again.
      */
     private DropBox dropBox;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String dropBoxId;   // for saving
 
     /**
      * depth of the DropBox. 
      * Maximum addition to the coordinates from the "top center"
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double boxDepth = -25.0f;
 
     /**
      * To save time, store the depth of the last pick, so we did not need to start at the top every time.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double lastFeedDepth = 0;
 
     /**
@@ -82,45 +80,45 @@ public class ReferenceHeapFeeder extends ReferenceFeeder {
      * Mowing to a heap the other direction.
      * Should be choosen, that a part is not moved other heps, so if a part is lost, it is not mixed with other parts.
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location way1 = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location way2 = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location way3 = new Location(LengthUnit.Millimeters);
 
     /**
      * If so many attemps to flip a part fails, throw all remaining parts away.
      * Used to avoid endless retries if a part is not recognizable.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int throwAwayDropBoxContentAfterFailedFeeds = 9;
 
     /**
      * Needed increase in the vacuum while stirring in a heap to define "part(s) on the nozzle".
      * partOn() not used, since the chance is high, that there are larger leakages.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int requiredVacuumDifference = 150;
 
     /**
      * Pipeline to detect parts (correct laying).
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     private CvPipeline feederPipeline = HeapFeederHelper.createPipeline("Part", dropBox);
 
     /**
      * Pipeline for getting a reference image.
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     private CvPipeline trainingPipeline = HeapFeederHelper.createPipeline("Training", dropBox);
     
     /**
      * feed strategy
      */
-    @Element(required = false)
+    @JacksonXmlProperty
     private boolean pokeForParts = false;
 
 
@@ -129,7 +127,7 @@ public class ReferenceHeapFeeder extends ReferenceFeeder {
     /**
      * After loading the configuration, set the dropBox with the stored id.
      */
-    @Commit
+    @PostDeserialize
     public void commit() {
         Configuration.get().addListener(new ConfigurationListener() {
             @Override
@@ -147,7 +145,7 @@ public class ReferenceHeapFeeder extends ReferenceFeeder {
     /**
      * on save set/update the DropBoxId.
      */
-    @Persist
+    @PreSerialize
     public void persist() {
         dropBoxId = getDropBox().getId();
     }
@@ -665,30 +663,30 @@ public class ReferenceHeapFeeder extends ReferenceFeeder {
 
     
 
-    @Root
+    @JacksonXmlRootElement
     public static class DropBox extends AbstractModelObject implements Identifiable, Named {
-        @Attribute(name = "id")
+        @JacksonXmlProperty( localName = "id")
         final private String id;
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private String name;
 
         /**
          * The pipeline to detect all parts in a DropBox, should detect everything, despite orientation, wrong part and so on.
          */
-        @Element
+        @JacksonXmlProperty
         private CvPipeline partPipeline = HeapFeederHelper.createPipeline("DropBox", this);
         
         /**
          * Center (xy) and bottom (z) of the DropBox
          */
-        @Element
+        @JacksonXmlProperty
         private Location centerBottomLocation = new Location(LengthUnit.Millimeters);
         
         /**
          * Location where to drop parts
          */
-        @Element(required = false)
+        @JacksonXmlProperty
         private Location dropLocation = new Location(LengthUnit.Millimeters);
 
         
@@ -697,7 +695,7 @@ public class ReferenceHeapFeeder extends ReferenceFeeder {
          * Used for partHeight, nozzleTip selection and so on.
          */
         private Part dummyPartForUnknown;
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private String dummyPartIdForUnknown;
 
 
@@ -711,7 +709,7 @@ public class ReferenceHeapFeeder extends ReferenceFeeder {
          * Creates a new DropBox.
          * @param id ID and name of the new DropBox
          */
-        public DropBox(@Attribute(name = "id") String id) {
+        public DropBox(@JacksonXmlProperty(localName = "id") String id) {
             if (id == null) {
                 throw new Error("Id is required.");
             }
@@ -722,7 +720,7 @@ public class ReferenceHeapFeeder extends ReferenceFeeder {
         /**
          * Get the object reference for the dummy part after configuration load
          */
-        @Commit
+        @PostDeserialize
         public void commit() {
             Configuration.get().addListener(new ConfigurationListener() {
                 @Override
@@ -741,7 +739,7 @@ public class ReferenceHeapFeeder extends ReferenceFeeder {
         /**
          * sets/updates thedummy partId before configuration save
          */
-        @Persist
+        @PreSerialize
         public void persist() {
             if (dummyPartForUnknown == null) {
                 dummyPartIdForUnknown = "HeapFedder-Dummy";
@@ -951,9 +949,9 @@ public class ReferenceHeapFeeder extends ReferenceFeeder {
     /**
      * This class is just a delegate wrapper around a list. 
      */
-    @Root
+    @JacksonXmlRootElement
     public static class DropBoxProperty {
-        @ElementList
+        @JacksonXmlProperty
         IdentifiableList<DropBox> boxes = new IdentifiableList<>();
     }
     

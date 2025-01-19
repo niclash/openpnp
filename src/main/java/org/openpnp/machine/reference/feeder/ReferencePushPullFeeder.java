@@ -43,6 +43,7 @@ import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Part;
 import org.openpnp.model.RegionOfInterest;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Axis;
 import org.openpnp.spi.Camera;
@@ -63,9 +64,7 @@ import org.openpnp.util.TravellingSalesman;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.stages.SimpleOcr;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferencePushPullFeeder extends ReferenceFeeder {
 
@@ -74,117 +73,144 @@ public class ReferencePushPullFeeder extends ReferenceFeeder {
     // Conversely, feeder.location.rotation contains the orientation of the feeder itself
     // and it defines the local feeder coordinate system. The rotationInFeeder here can be removed
     // once it is inherited. 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Double rotationInFeeder = Double.valueOf(0.0);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean normalizePickLocation = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean snapToAxis = true;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location hole1Location = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Location hole2Location = new Location(LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean usedAsTemplate = false; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean calibrateMotionX = true; 
-    @Attribute(required = false)
-    protected boolean calibrateMotionY = true; 
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean calibrateMotionY = true;
 
-    @Element
+    @JacksonXmlProperty
     protected Location feedStartLocation = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+
+    @JacksonXmlProperty
     protected Location feedMid1Location = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+
+    @JacksonXmlProperty
     protected Location feedMid2Location = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+
+    @JacksonXmlProperty
     protected Location feedMid3Location = new Location(LengthUnit.Millimeters);
-    @Element
+
+    @JacksonXmlProperty
     protected Location feedEndLocation = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+
+    @JacksonXmlProperty
     private Length partPitch = new Length(4, LengthUnit.Millimeters);
-    @Element(required = false)
+
+    @JacksonXmlProperty
     private Length feedPitch = new Length(4, LengthUnit.Millimeters);
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     private long feedMultiplier= 1;
 
-    @Element(required = false)
-    protected double feedSpeedPush1 = 1.0; 
-    @Attribute(required = false)
-    protected double feedSpeedPush2 = 1.0; 
-    @Attribute(required = false)
-    protected double feedSpeedPush3 = 1.0; 
-    @Attribute(required = false)
+    @JacksonXmlProperty
+    protected double feedSpeedPush1 = 1.0;
+
+    @JacksonXmlProperty( isAttribute = true )
+    protected double feedSpeedPush2 = 1.0;
+
+    @JacksonXmlProperty( isAttribute = true )
+    protected double feedSpeedPush3 = 1.0;
+
+    @JacksonXmlProperty( isAttribute = true )
     protected double feedSpeedPushEnd = 1.0;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     protected double feedSpeedPull3 = 1.0;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     protected double feedSpeedPull2 = 1.0;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     protected double feedSpeedPull1 = 1.0;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     protected double feedSpeedPull0 = 1.0;
 
-    @Attribute(required = false)
-    protected boolean includedPush1 = false; 
-    @Attribute(required = false)
-    protected boolean includedPush2 = false; 
-    @Attribute(required = false)
-    protected boolean includedPush3 = false; 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean includedPush1 = false;
+
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean includedPush2 = false;
+
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean includedPush3 = false;
+
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean includedPushEnd = true; 
 
-    @Attribute(required = false)
-    protected boolean includedMulti0 = true; 
-    @Attribute(required = false)
-    protected boolean includedMulti1 = false; 
-    @Attribute(required = false)
-    protected boolean includedMulti2 = false; 
-    @Attribute(required = false)
-    protected boolean includedMulti3 = false; 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean includedMulti0 = true;
+
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean includedMulti1 = false;
+
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean includedMulti2 = false;
+
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean includedMulti3 = false;
+
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean includedMultiEnd = true; 
 
-    @Attribute(required = false)
-    protected boolean includedPull0 = true; 
-    @Attribute(required = false)
-    protected boolean includedPull1 = false; 
-    @Attribute(required = false)
-    protected boolean includedPull2 = false; 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean includedPull0 = true;
+
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean includedPull1 = false;
+
+    @JacksonXmlProperty( isAttribute = true )
+    protected boolean includedPull2 = false;
+
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean includedPull3 = false; 
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean additiveRotation = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String actuatorName;
     protected Actuator actuator;
     /**
      * "peelOff" is a legacy name, it is now recommended to use the rotation axis for peeling
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private  String peelOffActuatorName;
     protected Actuator actuator2;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private long feedCount = 0;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CvPipeline pipeline = FeederVisionHelper.createDefaultPipeline(PipelineType.ColorKeyed);
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     protected PipelineType pipelineType = PipelineType.ColorKeyed;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String ocrFontName = "Liberation Mono";
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     protected double ocrFontSizePt = 7.0;
-    @Element(required = false)
+
+    @JacksonXmlProperty
     protected RegionOfInterest ocrRegion = null; 
     
     public enum OcrWrongPartAction {
@@ -195,45 +221,51 @@ public class ReferencePushPullFeeder extends ReferenceFeeder {
         ChangePartAndClone
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected OcrWrongPartAction ocrWrongPartAction = OcrWrongPartAction.SwapOrCreate;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean ocrDiscoverOnJobStart = true;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean ocrStopAfterWrongPart = false;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length precisionWanted = new Length(0.1, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int calibrationCount = 0;
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length sumOfErrors = new Length(0, LengthUnit.Millimeters);
-    @Element(required = false)
+
+    @JacksonXmlProperty
     private Length sumOfErrorSquares = new Length(0, LengthUnit.Millimeters);
 
 
     // These are not on the GUI but can be tweaked in the machine.xml /////////////////
 
     // initial calibration tolerance, i.e. how much the feeder can be shifted physically 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double calibrationToleranceMm = 1.95;
-    // vision and comparison sprocket hole tolerance (in size, position)
-    @Attribute(required = false)
-    private double sprocketHoleToleranceMm = 0.6;
-    // for rows of feeders, the tolerance in X, Y
-    @Attribute(required = false)
-    private double rowLocationToleranceMm = 4.0; 
-    // for rows of feeders, the tolerance in Z
-    @Attribute(required = false)
-    private double rowZLocationToleranceMm = 1.0; 
 
-    @Attribute(required = false)
-    private int calibrateMaxPasses = 3; 
+    // vision and comparison sprocket hole tolerance (in size, position)
+    @JacksonXmlProperty( isAttribute = true )
+    private double sprocketHoleToleranceMm = 0.6;
+
+    // for rows of feeders, the tolerance in X, Y
+    @JacksonXmlProperty( isAttribute = true )
+    private double rowLocationToleranceMm = 4.0;
+
+    // for rows of feeders, the tolerance in Z
+    @JacksonXmlProperty( isAttribute = true )
+    private double rowZLocationToleranceMm = 1.0;
+
+    @JacksonXmlProperty( isAttribute = true )
+    private int calibrateMaxPasses = 3;
+
     // how close the camera has to be to prevent one more pass
-    @Attribute(required = false)
-    private double calibrateToleranceMm = 0.3; 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
+    private double calibrateToleranceMm = 0.3;
+
+    @JacksonXmlProperty( isAttribute = true )
     private int calibrateMinStatistic = 2; 
 
     // Some EIA 481 standard constants.
@@ -254,7 +286,7 @@ public class ReferencePushPullFeeder extends ReferenceFeeder {
         OnEachTapeFeed
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected CalibrationTrigger calibrationTrigger = CalibrationTrigger.UntilConfident;
 
     public static final Location nullLocation = new Location(LengthUnit.Millimeters);
@@ -300,7 +332,7 @@ public class ReferencePushPullFeeder extends ReferenceFeeder {
         });
     }
 
-    @Persist
+    @PreSerialize
     private void persist() {
         // Make sure the newest names are persisted (legacy way).
         actuatorName = (actuator == null ? null : actuator.getName()); 

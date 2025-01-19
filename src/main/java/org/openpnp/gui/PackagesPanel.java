@@ -82,8 +82,8 @@ import org.openpnp.spi.Camera;
 import org.openpnp.spi.FiducialLocator;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.PartAlignment;
+import org.openpnp.util.XmlSerialize;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Serializer;
 
 @SuppressWarnings("serial")
 public class PackagesPanel extends JPanel implements WizardContainer {
@@ -363,10 +363,8 @@ public class PackagesPanel extends JPanel implements WizardContainer {
                 return;
             }
             try {
-                Serializer s = Configuration.createSerializer();
-                StringWriter w = new StringWriter();
-                s.write(pkg, w);
-                StringSelection stringSelection = new StringSelection(w.toString());
+                String xml = XmlSerialize.serialize(pkg);
+                StringSelection stringSelection = new StringSelection(xml);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(stringSelection, null);
             }
@@ -401,11 +399,9 @@ public class PackagesPanel extends JPanel implements WizardContainer {
                 return;
             }
             try {
-                Serializer ser = Configuration.createSerializer();
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 String s = (String) clipboard.getData(DataFlavor.stringFlavor);
-                StringReader r = new StringReader(s);
-                Package pkg = ser.read(Package.class, s);
+                Package pkg = XmlSerialize.serialization().read(Package.class, s);
                 pkg.setId(id);
                 Configuration.get().addPackage(pkg);
                 tableModel.fireTableDataChanged();

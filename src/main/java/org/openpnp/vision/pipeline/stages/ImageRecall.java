@@ -2,10 +2,10 @@ package org.openpnp.vision.pipeline.stages;
 
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ImageRecall extends CvStage {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String imageStageName = null;
 
     public String getImageStageName() {

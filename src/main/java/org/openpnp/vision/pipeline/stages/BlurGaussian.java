@@ -8,15 +8,15 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category="Image Processing", description="Performs gaussian blurring on the working image.")
 public class BlurGaussian extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="Width and height of the blurring kernel. Should be and odd number greater than or equal to 3")
     private int kernelSize = 3;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of the property through which OpenPnP controls this stage. Use \"BlurGaussian\" for standard control.")
     private String propertyName = "BlurGaussian";
 

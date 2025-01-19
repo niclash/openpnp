@@ -34,8 +34,7 @@ import org.openpnp.spi.Machine;
 import org.openpnp.spi.MotionPlanner.CompletionType;
 import org.openpnp.util.Collect;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * The GcodeAsyncDriver extends the GcodeDriver for asynchronous communication with the controller. 
@@ -82,34 +81,34 @@ import org.simpleframework.xml.Element;
  */
 public class GcodeAsyncDriver extends GcodeDriver {
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private long writerPollingInterval = 100;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private long writerQueueTimeout = 60000;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private int maxCommandsQueued = 1000;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean confirmationFlowControl = true;
 
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean reportedLocationConfirmation = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int interpolationMaxSteps = 32;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int interpolationJerkSteps = 4; // relative to max acceleration
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private double interpolationTimeStep = 0.001;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private int interpolationMinStep = 16;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length junctionDeviation = new Length(0.02, LengthUnit.Millimeters);
 
     @Override

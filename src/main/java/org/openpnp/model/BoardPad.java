@@ -1,27 +1,26 @@
 package org.openpnp.model;
 
 import org.openpnp.model.Abstract2DLocatable.Side;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class BoardPad extends AbstractModelObject {
     public enum Type {
         Paste, Ignore
     }
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Type type = Type.Paste;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected Side side = Side.Top;
 
-    @Element
+    @JacksonXmlProperty
     protected Location location = new Location(LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name;
 
-    @Element
+    @JacksonXmlProperty
     protected Pad pad;
 
     public BoardPad() {

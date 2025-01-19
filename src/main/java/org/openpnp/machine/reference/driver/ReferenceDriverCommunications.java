@@ -29,7 +29,7 @@ import org.openpnp.model.Named;
 import org.openpnp.util.Collect;
 import org.openpnp.util.GcodeServer;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Defines the interface for a simple communications IO driver, for example A serial port.
@@ -54,7 +54,7 @@ public abstract class ReferenceDriverCommunications {
         }
     }
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected LineEndingType lineEndingType = LineEndingType.LF;
 
     protected String driverName;

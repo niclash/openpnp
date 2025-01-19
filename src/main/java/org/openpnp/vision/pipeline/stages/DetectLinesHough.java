@@ -11,7 +11,7 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.pmw.tinylog.Logger;
 
 /**
@@ -20,23 +20,23 @@ import org.pmw.tinylog.Logger;
 @Stage(description="Finds circles in the working image. Diameter and spacing can be specified.")
 public class DetectLinesHough extends CvStage {
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Distance resolution from center.")
     private double rho = 0.5;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Angular resolution, in degrees.")
     private double theta = Math.PI / 180.0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Minimum accumulator count.")
     private int threshold = 1000;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Minimum line length, as a percent of the diagonal image length.")
     private double minLineLength = 30.0;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Max line gap, as a percent of the diagonal image length.")
     private double maxLineGap = 5.0;
 

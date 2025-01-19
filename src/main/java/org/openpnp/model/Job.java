@@ -29,51 +29,48 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.openpnp.model.Placement.Type;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.openpnp.serialization.PreSerialize;
 
 /**
  * A Job specifies a list of one or more PanelLocations and/or BoardLocations.
  */
-@Root(name = "openpnp-job")
+@JacksonXmlRootElement(localName = "openpnp-job")
 public class Job extends AbstractModelObject implements PropertyChangeListener {
     private static final Double LATEST_VERSION = 2.0;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Double version = null;
     
     /**
      * @deprecated All Panels are now held as children of the job's rootPanel
      */
     @Deprecated
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected ArrayList<Panel> panels = null;
 
     /**
      * @deprecated All Boards are now held as children of the job's rootPanel
      */
     @Deprecated
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected ArrayList<BoardLocation> boardLocations = null;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     protected Panel rootPanel = new Panel();
-    
-    @ElementMap(required = false)
+
+    @JacksonXmlProperty
     protected Map<String, Boolean> placedStatusMap = new HashMap<>();
 
-    @ElementMap(required = false)
+    @JacksonXmlProperty
     protected Map<String, Boolean> enabledStateMap = new HashMap<>();
 
-    @ElementMap(required = false)
+    @JacksonXmlProperty
     protected Map<String, Boolean> checkFiducialsStateMap = new HashMap<>();
 
-    @ElementMap(required = false)
+    @JacksonXmlProperty
     protected Map<String, Placement.ErrorHandling> errorHandlingStateMap = new HashMap<>();
 
     
@@ -88,7 +85,7 @@ public class Job extends AbstractModelObject implements PropertyChangeListener {
         addPropertyChangeListener(this);
     }
 
-    @Persist
+    @PreSerialize
     private void persist() {
         version = LATEST_VERSION;
         
@@ -321,7 +318,6 @@ public class Job extends AbstractModelObject implements PropertyChangeListener {
      * @param placementsHolderLocation - the PlacementsHolderLocation holding the Placement
      * @param placement - the Placement whose state is to be stored or null if the 
      * PlacementsHolderLocation state is to be stored
-     * @param enabledStateMap - the enabled state to be stored
      */
     public void storeEnabledState(PlacementsHolderLocation<?> placementsHolderLocation, Placement placement, boolean enabled) {
         String key = placementsHolderLocation.getUniqueId();
@@ -380,7 +376,6 @@ public class Job extends AbstractModelObject implements PropertyChangeListener {
      * Stores the check fiducials state of a PlacementsHolderLocation in a way that is uniquely
      * identifiable to it
      * @param placementsHolderLocation - the PlacementsHolderLocation whose state is to be stored
-     * @param enabledStateMap - the check fiducials state to be stored
      */
     public void storeCheckFiducialsState(PlacementsHolderLocation<?> placementsHolderLocation, boolean enabled) {
         String key = placementsHolderLocation.getUniqueId();

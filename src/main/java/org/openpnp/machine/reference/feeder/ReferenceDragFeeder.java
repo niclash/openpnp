@@ -38,6 +38,7 @@ import org.openpnp.model.Length;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Rectangle;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.Head;
@@ -47,21 +48,16 @@ import org.openpnp.spi.VisionProvider;
 import org.openpnp.util.MovableUtils;
 import org.openpnp.util.Utils2D;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Vision System Description
- * 
  * The Vision Operation is defined as moving the Camera to the defined Pick Location, performing a
  * template match against the Template Image bound by the Area of Interest and then storing the
  * offsets from the Pick Location to the matched image as Vision Offsets.
- * 
  * The feed operation consists of: 1. Apply the Vision Offsets to the Feed Start Location and Feed
  * End Location. 2. Feed the tape with the modified Locations. 3. Perform the Vision Operation. 4.
  * Apply the new Vision Offsets to the Pick Location and return the Pick Location for Picking.
- * 
  * This leaves the head directly above the Pick Location, which means that when the Feeder is then
  * commanded to pick the Part it only needs to move the distance of the Vision Offsets and do the
  * pick. The Vision Offsets are then used in the next feed operation to be sure to hit the tape at
@@ -72,21 +68,28 @@ public class ReferenceDragFeeder extends ReferenceFeeder {
 
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    @Element
+    @JacksonXmlProperty
     protected Location feedStartLocation = new Location(LengthUnit.Millimeters);
-    @Element
+
+    @JacksonXmlProperty
     protected Location feedEndLocation = new Location(LengthUnit.Millimeters);
-    @Element(required = false)
+
+    @JacksonXmlProperty
     private Length partPitch = new Length(4, LengthUnit.Millimeters);
-    @Element(required = false)
+
+    @JacksonXmlProperty
     protected double feedSpeed = 1.0;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     protected String actuatorName;
-    @Attribute(required = false)
+
+    @JacksonXmlProperty( isAttribute = true )
     protected String peelOffActuatorName;
-    @Element(required = false)
+
+    @JacksonXmlProperty
     protected Vision vision = new Vision();
-    @Element(required = false)
+
+    @JacksonXmlProperty
     protected Length backoffDistance = new Length(0, LengthUnit.Millimeters);    
 
     private double feededCount = 0;
@@ -456,15 +459,15 @@ public class ReferenceDragFeeder extends ReferenceFeeder {
     }
 
     public static class Vision {
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private boolean enabled;
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private String templateImageName;
-        @Element(required = false)
+        @JacksonXmlProperty
         private Rectangle areaOfInterest = new Rectangle();
-        @Element(required = false)
+        @JacksonXmlProperty
         private Location templateImageTopLeft = new Location(LengthUnit.Millimeters);
-        @Element(required = false)
+        @JacksonXmlProperty
         private Location templateImageBottomRight = new Location(LengthUnit.Millimeters);
 
         private BufferedImage templateImage;
@@ -484,7 +487,7 @@ public class ReferenceDragFeeder extends ReferenceFeeder {
         }
 
         @SuppressWarnings("unused")
-        @Persist
+        @PreSerialize
         private void persist() throws IOException {
             if (templateImageDirty) {
                 File file = null;

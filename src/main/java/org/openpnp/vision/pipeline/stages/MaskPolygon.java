@@ -14,28 +14,24 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.openpnp.vision.pipeline.stages.convert.ColorConverter;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.convert.Convert;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(category = "Image Processing",
         description = "Mask an image with multiple shapes formed with numeric data provided by the user.")
 
 public class MaskPolygon extends CvStage {
 
-    @Element(required = false)
-    @Convert(ColorConverter.class)
+    @JacksonXmlProperty
     @Property(description = "Color of mask.")
     private Color color = Color.black;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(
             description = "Coordinates forming shapes. X,Y coordinates or sizes are separated by commas, coordinate or size pairs are separated by colons ':'. Multiple shapes are separated by semicolons ';'")
     private String shapes = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Invert the mask.")
     private boolean inverted = false;
 

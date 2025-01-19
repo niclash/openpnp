@@ -11,7 +11,7 @@ import org.openpnp.model.Configuration;
 import org.openpnp.model.Part;
 import org.openpnp.spi.Feeder;
 import org.openpnp.spi.Nozzle;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractFeeder extends AbstractModelObject implements Feeder {
     /**
@@ -24,19 +24,19 @@ public abstract class AbstractFeeder extends AbstractModelObject implements Feed
      * 1.1: Migrate retryCount to feedRetryCount and zero out pickRetryCount for initial release
      *      of feature.
      */
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     private double version = 1.0;
     
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected String id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean enabled;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected String partId;
     
     /**
@@ -45,13 +45,13 @@ public abstract class AbstractFeeder extends AbstractModelObject implements Feed
      * 
      * TODO Migration has been added and this can be removed after 2021-12-29.  
      */
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Integer retryCount = 3;
     
-    @Attribute(required=false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int feedRetryCount = 3;
     
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected int pickRetryCount = 3;
 
     protected Part part;

@@ -23,20 +23,19 @@ import org.openpnp.spi.Nozzle;
 import org.openpnp.spi.NozzleTip;
 import org.openpnp.util.Utils2D;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractNozzle extends AbstractHeadMountable implements Nozzle {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected String id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected RotationMode rotationMode = RotationMode.AbsolutePartAngle;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean aligningRotationMode = false;
 
     /**
@@ -44,7 +43,7 @@ public abstract class AbstractNozzle extends AbstractHeadMountable implements No
      * any angular tolerances in the pick (for feeders with vision) and in the alignment (bottom vision).
      * The maxPickArticulationAngle gives us the maximum tolerance angle on the pick side.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double maxPickArticulationAngle = 15;
 
     /**
@@ -52,10 +51,10 @@ public abstract class AbstractNozzle extends AbstractHeadMountable implements No
      * any angular tolerances in the pick (for feeders with vision) and in the alignment (bottom vision).
      * The maxAlignmentArticulationAngle gives us the maximum tolerance angle on the alignment side.
      */
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected double maxAlignmentArticulationAngle = 30;
 
-    @ElementList(required = false)
+    @JacksonXmlProperty
     protected List<String> compatibleNozzleTipIds = new ArrayList<>();
 
     protected Set<NozzleTip> compatibleNozzleTips; 

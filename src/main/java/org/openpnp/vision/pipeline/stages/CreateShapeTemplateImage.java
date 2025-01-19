@@ -19,15 +19,15 @@ import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Creates a template from the specified shape and camera properties. The shape is scaled from Millimeters to the camera's units.")
 public class CreateShapeTemplateImage extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of the shape property to load the template shape from. The shape itself must be provided by the pipeline user.")
     private String templateShapeName;
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Oversize factor for border recognition around shape.")
     private double oversize = 1.5;
 

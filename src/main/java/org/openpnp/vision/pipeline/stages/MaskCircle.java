@@ -9,21 +9,21 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openpnp.model.Length;
 import org.openpnp.model.Location;
+import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.vision.FluentCv;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.Property;
 import org.openpnp.vision.pipeline.Stage;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Commit;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 @Stage(description="Mask everything in the working image outside of a circle centered at the center of the image with the specified diameter.")
 public class MaskCircle extends CvStage {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description="The diameter of the circle to mask. Use a negative value to invert the mask.")
     private int diameter = 100;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     @Property(description = "Name of the property through which OpenPnP controls this stage. Use \"MaskCircle\" for standard control.")
     private String propertyName = "MaskCircle";
 
@@ -43,7 +43,7 @@ public class MaskCircle extends CvStage {
         this.propertyName = propertyName;
     }
 
-    @Commit
+    @PostDeserialize
     void commit() {
         if (diameter == 0) {
             // MaskCircle with diameter 0 is traditionally used to paint the image black, 

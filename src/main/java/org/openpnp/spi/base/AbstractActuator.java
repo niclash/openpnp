@@ -14,52 +14,51 @@ import org.openpnp.spi.Driver;
 import org.openpnp.spi.Head;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.MotionPlanner.CompletionType;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractActuator extends AbstractHeadMountable implements Actuator {
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     protected String id;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String name;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected ActuatorValueType valueType = ActuatorValueType.Boolean;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean valueTypeConfirmed = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Double defaultOnDouble = 0.0;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String defaultOnString = "";
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected Double defaultOffDouble = 0.0;
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected String defaultOffString = "";
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     protected boolean interlockActuator;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private InterlockMonitor interlockMonitor;
 
     protected Head head;
 
     private Driver driver;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String driverId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean coordinatedBeforeActuate = true;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean coordinatedAfterActuate = false;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean coordinatedBeforeRead = true;
 
     public AbstractActuator() {

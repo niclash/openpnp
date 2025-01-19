@@ -36,6 +36,8 @@ import org.openpnp.model.Length;
 import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Point;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Camera;
 import org.openpnp.spi.Nozzle;
 import org.openpnp.spi.Head;
@@ -48,18 +50,13 @@ import org.openpnp.util.Utils2D;
 import org.openpnp.util.VisionUtils;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 
 /**
  * Implementation of Feeder that indexes through a strip of cut tape. This is a specialization of
  * the tray feeder that knows specifics about tape so that vision capabilities can be added.
- */
-
-/**
+ * <pre>
  * SMD tape standard info from http://www.liteplacer.com/setup-tape-positions-2/
  * 
  * holes 1.5mm
@@ -73,6 +70,7 @@ import org.simpleframework.xml.core.Persist;
  * part pitch is multiple of 4mm except for 0402 and smaller, where it is 2mm
  * 
  * hole to part lateral is tape width / 2 - 0.5mm
+ * </pre>
  */
 public class ReferenceStripFeeder extends ReferenceFeeder {
     public enum TapeType {
@@ -91,34 +89,34 @@ public class ReferenceStripFeeder extends ReferenceFeeder {
         }
     }
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location referenceHoleLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Location lastHoleLocation = new Location(LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length partPitch = new Length(4, LengthUnit.Millimeters);
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private Length tapeWidth = new Length(8, LengthUnit.Millimeters);
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private TapeType tapeType = TapeType.WhitePaper;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private Boolean standardEia481 = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private boolean visionEnabled = true;
 
-    @Element(required = false)
+    @JacksonXmlProperty
     private CvPipeline pipeline = createDefaultPipeline();
 
-    @Attribute
+    @JacksonXmlProperty( isAttribute = true )
     private int feedCount = 0;
 
-	@Attribute(required = false)
+	@JacksonXmlProperty( isAttribute = true )
 	private int maxFeedCount = 0;
 
     private Length holeDiameter = new Length(1.5, LengthUnit.Millimeters);
@@ -555,7 +553,7 @@ public class ReferenceStripFeeder extends ReferenceFeeder {
         this.visionEnabled = visionEnabled;
     }
 
-    @Commit
+    @PostDeserialize
     void commit() {
         if (standardEia481 == null) {
             // If loaded from old configuration, we must migrate it to the EIA-481-C industry 
@@ -566,7 +564,7 @@ public class ReferenceStripFeeder extends ReferenceFeeder {
         }
     }
 
-    @Persist
+    @PreSerialize
     private void persist() {
         // Make sure the EIA-481 flag is initialized before persisting.
         isStandardEia481(); // using side effect

@@ -44,6 +44,9 @@ import java.util.prefs.Preferences;
 
 import javax.swing.JOptionPane;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.apache.commons.io.FileUtils;
 import org.openpnp.ConfigurationListener;
 import org.openpnp.gui.MainFrame;
@@ -54,16 +57,8 @@ import org.openpnp.model.Abstract2DLocatable.Side;
 import org.openpnp.scripting.Scripting;
 import org.openpnp.spi.Machine;
 import org.openpnp.util.NanosecondTime;
+import org.openpnp.util.XmlSerialize;
 import org.pmw.tinylog.Logger;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.stream.Format;
-import org.simpleframework.xml.stream.HyphenStyle;
-import org.simpleframework.xml.stream.Style;
 
 import com.google.common.eventbus.EventBus;
 
@@ -736,8 +731,7 @@ public class Configuration extends AbstractModelObject {
         if (!file.exists()) {
             Panel panel = new Panel(file);
             panel.setName(file.getName());
-            Serializer serializer = createSerializer();
-            serializer.write(panel, file);
+            XmlSerialize.serialization().write(panel, file);
         }
         file = file.getCanonicalFile();
         if (panels.containsKey(file)) {
@@ -804,8 +798,7 @@ public class Configuration extends AbstractModelObject {
         if (!file.exists()) {
             Board board = new Board(file);
             board.setName(file.getName());
-            Serializer serializer = createSerializer();
-            serializer.write(board, file);
+            XmlSerialize.serialization().write(board, file);
         }
         file = file.getCanonicalFile();
         if (boards.containsKey(file)) {
@@ -819,19 +812,17 @@ public class Configuration extends AbstractModelObject {
     }
     
     private static void serializeObject(Object o, File file) throws Exception {
-        Serializer serializer = createSerializer();
         // This write forces any errors that will appear to happen before we start writing to
         // the file, which keeps us from writing a partial configuration to the real file.
-        serializer.write(o, new ByteArrayOutputStream());
+        XmlSerialize.serialization().write(o, new ByteArrayOutputStream());
         FileOutputStream out = new FileOutputStream(file);
-        serializer.write(o, out);
+        XmlSerialize.serialization().write(o, out);
         out.write('\n');
         out.close();
     }
 
     private void loadMachine(File file) throws Exception {
-        Serializer serializer = createSerializer();
-        MachineConfigurationHolder holder = serializer.read(MachineConfigurationHolder.class, file);
+        MachineConfigurationHolder holder = XmlSerialize.serialization().read(MachineConfigurationHolder.class, file);
         machine = holder.machine;
     }
 
@@ -842,9 +833,8 @@ public class Configuration extends AbstractModelObject {
     }
 
     private void loadPackages(File file) throws Exception {
-        Serializer serializer = createSerializer();
         PackagesConfigurationHolder holder =
-                serializer.read(PackagesConfigurationHolder.class, file);
+            XmlSerialize.serialization().read(PackagesConfigurationHolder.class, file);
         for (Package pkg : holder.packages) {
             addPackage(pkg);
         }
@@ -857,8 +847,7 @@ public class Configuration extends AbstractModelObject {
     }
 
     private void loadParts(File file) throws Exception {
-        Serializer serializer = createSerializer();
-        PartsConfigurationHolder holder = serializer.read(PartsConfigurationHolder.class, file);
+        PartsConfigurationHolder holder = XmlSerialize.serialization().read(PartsConfigurationHolder.class, file);
         for (Part part : holder.parts) {
             addPart(part);
         }
@@ -877,8 +866,7 @@ public class Configuration extends AbstractModelObject {
      * @throws Exception - if the specified file can't be read successfully
      */
     private void loadBoards(File file) throws Exception {
-        Serializer serializer = createSerializer();
-        BoardsConfigurationHolder holder = serializer.read(BoardsConfigurationHolder.class, file);
+        BoardsConfigurationHolder holder = XmlSerialize.serialization().read(BoardsConfigurationHolder.class, file);
         for (File boardFile : holder.boards) {
             try {
                 addBoard(boardFile);
@@ -915,8 +903,7 @@ public class Configuration extends AbstractModelObject {
      * @throws Exception - if the specified file can't be read successfully
      */
     private void loadPanels(File file) throws Exception {
-        Serializer serializer = createSerializer();
-        PanelsConfigurationHolder holder = serializer.read(PanelsConfigurationHolder.class, file);
+        PanelsConfigurationHolder holder = XmlSerialize.serialization().read(PanelsConfigurationHolder.class, file);
         for (File panelFile : holder.panels) {
             try {
                 addPanel(panelFile);
@@ -974,9 +961,8 @@ public class Configuration extends AbstractModelObject {
     }
     
     private void loadVisionSettings(File file) throws Exception {
-        Serializer serializer = createSerializer();
         VisionSettingsConfigurationHolder holder =
-                serializer.read(VisionSettingsConfigurationHolder.class, file);
+            XmlSerialize.serialization().read(VisionSettingsConfigurationHolder.class, file);
         for (AbstractVisionSettings visionSettings : holder.visionSettings) {
             addVisionSettings(visionSettings);
         }
@@ -995,8 +981,7 @@ public class Configuration extends AbstractModelObject {
      * @throws Exception - if the file can't be read successfully
      */
     public Job loadJob(File file) throws Exception {
-        Serializer serializer = createSerializer();
-        Job job = serializer.read(Job.class, file);
+        Job job = XmlSerialize.serialization().read(Job.class, file);
         job.setFile(file);
         convertLegacyJob(job);
         
@@ -1383,9 +1368,8 @@ public class Configuration extends AbstractModelObject {
      */
     public void saveJob(Job job, File file) throws Exception {
         saveJobEnabledAndErrorHandlingSettings(job, job.getRootPanelLocation());
-        Serializer serializer = createSerializer();
-        serializer.write(job, new ByteArrayOutputStream());
-        serializer.write(job, file);
+        XmlSerialize.serialization().write(job, new ByteArrayOutputStream());
+        XmlSerialize.serialization().write(job, file);
         job.setFile(file);
         job.setDirty(false);
     }
@@ -1400,9 +1384,8 @@ public class Configuration extends AbstractModelObject {
      * @throws Exception if the file can't be written successfully
      */
     public void savePanel(Panel panel) throws Exception {
-        Serializer serializer = createSerializer();
-        serializer.write(panel, new ByteArrayOutputStream());
-        serializer.write(panel, panel.getFile());
+        XmlSerialize.serialization().write(panel, new ByteArrayOutputStream());
+        XmlSerialize.serialization().write(panel, panel.getFile());
         panel.setDirty(false);
     }
 
@@ -1415,8 +1398,7 @@ public class Configuration extends AbstractModelObject {
      * descendants of the panel can't be found
      */
     private Panel loadPanel(File file) throws Exception {
-        Serializer serializer = createSerializer();
-        Panel panel = serializer.read(Panel.class, file);
+        Panel panel = XmlSerialize.serialization().read(Panel.class, file);
         panel.setFile(file);
         for (PlacementsHolderLocation<?> child : panel.getChildren()) {
             File childFile = new File(child.getFileName());
@@ -1448,13 +1430,12 @@ public class Configuration extends AbstractModelObject {
     
     /**
      * Saves the specified Board into its file
-     * @param panel - the Board to save
+     * @param board - the Board to save
      * @throws Exception if the file can't be written successfully
      */
     public void saveBoard(Board board) throws Exception {
-        Serializer serializer = createSerializer();
-        serializer.write(board, new ByteArrayOutputStream());
-        serializer.write(board, board.getFile());
+        XmlSerialize.serialization().write(board, new ByteArrayOutputStream());
+        XmlSerialize.serialization().write(board, board.getFile());
         board.setDirty(false);
     }
 
@@ -1465,19 +1446,10 @@ public class Configuration extends AbstractModelObject {
      * @throws Exception if the specified file can't be read successfully
      */
     private Board loadBoard(File file) throws Exception {
-        Serializer serializer = createSerializer();
-        Board board = serializer.read(Board.class, file);
+        Board board = XmlSerialize.serialization().read(Board.class, file);
         board.setFile(file);
         board.setDirty(false);
         return board;
-    }
-
-    public static Serializer createSerializer() {
-        Style style = new HyphenStyle();
-        Format format = new Format(style);
-        AnnotationStrategy strategy = new AnnotationStrategy();
-        Serializer serializer = new Persister(strategy, format);
-        return serializer;
     }
 
     public static String createId(String prefix) {
@@ -1488,55 +1460,60 @@ public class Configuration extends AbstractModelObject {
     /**
      * Used to provide a fixed root for the Machine when serializing.
      */
-    @Root(name = "openpnp-machine")
+    @JacksonXmlRootElement(localName = "openpnp-machine")
     public static class MachineConfigurationHolder {
-        @Element
+        @JacksonXmlProperty
         private Machine machine;
     }
 
     /**
      * Used to provide a fixed root for the Packages when serializing.
      */
-    @Root(name = "openpnp-packages")
+    @JacksonXmlRootElement(localName = "openpnp-packages")
     public static class PackagesConfigurationHolder {
-        @ElementList(inline = true, entry = "package", required = false)
-        private ArrayList<Package> packages = new ArrayList<>();
+        @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlProperty(localName = "package")
+        private List<Package> packages = new ArrayList<>();
     }
 
     /**
      * Used to provide a fixed root for the Parts when serializing.
      */
-    @Root(name = "openpnp-parts")
+    @JacksonXmlRootElement(localName = "openpnp-parts")
     public static class PartsConfigurationHolder {
-        @ElementList(inline = true, entry = "part", required = false)
-        private ArrayList<Part> parts = new ArrayList<>();
+        @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlProperty(localName = "part")
+        private List<Part> parts = new ArrayList<>();
     }
 
     /**
      * Used to provide a fixed root for the Boards when serializing.
      */
-    @Root(name = "openpnp-boards")
+    @JacksonXmlRootElement(localName = "openpnp-boards")
     public static class BoardsConfigurationHolder {
-        @ElementList(inline = true, entry = "board", required = false)
-        private ArrayList<File> boards = new ArrayList<>();
+        @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlProperty(localName = "board")
+        private List<File> boards = new ArrayList<>();
     }
 
     /**
      * Used to provide a fixed root for the Panels when serializing.
      */
-    @Root(name = "openpnp-panels")
+    @JacksonXmlRootElement(localName = "openpnp-panels")
     public static class PanelsConfigurationHolder {
-        @ElementList(inline = true, entry = "panel", required = false)
-        private ArrayList<File> panels = new ArrayList<>();
+        @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlProperty(localName = "panel")
+        private List<File> panels = new ArrayList<>();
     }
 
     /**
      * Used to provide a fixed root for the VisionSettings when serializing.
      */
-    @Root(name = "openpnp-vision-settings")
+    @JacksonXmlRootElement(localName = "openpnp-vision-settings")
     public static class VisionSettingsConfigurationHolder {
-        @ElementList(inline = true, entry = "visionSettings", required = false)
-        public ArrayList<AbstractVisionSettings> visionSettings = new ArrayList<>();
+        @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlProperty(localName = "visionSettings")
+        public List<AbstractVisionSettings> visionSettings = new ArrayList<>();
     }
 
 }

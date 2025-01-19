@@ -44,12 +44,12 @@ import org.openpnp.spi.Head;
 import org.openpnp.spi.HeadMountable;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.Nozzle;
-import org.simpleframework.xml.Serializer;
 
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
+import org.openpnp.util.XmlSerialize;
 
 public class GcodeDriverGcodes extends AbstractConfigurationWizard {
     private final GcodeDriver driver;
@@ -312,10 +312,7 @@ public class GcodeDriverGcodes extends AbstractConfigurationWizard {
                         return;
                     }
                 }
-                Serializer s = Configuration.createSerializer();
-                FileWriter w = new FileWriter(file);
-                s.write(driver, w);
-                w.close();
+                XmlSerialize.serialization().write(driver, file);
             }
             catch (Exception e) {
                 MessageBoxes.errorBox(MainFrame.get(), "Export Failed", e);
@@ -344,9 +341,7 @@ public class GcodeDriverGcodes extends AbstractConfigurationWizard {
                 fileDialog.setVisible(true);
                 String filename = fileDialog.getFile();
                 File file = new File(new File(fileDialog.getDirectory()), filename);
-                Serializer ser = Configuration.createSerializer();
-                FileReader r = new FileReader(file);
-                GcodeDriver d = ser.read(GcodeDriver.class, r);
+                GcodeDriver d = XmlSerialize.serialization().read(GcodeDriver.class, file);
                 // copySettings(d, driver);
             }
             catch (Exception e) {
@@ -365,10 +360,8 @@ public class GcodeDriverGcodes extends AbstractConfigurationWizard {
         @Override
         public void actionPerformed(ActionEvent arg0) {
             try {
-                Serializer s = Configuration.createSerializer();
-                StringWriter w = new StringWriter();
-                s.write(driver, w);
-                StringSelection stringSelection = new StringSelection(w.toString());
+                String xml = XmlSerialize.serialize(driver);
+                StringSelection stringSelection = new StringSelection(xml);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(stringSelection, null);
                 MessageBoxes.infoBox(Translations.getString("CommonPhrases.copiedGcode"), //$NON-NLS-1$
@@ -390,11 +383,9 @@ public class GcodeDriverGcodes extends AbstractConfigurationWizard {
         @Override
         public void actionPerformed(ActionEvent arg0) {
             try {
-                Serializer ser = Configuration.createSerializer();
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 String s = (String) clipboard.getData(DataFlavor.stringFlavor);
-                StringReader r = new StringReader(s);
-                GcodeDriver d = ser.read(GcodeDriver.class, s);
+                GcodeDriver d = XmlSerialize.serialization().read(GcodeDriver.class, s);
                 // copySettings(d, driver);
                 MessageBoxes.infoBox(Translations.getString("CommonPhrases.pastedGcode"), //$NON-NLS-1$
                         Translations.getString("CommonPhrases.pastedGcodeFromClipboard")); //$NON-NLS-1$

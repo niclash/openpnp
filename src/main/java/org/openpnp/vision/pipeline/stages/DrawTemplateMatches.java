@@ -11,20 +11,16 @@ import org.openpnp.vision.FluentCv;
 import org.openpnp.vision.pipeline.CvPipeline;
 import org.openpnp.vision.pipeline.CvStage;
 import org.openpnp.vision.pipeline.CvStage.Result.TemplateMatch;
-import org.openpnp.vision.pipeline.stages.convert.ColorConverter;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.convert.Convert;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Draws TemplatesMatches contained in a List<TemplateMatch> by referencing a previous stage's model data.
  */
 public class DrawTemplateMatches extends CvStage {
-    @Element(required = false)
-    @Convert(ColorConverter.class)
+    @JacksonXmlProperty
     private Color color = null;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String templateMatchesStageName = null;
 
     public Color getColor() {

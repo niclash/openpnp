@@ -26,13 +26,13 @@ import org.openpnp.model.AxesLocation;
 import org.openpnp.model.Configuration;
 import org.openpnp.spi.LinearInputAxis;
 import org.openpnp.spi.Machine;
-import org.simpleframework.xml.Attribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractSingleTransformedAxis extends AbstractTransformedAxis implements LinearInputAxis {
     // The input axis of the transformation.  
     protected AbstractAxis inputAxis;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String inputAxisId;
 
     protected AbstractSingleTransformedAxis() {

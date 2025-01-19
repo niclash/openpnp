@@ -2,6 +2,7 @@ package org.openpnp.machine.reference.feeder;
 
 import java.util.List;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.openpnp.ConfigurationListener;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.machine.reference.feeder.wizards.ReferenceSlotAutoFeederConfigurationWizard;
@@ -12,23 +13,20 @@ import org.openpnp.model.LengthUnit;
 import org.openpnp.model.Location;
 import org.openpnp.model.Named;
 import org.openpnp.model.Part;
+import org.openpnp.serialization.PostDeserialize;
+import org.openpnp.serialization.PreSerialize;
 import org.openpnp.spi.Nozzle;
 import org.openpnp.util.IdentifiableList;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Persist;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 public class ReferenceSlotAutoFeeder extends ReferenceAutoFeeder {
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String bankId;
 
-    @Attribute(required = false)
+    @JacksonXmlProperty( isAttribute = true )
     private String feederId;
 
     private Bank bank;
@@ -41,7 +39,7 @@ public class ReferenceSlotAutoFeeder extends ReferenceAutoFeeder {
         partId = "";
     }
     
-    @Commit
+    @PostDeserialize
     public void commit() {
         Configuration.get().addListener(new ConfigurationListener() {
             @Override
@@ -56,7 +54,7 @@ public class ReferenceSlotAutoFeeder extends ReferenceAutoFeeder {
         });
     }
 
-    @Persist
+    @PreSerialize
     public void persist() {
         bankId = getBank().getId();
         feederId = getFeeder() == null ? null : getFeeder().getId();
@@ -170,15 +168,15 @@ public class ReferenceSlotAutoFeeder extends ReferenceAutoFeeder {
         return new ReferenceSlotAutoFeederConfigurationWizard(this);
     }
 
-    @Root
+    @JacksonXmlRootElement
     public static class Bank extends AbstractModelObject implements Identifiable, Named {
-        @ElementList
+        @JacksonXmlProperty
         private IdentifiableList<ReferenceSlotAutoFeeder.Feeder> feeders = new IdentifiableList<>();
 
-        @Attribute(name = "id")
+        @JacksonXmlProperty(isAttribute = true)
         final private String id;
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private String name;
         
         BiMap<Feeder, ReferenceSlotAutoFeeder> assignments = HashBiMap.create();
@@ -187,7 +185,7 @@ public class ReferenceSlotAutoFeeder extends ReferenceAutoFeeder {
             this(Configuration.createId("BANK-"));
         }
 
-        public Bank(@Attribute(name = "id") String id) {
+        public Bank(@JacksonXmlProperty(isAttribute = true, localName = "id") String id) {
             if (id == null) {
                 throw new Error("Id is required.");
             }
@@ -234,24 +232,24 @@ public class ReferenceSlotAutoFeeder extends ReferenceAutoFeeder {
     /**
      * This class is just a delegate wrapper around a list. 
      */
-    @Root
+    @JacksonXmlRootElement
     public static class BanksProperty {
-        @ElementList
+        @JacksonXmlProperty
         IdentifiableList<Bank> banks = new IdentifiableList<>();
     }
 
-    @Root
+    @JacksonXmlRootElement
     public static class Feeder extends AbstractModelObject implements Identifiable, Named {
-        @Attribute(name = "id")
+        @JacksonXmlProperty(isAttribute = true)
         final private String id;
 
-        @Attribute
+        @JacksonXmlProperty( isAttribute = true )
         private String name;
 
-        @Attribute(required = false)
+        @JacksonXmlProperty( isAttribute = true )
         private String partId;
 
-        @Element
+        @JacksonXmlProperty
         private Location offsets = new Location(LengthUnit.Millimeters);
 
         private Part part;
@@ -262,7 +260,7 @@ public class ReferenceSlotAutoFeeder extends ReferenceAutoFeeder {
             this(Configuration.createId("SLOTFDR-"));
         }
 
-        public Feeder(@Attribute(name = "id") String id) {
+        public Feeder(@JacksonXmlProperty(isAttribute = true, localName = "id") String id) {
             this.id = id;
             this.name = id;
             Configuration.get().addListener(new ConfigurationListener.Adapter() {
@@ -285,7 +283,7 @@ public class ReferenceSlotAutoFeeder extends ReferenceAutoFeeder {
             this.owner = owner;
         }
 
-        @Persist
+        @PreSerialize
         public void persist() {
             partId = part == null ? null : part.getId();
         }
