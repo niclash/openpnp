@@ -30,6 +30,9 @@ import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.openpnp.Translations;
 import org.openpnp.gui.support.PropertySheetWizardAdapter;
@@ -81,6 +84,7 @@ import com.google.common.base.Joiner;
 
 @JacksonXmlRootElement
 public class GcodeDriver extends AbstractReferenceDriver implements Named {
+
     public enum CommandType {
         COMMAND_CONFIRM_REGEX,
         POSITION_REPORT_REGEX,
@@ -116,19 +120,19 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
         final boolean headMountable;
         final String[] variableNames;
 
-        private CommandType() {
+        CommandType() {
             this(false);
         }
 
-        private CommandType(boolean headMountable) {
+        CommandType(boolean headMountable) {
             this(headMountable, new String[] {});
         }
 
-        private CommandType(String... variableNames) {
+        CommandType(String... variableNames) {
             this(false, variableNames);
         }
 
-        private CommandType(boolean headMountable, String... variableNames) {
+        CommandType(boolean headMountable, String... variableNames) {
             this.headMountable = headMountable;
             this.variableNames = variableNames;
         }
@@ -159,8 +163,8 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
         @JacksonXmlProperty( isAttribute = true )
         public CommandType type;
 
-//        @ElementList(required = false, inline = true, entry = "text", data = true)
-        @JacksonXmlProperty
+        @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlProperty(localName = "text")
         public ArrayList<String> commands = new ArrayList<>();
 
         public Command(String headMountableId, CommandType type, String text) {
@@ -259,20 +263,17 @@ public class GcodeDriver extends AbstractReferenceDriver implements Named {
     @JacksonXmlProperty( isAttribute = true ) 
     int infinityTimeoutMilliseconds = 60000; // 1 Minute is considered an "eternity" for a controller.
 
-//    @Element(required = false, data=true)
     @JacksonXmlProperty
     String detectedFirmware = null; 
 
-//    @Element(required = false, data=true)
     @JacksonXmlProperty
     String reportedAxes = null;
 
-//    @Element(required = false, data=true)
     @JacksonXmlProperty
     String configuredAxes = null;
 
-//    @ElementList(required = false, inline = true)
-    @JacksonXmlProperty
+//    @JacksonXmlElementWrapper(localName = "command")
+    @JacksonXmlProperty(localName = "command")
     public ArrayList<Command> commands = new ArrayList<>();
 
     @Deprecated

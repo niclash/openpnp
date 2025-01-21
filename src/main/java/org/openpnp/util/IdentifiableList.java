@@ -2,6 +2,7 @@ package org.openpnp.util;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.model.Identifiable;
 
 /**

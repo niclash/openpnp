@@ -88,6 +88,7 @@ import org.pmw.tinylog.Logger;
 
 @SuppressWarnings("serial")
 public class CameraView extends JComponent implements CameraListener {
+    // TODO: niclas; The strings below contains a spelling mistake. This should be corrected, but will affect existing systems. Investigate if this can be fixed without breaking.
     private static final String PREF_RETICLE = "CamerView.reticle";
     private static final String PREF_ZOOM_INCREMENT = "CamerView.zoomIncrement";
     private static final String PREF_RENDERING_QUALITY = "CamerView.renderingQuality";
@@ -290,14 +291,19 @@ public class CameraView extends JComponent implements CameraListener {
         // load the reticle pref, if any
         try {
             String reticleXml = prefs.get(getReticlePrefKey(), null);
-            Reticle reticle = (Reticle) XmlSerialize.deserialize(reticleXml);
+            Reticle reticle;
+            try {
+                reticle = XmlSerialize.serialization().read(Reticle.class, reticleXml);
+            } catch (Exception e) {
+                reticle = (Reticle) XmlSerialize.deserialize(reticleXml);
+            }
             setDefaultReticle(reticle);
         }
         catch (Exception e) {
             Logger.debug("Failed to load camera specific reticle, checking default.");
             try {
                 String reticleXml = prefs.get(PREF_RETICLE, null);
-                Reticle reticle = (Reticle) XmlSerialize.deserialize(reticleXml);
+                Reticle reticle = XmlSerialize.serialization().read(Reticle.class, reticleXml);
                 setDefaultReticle(reticle);
             }
             catch (Exception e1) {
@@ -335,7 +341,14 @@ public class CameraView extends JComponent implements CameraListener {
     public void setDefaultReticle(Reticle reticle) {
         setReticle(DEFAULT_RETICLE_KEY, reticle);
 
-        prefs.put(getReticlePrefKey(), XmlSerialize.serialize(reticle));
+        String xml;
+        try {
+            xml = XmlSerialize.serialization().writeAsString(reticle);
+        } catch (Exception e) {
+            xml = XmlSerialize.serialize(reticle);
+        }
+
+        prefs.put(getReticlePrefKey(), xml);
         try {
             prefs.flush();
         }

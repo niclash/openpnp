@@ -23,7 +23,7 @@ public class ReferenceBottomVisionInheritanceTest {
 
     @BeforeAll
     public static void setup() throws Exception {
-        /**
+        /*
          * Create a new config directory and load the default configuration.
          */
         workingDirectory = Files.createTempDir();

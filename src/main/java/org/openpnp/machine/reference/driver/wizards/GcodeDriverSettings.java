@@ -388,7 +388,7 @@ public class GcodeDriverSettings extends AbstractConfigurationWizard {
         @Override
         public void actionPerformed(ActionEvent arg0) {
             try {
-                String xml = XmlSerialize.serialize(driver);
+                String xml = XmlSerialize.serialization().writeAsString(driver);
                 StringSelection stringSelection = new StringSelection(xml);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(stringSelection, null);

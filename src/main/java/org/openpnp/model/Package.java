@@ -25,10 +25,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import org.openpnp.machine.reference.vision.AbstractPartSettingsHolder;
 import org.openpnp.spi.NozzleTip;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+@JsonIgnoreProperties({"outline"})
 public class Package extends AbstractPartSettingsHolder {
 //    @Version(revision=1.1)
     // TODO; What/How was this used?
@@ -55,9 +58,10 @@ public class Package extends AbstractPartSettingsHolder {
     
     @JacksonXmlProperty
     private VisionCompositing visionCompositing;
-    
-    @JacksonXmlProperty
-    protected List<String> compatibleNozzleTipIds = new ArrayList<>();
+
+    @JacksonXmlElementWrapper(localName = "compatible-nozzle-tip-ids")
+    @JacksonXmlProperty(localName = "string")
+    protected ArrayList<String> compatibleNozzleTipIds = new ArrayList<>();
 
     protected Set<NozzleTip> compatibleNozzleTips; 
 

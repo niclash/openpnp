@@ -29,11 +29,11 @@ public abstract class AbstractHeadMountable extends AbstractModelObject implemen
     private AbstractAxis axisZ;
     private AbstractAxis axisRotation;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "axis-X-id")
     private String axisXId;
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "axis-Y-id" )
     private String axisYId;
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "axis-Z-id" )
     private String axisZId;
     @JacksonXmlProperty( isAttribute = true )
     private String axisRotationId;

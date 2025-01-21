@@ -817,8 +817,6 @@ public class Configuration extends AbstractModelObject {
         XmlSerialize.serialization().write(o, new ByteArrayOutputStream());
         FileOutputStream out = new FileOutputStream(file);
         XmlSerialize.serialization().write(o, out);
-        out.write('\n');
-        out.close();
     }
 
     private void loadMachine(File file) throws Exception {

@@ -48,27 +48,27 @@ public class AffineWarp extends CvStage {
     @Property(description = "Length unit used in this stage.")
     private LengthUnit lengthUnit = LengthUnit.Millimeters;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "x-0")
     @Property(description = "What will become the left upper corner of the extracted area. X offset from camera location.")
     private double x0 = 0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "y-0")
     @Property(description = "What will become the left upper corner of the extracted area. Y offset from camera location.")
     private double y0 = 0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "x-1")
     @Property(description = "What will become the right upper corner of the extracted area. X offset from camera location.")
     private double x1 = 0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "y-1")
     @Property(description = "What will become the right upper corner of the extracted area. Y offset from camera location.")
     private double y1 = 0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "x-2")
     @Property(description = "What will become the left lower corner of the extracted area. X offset from camera location.")
     private double x2 = 0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "y-2")
     @Property(description = "What will become the left lower corner of the extracted area. Y offset from camera location.")
     private double y2 = 0;
 

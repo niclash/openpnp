@@ -21,6 +21,7 @@ package org.openpnp.spi;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.model.Identifiable;
 import org.openpnp.model.Location;
 import org.openpnp.model.Motion.MotionOption;
@@ -34,6 +35,7 @@ import org.openpnp.model.Solutions;
  * moved by moving any one of it's components. When any attached component is moved in (at least) X
  * or Y, it is expected that all components attached to the Head also move in the same axes.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public interface Head extends Identifiable, Named, WizardConfigurable, PropertySheetHolder, Solutions.Subject {
     /**
      * Get a list of Nozzles that are attached to this head.

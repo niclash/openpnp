@@ -269,7 +269,13 @@ public abstract class AbstractVisionSettings extends AbstractModelObject impleme
     }
 
     public static String createSettingsFingerprint(Object partSettings) {
-        String xml = XmlSerialize.serialize(partSettings);
+
+        String xml;
+        try {
+            xml = XmlSerialize.serialization().writeAsString(partSettings);
+        } catch (Exception e) {
+            xml = XmlSerialize.serialize(partSettings);
+        }
         if (partSettings instanceof AbstractVisionSettings) {
             // Must filter out the id.
             for (java.lang.reflect.Field field : AbstractVisionSettings.class.getDeclaredFields()) {

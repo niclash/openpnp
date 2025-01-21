@@ -2,6 +2,7 @@ package org.openpnp.spi;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.model.Length;
 import org.openpnp.model.Location;
 import org.openpnp.model.Part;
@@ -12,6 +13,7 @@ import org.openpnp.model.Part;
  * that defines what types of Packages it can handle and it may have the capability of changing it's
  * NozzleTip.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public interface Nozzle
         extends HeadMountable, WizardConfigurable, PropertySheetHolder {
     /**

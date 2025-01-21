@@ -21,6 +21,7 @@ package org.openpnp.spi;
 
 import java.io.Closeable;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.model.AxesLocation;
 import org.openpnp.model.Identifiable;
 import org.openpnp.model.Length;
@@ -41,7 +42,8 @@ import org.openpnp.spi.MotionPlanner.CompletionType;
  * different from previous versions of OpenPnP where the driver did much more. 
  * 
  */
- public interface Driver extends Identifiable, Named, Closeable, WizardConfigurable, PropertySheetHolder, Solutions.Subject {
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
+public interface Driver extends Identifiable, Named, Closeable, WizardConfigurable, PropertySheetHolder, Solutions.Subject {
     /**
      * @return The LengthUnit used by the controller that is driven by this driver. 
      */

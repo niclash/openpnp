@@ -69,7 +69,7 @@ public class ReferenceNozzleTip extends AbstractNozzleTip {
     @JacksonXmlProperty
     private double changerMidToMid2Speed = 1D;
 
-    @JacksonXmlProperty
+    @JacksonXmlProperty(localName = "changer-mid-location-2")
     private Location changerMidLocation2 = new Location(LengthUnit.Millimeters);
 
     @JacksonXmlProperty

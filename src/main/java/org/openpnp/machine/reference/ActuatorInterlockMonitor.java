@@ -69,7 +69,6 @@ public class ActuatorInterlockMonitor extends AbstractModelObject implements Act
     @JacksonXmlProperty( isAttribute = true )
     private double confirmationGoodMax;
 
-//    @Element(required = false, data=true)
     @JacksonXmlProperty
     private String confirmationPattern;
 

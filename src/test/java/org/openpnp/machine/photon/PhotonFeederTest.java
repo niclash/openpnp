@@ -7,23 +7,43 @@ import org.openpnp.machine.photon.exceptions.FeedFailureException;
 import org.openpnp.machine.photon.exceptions.FeederHasNoLocationOffsetException;
 import org.openpnp.machine.photon.exceptions.NoSlotAddressException;
 import org.openpnp.machine.photon.exceptions.UnconfiguredSlotException;
-import org.openpnp.machine.photon.protocol.commands.*;
+import org.openpnp.machine.photon.protocol.commands.GetFeederAddress;
+import org.openpnp.machine.photon.protocol.commands.GetFeederId;
+import org.openpnp.machine.photon.protocol.commands.InitializeFeeder;
+import org.openpnp.machine.photon.protocol.commands.MoveFeedForward;
+import org.openpnp.machine.photon.protocol.commands.MoveFeedStatus;
 import org.openpnp.machine.photon.protocol.helpers.ResponsesHelper;
 import org.openpnp.machine.photon.protocol.helpers.TestBus;
 import org.openpnp.machine.photon.sheets.FeederPropertySheet;
 import org.openpnp.machine.photon.sheets.GlobalConfigPropertySheet;
 import org.openpnp.machine.reference.ReferenceActuator;
-import org.openpnp.model.*;
+import org.openpnp.model.Configuration;
+import org.openpnp.model.LengthUnit;
+import org.openpnp.model.Location;
+import org.openpnp.model.Part;
+import org.openpnp.model.Solutions;
 import org.openpnp.spi.Actuator;
 import org.openpnp.spi.Machine;
 import org.openpnp.spi.Nozzle;
 import org.openpnp.spi.PropertySheetHolder;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PhotonFeederTest {
     private final String hardwareId = "00112233445566778899AABB";

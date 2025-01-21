@@ -22,6 +22,7 @@ package org.openpnp.spi;
 import java.awt.image.BufferedImage;
 import java.io.Closeable;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.CameraListener;
 import org.openpnp.model.Length;
 import org.openpnp.model.Location;
@@ -29,6 +30,7 @@ import org.openpnp.model.Location;
 /**
  * Represents a Camera attached to the system and allows a caller to retrieve images from it.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public interface Camera extends HeadMountable, WizardConfigurable,
         PropertySheetHolder, Closeable {
     public enum Looking {

@@ -21,6 +21,7 @@
 
 package org.openpnp.spi;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.model.Identifiable;
 import org.openpnp.model.Named;
 import org.openpnp.model.Solutions;
@@ -31,8 +32,9 @@ import org.openpnp.model.Solutions;
  * into a raw axis. Furthermore there are virtual axes to store coordinate states. 
  *  
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public interface Axis extends Identifiable, Named, WizardConfigurable, PropertySheetHolder, Solutions.Subject {
-    public enum Type {
+    enum Type {
         X,
         Y,
         Z,

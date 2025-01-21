@@ -1,25 +1,35 @@
 package org.openpnp.serialization;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
-import com.fasterxml.jackson.databind.ser.std.StdDelegatingSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.deser.FromXmlParser;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
-import org.apache.xmlgraphics.java2d.color.ColorConverter;
 import org.opencv.core.Mat;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamReader;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class XmlObjectMapperSerializer {
@@ -27,30 +37,17 @@ public class XmlObjectMapperSerializer {
 
     public XmlObjectMapperSerializer() {
         JacksonXmlModule module = new JacksonXmlModule();
-        module.addSerializer(Color.class, new ParentColorSerializer());
-        module.addDeserializer(Color.class, new ParentColorDeserializer());
+        module.addSerializer(Color.class, new StdColorSerializer());
+        module.addDeserializer(Color.class, new StdColorDeserializer());
 
-        module.setDeserializerModifier(new BeanDeserializerModifier() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config, BeanDescription beanDescription,
-                                                          JsonDeserializer<?> originalDeserializer) {
-                return new CustomAnnotationsDeserializer((JsonDeserializer<Object>) originalDeserializer, beanDescription);
-            }
-        });
-
-        module.setSerializerModifier(new BeanSerializerModifier() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public JsonSerializer<?> modifySerializer(SerializationConfig config, BeanDescription beanDesc, JsonSerializer<?> serializer) {
-                return new CustomAnnotationsSerializer((JsonSerializer<Object>) serializer, beanDesc);
-            }
-        });
+        module.setDeserializerModifier(PostDeserializeAnnotationDeserializer.modifier);
+        module.setSerializerModifier(PreSerializeAnnotationSerializer.modifier);
 
         mapper = new XmlMapper(module);
 //        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         mapper.setPropertyNamingStrategy(PropertyNamingStrategies.KEBAB_CASE);
+        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
 
         mapper.addMixIn(Mat.class, MatExclusionMixin.class);
         mapper.addMixIn(ThreadPoolExecutor.class, ThreadPoolExecutorExclusionMixin.class);
@@ -62,6 +59,7 @@ public class XmlObjectMapperSerializer {
     }
 
     public <T> T read(Class<? extends T> type, File source) throws Exception {
+        System.out.println(source.getAbsolutePath());
         return mapper.readValue(source, type);
     }
 
@@ -83,6 +81,10 @@ public class XmlObjectMapperSerializer {
 
     public void write(Object source, Writer out) throws Exception {
         mapper.writeValue(out, source);
+    }
+
+    public String writeAsString( Object source ) throws Exception {
+        return mapper.writeValueAsString(source);
     }
 
     @JsonIgnoreType

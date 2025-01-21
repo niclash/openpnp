@@ -2,6 +2,7 @@ package org.openpnp.spi;
 
 import java.awt.image.BufferedImage;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.model.BoardLocation;
 import org.openpnp.model.Location;
@@ -16,6 +17,7 @@ import org.openpnp.model.Solutions;
  * is an implementation of this interface, but other implementations could include laser
  * alignment or pit alignment.  
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public interface PartAlignment extends PartSettingsHolder, Named, Solutions.Subject, PropertySheetHolder {
 
     public class PartAlignmentOffset

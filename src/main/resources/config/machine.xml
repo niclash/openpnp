@@ -7,9 +7,9 @@
                   <head-offsets units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
                   <vacuum-sense-actuator-name>A1</vacuum-sense-actuator-name>
                   <vacuum-actuator-name>A1</vacuum-actuator-name>
-				<compatible-nozzle-tip-ids class="java.util.ArrayList">
-					<string>NT1</string>
-				</compatible-nozzle-tip-ids>
+                  <compatible-nozzle-tip-ids class="java.util.ArrayList">
+                     <string>NT1</string>
+                  </compatible-nozzle-tip-ids>
                </nozzle>
             </nozzles>
             <actuators>

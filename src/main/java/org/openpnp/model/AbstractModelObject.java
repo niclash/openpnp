@@ -23,9 +23,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeListenerProxy;
 import java.beans.PropertyChangeSupport;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.pmw.tinylog.Logger;
 
 public abstract class AbstractModelObject {
+
+    @JsonIgnore
     protected final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {

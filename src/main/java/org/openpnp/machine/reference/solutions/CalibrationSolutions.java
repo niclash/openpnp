@@ -69,7 +69,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 /**
  * This helper class implements the Issues & Solutions for the Calibration Milestone. 
  */
-public class CalibrationSolutions implements Solutions.Subject {
+public class CalibrationSolutions
+    implements Solutions.Subject {
 
     @JacksonXmlProperty( isAttribute = true )
     private int backlashCalibrationPasses = 4;

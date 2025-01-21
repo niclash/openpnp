@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.swing.Icon;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import org.openpnp.ConfigurationListener;
 import org.openpnp.model.AbstractModelObject;
 import org.openpnp.model.Configuration;
@@ -33,7 +35,7 @@ public abstract class AbstractHead extends AbstractModelObject implements Head {
     @JacksonXmlProperty( isAttribute = true )
     protected String name;
 
-    @JacksonXmlProperty
+    @JacksonXmlProperty(localName = "nozzles")
     protected IdentifiableList<Nozzle> nozzles = new IdentifiableList<>();
 
     @JacksonXmlProperty

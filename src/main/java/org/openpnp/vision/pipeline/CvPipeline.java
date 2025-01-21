@@ -378,7 +378,7 @@ public class CvPipeline implements AutoCloseable {
      */
     public String toXmlString() throws Exception {
         resetToDefaults();
-        return XmlSerialize.serialize(this);
+        return XmlSerialize.serialization().writeAsString(this);
     }
 
     /**

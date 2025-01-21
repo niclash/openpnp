@@ -19,6 +19,7 @@
 
 package org.openpnp.spi;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.model.Identifiable;
 import org.openpnp.model.Location;
 import org.openpnp.model.Named;
@@ -32,27 +33,28 @@ import org.openpnp.model.Solutions;
  * feeder, a tray handler, a single part in a specific location or anything else that can be used as
  * a pick source.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public interface Feeder extends Identifiable, Named, WizardConfigurable, PropertySheetHolder, Solutions.Subject {
     /**
      * Return true is the Feeder is currently enabled and can be considered in Job planning.
      * 
      * @return
      */
-    public boolean isEnabled();
+    boolean isEnabled();
 
-    public void setEnabled(boolean enabled);
+    void setEnabled(boolean enabled);
 
     /**
      * Get the Part that is loaded into this Feeder.
      * 
      * @return
      */
-    public Part getPart();
+    Part getPart();
 
     /**
      * Set the Part that is loaded into this Feeder.
      */
-    public void setPart(Part part);
+    void setPart(Part part);
 
     /**
      * Gets the Location from which the currently available Part should be picked from. This value
@@ -62,7 +64,7 @@ public interface Feeder extends Identifiable, Named, WizardConfigurable, Propert
      * 
      * @return
      */
-    public Location getPickLocation() throws Exception;
+    Location getPickLocation() throws Exception;
 
     /**
      * @return True if the part height needs to be added to the pick location. The distinction is
@@ -80,7 +82,7 @@ public interface Feeder extends Identifiable, Named, WizardConfigurable, Propert
      *  
      * @return The location for the feeder Job preparation visit or null if none.
      */
-    public Location getJobPreparationLocation();
+    Location getJobPreparationLocation();
     
     /**
      * Prepares a Feeder for usage in a Job. This is done for all the feeders that are enabled and 
@@ -92,7 +94,7 @@ public interface Feeder extends Identifiable, Named, WizardConfigurable, Propert
      *  
      * @throws Exception
      */
-    public void prepareForJob(boolean visit) throws Exception;
+    void prepareForJob(boolean visit) throws Exception;
     
     /**
      * Commands the Feeder to do anything it needs to do to prepare the part to be picked by the
@@ -105,26 +107,26 @@ public interface Feeder extends Identifiable, Named, WizardConfigurable, Propert
      * @return The Location where the fed part can be picked from.
      * @throws Exception
      */
-    public void feed(Nozzle nozzle) throws Exception;
+    void feed(Nozzle nozzle) throws Exception;
 
-    public void postPick(Nozzle nozzle) throws Exception;
+    void postPick(Nozzle nozzle) throws Exception;
 
     /*
      * If the feeder (currently) supports taking back a part
      */
-    public boolean canTakeBackPart();
+    boolean canTakeBackPart();
     
     /**
      * Asks the feeder to take back the part currently on the nozzle.
      */
-    public void takeBackPart(Nozzle nozzle) throws Exception;
+    void takeBackPart(Nozzle nozzle) throws Exception;
     
     /**
      * If feed() throws an Exception during job processing, the job processor will retry the
      * feed() call this many times before raising the error.
      * @return
      */
-    public int getFeedRetryCount();
+    int getFeedRetryCount();
     
     /**
      * If post pick checks such as isPartOn() fail during job processing, the job processor will
@@ -132,5 +134,5 @@ public interface Feeder extends Identifiable, Named, WizardConfigurable, Propert
      * this does not include re-feeding the part.  
      * @return
      */
-    public int getPickRetryCount();
+    int getPickRetryCount();
 }

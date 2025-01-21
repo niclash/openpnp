@@ -363,7 +363,7 @@ public class PackagesPanel extends JPanel implements WizardContainer {
                 return;
             }
             try {
-                String xml = XmlSerialize.serialize(pkg);
+                String xml = XmlSerialize.serialization().writeAsString(pkg);
                 StringSelection stringSelection = new StringSelection(xml);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(stringSelection, null);

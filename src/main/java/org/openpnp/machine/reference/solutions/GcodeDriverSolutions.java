@@ -1159,11 +1159,11 @@ public class GcodeDriverSolutions implements Solutions.Subject {
      */
     public static void convertToAsync(GcodeDriver gcodeDriver) throws Exception {
         // Serialize the GcodeDriver
-        String xml = XmlSerialize.serialize(gcodeDriver);
-        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
-        xml = xml.replace(
-                gcodeDriver.getClass().getCanonicalName(), 
-                GcodeAsyncDriver.class.getCanonicalName());
+        String xml = XmlSerialize.serialization().writeAsString(gcodeDriver);
+//        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
+//        xml = xml.replace(
+//                gcodeDriver.getClass().getCanonicalName(),
+//                GcodeAsyncDriver.class.getCanonicalName());
         // De-serialize it.
         GcodeAsyncDriver asyncDriver = XmlSerialize.serialization().read(GcodeAsyncDriver.class, xml);
         // Triple the timeout as asynchronously executed move sequences can be longer than single moves.
@@ -1179,12 +1179,15 @@ public class GcodeDriverSolutions implements Solutions.Subject {
      * @throws Exception
      */
     public static void convertToPlain(GcodeAsyncDriver asyncDriver) throws Exception {
+
+        // TODO: This is a bad use of serialization. Converting from GcodeAsyncDriver to a GcodeDriver should be done programmatically.
+
         // Serialize the GcodeDriver
-        String xml = XmlSerialize.serialize(asyncDriver);
-        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
-        xml = xml.replace(
-                asyncDriver.getClass().getCanonicalName(), 
-                GcodeAsyncDriver.class.getCanonicalName());
+        String xml = XmlSerialize.serialization().writeAsString(asyncDriver);
+//        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
+//        xml = xml.replace(
+//                asyncDriver.getClass().getCanonicalName(),
+//                GcodeAsyncDriver.class.getCanonicalName());
         // Remove the sub-class properties. 
         xml = XmlSerialize.purgeSubclassXml(GcodeAsyncDriver.class, xml);
         // De-serialize it.

@@ -29,6 +29,8 @@ import java.lang.reflect.Field;
 import org.openpnp.serialization.XmlObjectMapperSerializer;
 
 public class XmlSerialize {
+
+    @Deprecated( since="3.0", forRemoval=true)
     public static String serialize(Object o) {
         ByteArrayOutputStream bOut = new ByteArrayOutputStream();
         XMLEncoder xmlEncoder = new XMLEncoder(bOut);
@@ -37,6 +39,7 @@ public class XmlSerialize {
         return bOut.toString();
     }
 
+    @Deprecated( since="3.0", forRemoval=true)
     public static Object deserialize(String s) {
         XMLDecoder xmlDecoder = new XMLDecoder(new ByteArrayInputStream(s.getBytes()));
         return xmlDecoder.readObject();

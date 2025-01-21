@@ -41,7 +41,7 @@ public class DetectCirclesHough extends CvStage {
      * First method-specific parameter. In case of CV_HOUGH_GRADIENT , it is the higher threshold of
      * the two passed to the Canny() edge detector (the lower one is twice smaller).
      */
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "param-1")
     @Property(description = "The higher threshold of the two passed to the Canny() edge detector (the lower one is twice smaller)")
     private double param1 = 80;
 
@@ -51,7 +51,7 @@ public class DetectCirclesHough extends CvStage {
      * circles may be detected. Circles, corresponding to the larger accumulator values, will be
      * returned first.
      */
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "param-2" )
     @Property(description = "The accumulator threshold for the circle centers at the detection stage. The smaller it is, the more false circles may be detected")
     private double param2 = 10;
 

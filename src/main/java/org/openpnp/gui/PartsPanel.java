@@ -381,7 +381,7 @@ public class PartsPanel extends JPanel implements WizardContainer {
                 return;
             }
             try {
-                String xml = XmlSerialize.serialize(part);
+                String xml = XmlSerialize.serialization().writeAsString(part);
                 StringSelection stringSelection = new StringSelection(xml);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(stringSelection, null);

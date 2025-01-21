@@ -19,8 +19,6 @@
 
 package org.openpnp.machine.reference;
 
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -1022,11 +1020,11 @@ public class ContactProbeNozzle extends ReferenceNozzle {
      */
     public static ContactProbeNozzle convertToContactProbe(ReferenceNozzle nozzle) throws Exception {
         // Serialize the nozzle
-        String xml = XmlSerialize.serialize(nozzle);
-        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
-        xml = xml.replace(
-                nozzle.getClass().getCanonicalName(), 
-                ContactProbeNozzle.class.getCanonicalName());
+        String xml = XmlSerialize.serialization().writeAsString(nozzle);
+//        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
+//        xml = xml.replace(
+//                nozzle.getClass().getCanonicalName(),
+//                ContactProbeNozzle.class.getCanonicalName());
         // De-serialize it.
         ContactProbeNozzle contactProbeNozzle = XmlSerialize.serialization().read(ContactProbeNozzle.class, xml);
         contactProbeNozzle.setHead(nozzle.getHead());
@@ -1043,12 +1041,30 @@ public class ContactProbeNozzle extends ReferenceNozzle {
      * @throws Exception
      */
     public static ReferenceNozzle convertToReferenceNozzle(ContactProbeNozzle nozzle) throws Exception {
+
+
+// TODO: Using serialization for this kind of cloning/conversion is a bad idea, and instead should be done the long way, like this...
+//        ReferenceNozzle converted = new ReferenceNozzle(nozzle.id);
+//
+//        // AbstractNozzle properties
+//        converted.setName(nozzle.getName());
+//        converted.setRotationMode(nozzle.rotationMode);
+//        converted.setAligningRotationMode(nozzle.aligningRotationMode);
+//        converted.setMaxAlignmentArticulationAngle(nozzle.maxAlignmentArticulationAngle);
+//        converted.setMaxPickArticulationAngle(nozzle.maxPickArticulationAngle);
+//
+//        // ReferenceNozzle properties
+//        converted.setHeadOffsets(nozzle.getHeadOffsets());
+//        converted.setHead(nozzle.getHead());
+//           :
+//
+
         // Serialize the nozzle
-        String xml = XmlSerialize.serialize(nozzle);
-        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
-        xml = xml.replace(
-                nozzle.getClass().getCanonicalName(), 
-                ReferenceNozzle.class.getCanonicalName());
+        String xml = XmlSerialize.serialization().writeAsString(nozzle);
+//        // Patch it.  niclas; The old code didn't actually do the replace, since replace() is not modifying the String and the return valye was ignored.
+//        xml = xml.replace(
+//                nozzle.getClass().getCanonicalName(),
+//                ReferenceNozzle.class.getCanonicalName());
         // Remove sub-class settings.
         xml = XmlSerialize.purgeSubclassXml(ContactProbeNozzle.class, xml);
         // De-serialize it.

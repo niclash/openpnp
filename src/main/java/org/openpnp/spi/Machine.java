@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.model.Length;
 import org.openpnp.model.Location;
 import org.openpnp.model.Solutions;
@@ -35,6 +36,7 @@ import com.google.common.util.concurrent.FutureCallback;
  * needed to cause the machine to do work. A Machine has one or more Heads. Unless otherwise noted,
  * the methods in this class block while performing their operations.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public interface Machine extends WizardConfigurable, PropertySheetHolder, Closeable, Solutions.Subject {
     /**
      * Gets a List of Axes attached to the Machine.

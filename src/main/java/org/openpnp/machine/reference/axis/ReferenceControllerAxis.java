@@ -158,10 +158,10 @@ public class ReferenceControllerAxis extends AbstractControllerAxis {
     @JacksonXmlProperty
     private Length feedratePerSecond = new Length(250, LengthUnit.Millimeters);
 
-    @JacksonXmlProperty
+    @JacksonXmlProperty(localName = "acceleration-per-second-2")
     private Length accelerationPerSecond2 = new Length(500, LengthUnit.Millimeters);
 
-    @JacksonXmlProperty
+    @JacksonXmlProperty(localName = "jerk-per-second-3")
     private Length jerkPerSecond3 = new Length(2000, LengthUnit.Millimeters);
 
     /**

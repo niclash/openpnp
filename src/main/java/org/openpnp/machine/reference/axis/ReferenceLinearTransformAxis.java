@@ -53,11 +53,11 @@ public class ReferenceLinearTransformAxis extends AbstractTransformedAxis {
     private AbstractAxis inputAxisZ;
     private AbstractAxis inputAxisRotation;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "input-axis-X-id")
     private String inputAxisXId;
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "input-axis-Y-id")
     private String inputAxisYId;
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "input-axis-Z-id")
     private String inputAxisZId;
     @JacksonXmlProperty( isAttribute = true )
     private String inputAxisRotationId;

@@ -10,10 +10,10 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * Performs Canny edge detection on the working image, updating it with the results.
  */
 public class DetectEdgesCanny extends CvStage {
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "threshold-1")
     double threshold1 = 40;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "threshold-2" )
     double threshold2 = 180;
 
     public double getThreshold1() {

@@ -275,7 +275,7 @@ public class VisionSettingsPanel extends JPanel implements WizardContainer {
             try {
                 VisionSettingsConfigurationHolder holder = new VisionSettingsConfigurationHolder();
                 holder.visionSettings.addAll(visionSettings);
-                String xml = XmlSerialize.serialize(holder);
+                String xml = XmlSerialize.serialization().writeAsString(holder);
                 StringSelection stringSelection = new StringSelection(xml);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(stringSelection, null);

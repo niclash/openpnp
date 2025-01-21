@@ -23,6 +23,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.model.Location;
 
@@ -31,6 +32,7 @@ import org.openpnp.model.Location;
  * attached to a Camera in configuration and can be commanded by the system to perform a variety of
  * vision tasks.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public interface VisionProvider {
     /**
      * Sets the Camera that the VisionProvider should use for image capture. This is called during

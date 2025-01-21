@@ -21,6 +21,7 @@
 
 package org.openpnp.spi.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.openpnp.ConfigurationListener;
 import org.openpnp.model.Configuration;
 import org.openpnp.model.Length;
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public abstract class AbstractControllerAxis extends AbstractCoordinateAxis implements ControllerAxis {
 
+    @JsonIgnore
     private Driver driver;
 
     @JacksonXmlProperty( isAttribute = true )

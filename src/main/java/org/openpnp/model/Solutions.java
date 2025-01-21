@@ -176,9 +176,9 @@ public class Solutions extends AbstractTableModel {
          * Report any detected issue and proposed solution in the list. 
          * @param solutions
          */
-        public default void findIssues(Solutions solutions) {
+        default void findIssues(Solutions solutions) {
         }
-        public default String getSubjectText() {
+        default String getSubjectText() {
             if (this instanceof Named) {
                 return (this.getClass().getSimpleName()+(((Named) this).getName() != null ? " "+((Named) this).getName() : ""));
             }
@@ -189,7 +189,7 @@ public class Solutions extends AbstractTableModel {
                 return (this.getClass().getSimpleName());
             }
         }
-        public default Icon getSubjectIcon() {
+        default Icon getSubjectIcon() {
             Icon icon = null;
             if (this instanceof PropertySheetHolder) {
                 icon = ((PropertySheetHolder)this).getPropertySheetHolderIcon();

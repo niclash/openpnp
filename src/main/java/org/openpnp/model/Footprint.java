@@ -27,24 +27,20 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.openpnp.gui.importer.KicadModImporter;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 /**
  * A Footprint is a group of SMD pads along with length unit information. Footprints can be rendered
  * to a Shape for easy display using 2D primitives.
  */
 public class Footprint extends AbstractModelObject{
-    @JacksonXmlProperty(isAttribute = true)
+    @JacksonXmlProperty(isAttribute = true, localName = "units")
     private LengthUnit units = LengthUnit.Millimeters;
 
     @JacksonXmlProperty(localName = "pad")
-    private ArrayList<Pad> pads = new ArrayList<>();
+    private List<Pad> pads = new ArrayList<>();
 
     @JacksonXmlProperty( isAttribute = true )
     private double bodyWidth;
@@ -215,8 +211,8 @@ public class Footprint extends AbstractModelObject{
     }
 
 
-    @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE)
     public static class Pad {
+
         @JacksonXmlProperty( isAttribute = true )
         private String name;
 

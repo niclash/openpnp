@@ -19,6 +19,7 @@
 
 package org.openpnp.spi;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.gui.support.Wizard;
 import org.openpnp.model.AxesLocation;
 import org.openpnp.spi.base.AbstractActuator;
@@ -28,6 +29,7 @@ import org.openpnp.spi.base.AbstractActuator;
  * head. This is a minimal interface and it is expected that concrete implementations may have many
  * other capabilities exposed in their specific implementations.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public interface Actuator
         extends HeadMountable, WizardConfigurable, PropertySheetHolder {
     /**

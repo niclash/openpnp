@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 
 import javax.swing.Icon;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import org.openpnp.machine.reference.axis.ReferenceLinearTransformAxis;
 import org.openpnp.model.AbstractModelObject;
 import org.openpnp.model.LengthUnit;
@@ -45,7 +46,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.google.common.util.concurrent.FutureCallback;
 
 public abstract class AbstractMachine extends AbstractModelObject implements Machine {
-    /**
+    /*
      * History:
      * 
      * Note: Can't actually use the @Version annotation because of a bug in SimpleXML. See

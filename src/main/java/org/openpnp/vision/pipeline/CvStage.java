@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.opencv.core.Mat;
 import org.openpnp.model.Area;
 import org.openpnp.model.Length;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * to perform computer vision operations resulting in either a modified working image or a new image
  * and optional model data extracted from the image.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public abstract class CvStage {
     @JacksonXmlProperty( isAttribute = true )
     private String name;

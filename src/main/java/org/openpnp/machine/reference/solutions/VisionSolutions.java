@@ -82,7 +82,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * This helper class implements the Issues & Solutions for the Vision milestone. 
  *
  */
-public class VisionSolutions implements Solutions.Subject {
+public class VisionSolutions
+    implements Solutions.Subject {
 
     // These values can be changed in the machine.xml but they are not exposed in the UI.  
 

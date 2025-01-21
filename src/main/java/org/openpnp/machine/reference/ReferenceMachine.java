@@ -123,6 +123,7 @@ import org.pmw.tinylog.Logger;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class ReferenceMachine extends AbstractMachine {
+
     @Deprecated
     @JacksonXmlProperty
     private Driver driver = null;

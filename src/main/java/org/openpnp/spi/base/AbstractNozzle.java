@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.swing.Icon;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.gui.support.Icons;
 import org.openpnp.machine.reference.axis.ReferenceControllerAxis;
 import org.openpnp.model.AxesLocation;
@@ -55,7 +56,7 @@ public abstract class AbstractNozzle extends AbstractHeadMountable implements No
     protected double maxAlignmentArticulationAngle = 30;
 
     @JacksonXmlProperty
-    protected List<String> compatibleNozzleTipIds = new ArrayList<>();
+    protected ArrayList<String> compatibleNozzleTipIds = new ArrayList<>();
 
     protected Set<NozzleTip> compatibleNozzleTips; 
 
@@ -298,5 +299,21 @@ public abstract class AbstractNozzle extends AbstractHeadMountable implements No
         compatibleNozzleTips.remove(nt);
         syncCompatibleNozzleTipIds();
         firePropertyChange("compatibleNozzleTips", null, getCompatibleNozzleTips());
+    }
+
+    public double getMaxPickArticulationAngle() {
+        return maxPickArticulationAngle;
+    }
+
+    public void setMaxPickArticulationAngle(double maxPickArticulationAngle) {
+        this.maxPickArticulationAngle = maxPickArticulationAngle;
+    }
+
+    public double getMaxAlignmentArticulationAngle() {
+        return maxAlignmentArticulationAngle;
+    }
+
+    public void setMaxAlignmentArticulationAngle(double maxAlignmentArticulationAngle) {
+        this.maxAlignmentArticulationAngle = maxAlignmentArticulationAngle;
     }
 }

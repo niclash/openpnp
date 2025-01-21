@@ -153,7 +153,7 @@ public class ReferenceSlotAutoFeeder extends ReferenceAutoFeeder {
     
     @Override
     public void setName(String name) {
-        /**
+        /*
          * This is kind of an ugly hack to avoid the bug in:
          * https://github.com/openpnp/openpnp/issues/427.
          * It removes any instance of the additional info we show in the name when a feeder is

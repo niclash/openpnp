@@ -21,7 +21,6 @@
 
 package org.openpnp.machine.reference.feeder;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,7 +28,6 @@ import java.util.List;
 
 import javax.swing.Action;
 
-import org.apache.commons.io.IOUtils;
 import org.openpnp.ConfigurationListener;
 import org.openpnp.gui.support.PropertySheetWizardAdapter;
 import org.openpnp.gui.support.Wizard;
@@ -82,9 +80,9 @@ public class ReferencePushPullFeeder extends ReferenceFeeder {
     @JacksonXmlProperty( isAttribute = true )
     protected boolean snapToAxis = true;
 
-    @JacksonXmlProperty
+    @JacksonXmlProperty(localName = "hole-1-location")
     protected Location hole1Location = new Location(LengthUnit.Millimeters);
-    @JacksonXmlProperty
+    @JacksonXmlProperty(localName = "hole-2-location")
     protected Location hole2Location = new Location(LengthUnit.Millimeters);
 
     @JacksonXmlProperty( isAttribute = true )
@@ -98,13 +96,13 @@ public class ReferencePushPullFeeder extends ReferenceFeeder {
     @JacksonXmlProperty
     protected Location feedStartLocation = new Location(LengthUnit.Millimeters);
 
-    @JacksonXmlProperty
+    @JacksonXmlProperty(localName = "feed-mid-1-location")
     protected Location feedMid1Location = new Location(LengthUnit.Millimeters);
 
-    @JacksonXmlProperty
+    @JacksonXmlProperty(localName = "feed-mid-2-location")
     protected Location feedMid2Location = new Location(LengthUnit.Millimeters);
 
-    @JacksonXmlProperty
+    @JacksonXmlProperty(localName = "feed-mid-3-location")
     protected Location feedMid3Location = new Location(LengthUnit.Millimeters);
 
     @JacksonXmlProperty
@@ -119,67 +117,67 @@ public class ReferencePushPullFeeder extends ReferenceFeeder {
     @JacksonXmlProperty( isAttribute = true )
     private long feedMultiplier= 1;
 
-    @JacksonXmlProperty
+    @JacksonXmlProperty(localName = "feed-speed-push-1")
     protected double feedSpeedPush1 = 1.0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "feed-speed-push-2" )
     protected double feedSpeedPush2 = 1.0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "feed-speed-push-3" )
     protected double feedSpeedPush3 = 1.0;
 
     @JacksonXmlProperty( isAttribute = true )
     protected double feedSpeedPushEnd = 1.0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "feed-speed-pull-3" )
     protected double feedSpeedPull3 = 1.0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "feed-speed-pull-2" )
     protected double feedSpeedPull2 = 1.0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "feed-speed-pull-1" )
     protected double feedSpeedPull1 = 1.0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "feed-speed-pull-0" )
     protected double feedSpeedPull0 = 1.0;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-push-1")
     protected boolean includedPush1 = false;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-push-2" )
     protected boolean includedPush2 = false;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-push-3" )
     protected boolean includedPush3 = false;
 
     @JacksonXmlProperty( isAttribute = true )
     protected boolean includedPushEnd = true; 
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-multi-0")
     protected boolean includedMulti0 = true;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-multi-1" )
     protected boolean includedMulti1 = false;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-multi-2" )
     protected boolean includedMulti2 = false;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-multi-3" )
     protected boolean includedMulti3 = false;
 
     @JacksonXmlProperty( isAttribute = true )
     protected boolean includedMultiEnd = true; 
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-pull-0")
     protected boolean includedPull0 = true;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-pull-1" )
     protected boolean includedPull1 = false;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-pull-2" )
     protected boolean includedPull2 = false;
 
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "included-pull-3" )
     protected boolean includedPull3 = false; 
 
     @JacksonXmlProperty( isAttribute = true )
@@ -187,12 +185,15 @@ public class ReferencePushPullFeeder extends ReferenceFeeder {
 
     @JacksonXmlProperty( isAttribute = true )
     private String actuatorName;
+
     protected Actuator actuator;
+
     /**
      * "peelOff" is a legacy name, it is now recommended to use the rotation axis for peeling
      */
     @JacksonXmlProperty( isAttribute = true )
     private  String peelOffActuatorName;
+
     protected Actuator actuator2;
 
     @JacksonXmlProperty( isAttribute = true )
@@ -255,7 +256,7 @@ public class ReferencePushPullFeeder extends ReferenceFeeder {
     private double rowLocationToleranceMm = 4.0;
 
     // for rows of feeders, the tolerance in Z
-    @JacksonXmlProperty( isAttribute = true )
+    @JacksonXmlProperty( isAttribute = true, localName = "row-Z-location-tolerance-mm")
     private double rowZLocationToleranceMm = 1.0;
 
     @JacksonXmlProperty( isAttribute = true )

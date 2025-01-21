@@ -1,5 +1,6 @@
 package org.openpnp.spi;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openpnp.model.Identifiable;
 import org.openpnp.model.Length;
 import org.openpnp.model.Named;
@@ -8,6 +9,7 @@ import org.openpnp.model.Solutions;
 /**
  * A NozzleTip is the physical interface between a Nozzle and a Part.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public interface NozzleTip extends Identifiable, Named, Solutions.Subject, WizardConfigurable, PropertySheetHolder {
     /**
      * @return The outside diameter of the NozzleTip at the lowest ca. 0.75mm. Most nozzle tips seem to have 

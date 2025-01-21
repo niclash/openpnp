@@ -19,10 +19,14 @@
 
 package org.openpnp.machine.reference.camera.calibration;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.openpnp.model.AbstractModelObject;
+import org.openpnp.serialization.DoubleVectorDeserializer;
+import org.openpnp.serialization.DoubleVectorSerializer;
 import org.openpnp.serialization.PostDeserialize;
 import org.openpnp.serialization.PreSerialize;
 import org.pmw.tinylog.Logger;
@@ -33,9 +37,13 @@ public class LensCalibrationParams extends AbstractModelObject {
     protected boolean enabled = false;
 
     @JacksonXmlProperty(localName = "camera-matrix")
+    @JsonSerialize(converter = DoubleVectorSerializer.class)
+    @JsonDeserialize(converter = DoubleVectorDeserializer.class)
     private double[] cameraMatrixArr = new double[9];
 
     @JacksonXmlProperty(localName = "distortion-coefficients")
+    @JsonSerialize(converter = DoubleVectorSerializer.class)
+    @JsonDeserialize(converter = DoubleVectorDeserializer.class)
     private double[] distortionCoefficientsArr = new double[5];
 
     protected Mat cameraMatrix = Mat.zeros(3, 3, CvType.CV_64FC1);

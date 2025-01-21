@@ -86,8 +86,13 @@ public class ReferenceFiducialLocator extends AbstractPartSettingsHolder impleme
     protected FiducialLocatorTolerances tolerances = new FiducialLocatorTolerances();
 
     public static class FiducialLocatorTolerances {
+        @JacksonXmlProperty
         protected double scalingTolerance = 0.05; //unitless
+
+        @JacksonXmlProperty
         protected double shearingTolerance = 0.05; //unitless
+
+        @JacksonXmlProperty
         protected Length boardLocationTolerance = new Length(5.0, LengthUnit.Millimeters);
     }
 
